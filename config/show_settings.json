@@ -1,0 +1,10 @@
+{
+    "presenter": {
+        "name": "Jack Harlan",
+        "turnaround_image": "jack-harlan.png",
+        "elevenlabs_voice_id": "tkPQHnQfmFvyE5X9juYK",
+        "elevenlabs_model": "eleven_v3",
+        "elevenlabs_stability": 0.5,
+        "elevenlabs_speed": 0.75
+    }
+}

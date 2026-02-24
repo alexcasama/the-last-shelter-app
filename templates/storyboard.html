@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project_title }} — Storyboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/storyboard.css">
+</head>
+
+<body class="sb-body">
+
+    <!-- Top Bar -->
+    <div class="sb-topbar">
+        <a href="/" class="sb-back-btn">← Back</a>
+        <h1 class="sb-title">{{ project_title }}</h1>
+        <div class="sb-topbar-actions">
+            <span class="sb-total-duration" id="totalDuration">—</span>
+        </div>
+    </div>
+
+    <!-- Activity Console -->
+    <div class="sb-console" id="sbConsole" style="display:none;">
+        <div class="sb-console-header">
+            <span>⚡ Activity</span>
+            <button class="sb-console-close" onclick="closeConsole()">✕</button>
+        </div>
+        <div class="sb-console-body" id="sbConsoleBody"></div>
+    </div>
+
+    <!-- Main Container — vertical scroll -->
+    <div class="sb-container" id="sbContainer">
+        <!-- Blocks will be rendered here by JS -->
+        <div class="sb-loading" id="sbLoading">
+            <div class="sb-spinner"></div>
+            <p>Loading storyboard data...</p>
+        </div>
+    </div>
+
+    <!-- AI Edit Modal -->
+    <div class="sb-modal-overlay" id="aiEditModal" style="display:none;">
+        <div class="sb-modal">
+            <div class="sb-modal-header">
+                <h3>✏️ Edit Scene <span id="editSceneNum"></span></h3>
+                <button class="sb-modal-close" onclick="closeAiModal()">✕</button>
+            </div>
+            <div class="sb-modal-body">
+                <label>Scene type:</label>
+                <select class="sb-modal-input" id="editSceneType" style="height:auto;min-height:40px;padding:8px;">
+                    <option value="presenter">PRESENTER (host on camera)</option>
+                    <option value="bridge">BRIDGE (B-roll, landscape)</option>
+                    <option value="flashback">FLASHBACK (past event)</option>
+                    <option value="narrated">NARRATED (footage + narration)</option>
+                    <option value="anticipatorio">ANTICIPATORY (foreshadowing)</option>
+                </select>
+                <label>Action (¿qué pasa en esta escena?):</label>
+                <textarea class="sb-modal-input" id="editSceneAction" rows="3"
+                    placeholder='Ej: "Jack se inclina agresivo, señala a cámara con urgencia" o "Erik corta troncos solo en el bosque"'></textarea>
+                <label>Narration / Dialogue:</label>
+                <textarea class="sb-modal-input" id="editSceneNarration" rows="2"
+                    placeholder="Voz en off o diálogo"></textarea>
+                <label>Duration:</label>
+                <select class="sb-modal-input" id="editSceneDuration" style="height:auto;min-height:40px;padding:8px;">
+                    <option value="3s">3s</option>
+                    <option value="4s">4s</option>
+                    <option value="5s">5s</option>
+                    <option value="6s">6s</option>
+                    <option value="7s">7s</option>
+                    <option value="8s" selected>8s</option>
+                    <option value="10s">10s</option>
+                    <option value="12s">12s</option>
+                    <option value="15s">15s</option>
+                </select>
+                <div style="margin-top:12px;">
+                    <label><input type="checkbox" id="editRegenImage" checked> 🖼️ Regenerate image (AI generates visual
+                        from your action)</label>
+                </div>
+            </div>
+            <div class="sb-modal-footer">
+                <button class="btn btn-ghost" onclick="closeAiModal()">Cancel</button>
+                <button class="btn btn-primary" id="aiModalSubmit" onclick="submitAiEdit()">Save + Regenerate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Scene Modal -->
+    <div class="sb-modal-overlay" id="addSceneModal" style="display:none;">
+        <div class="sb-modal">
+            <div class="sb-modal-header">
+                <h3>➕ Add New Scene</h3>
+                <button class="sb-modal-close" onclick="closeAddModal()">✕</button>
+            </div>
+            <div class="sb-modal-body">
+                <label>Scene type:</label>
+                <select class="sb-modal-input" id="addSceneType" style="height:auto;min-height:40px;padding:8px;">
+                    <option value="presenter">PRESENTER (host on camera)</option>
+                    <option value="bridge">BRIDGE (B-roll, landscape)</option>
+                    <option value="flashback">FLASHBACK (past event)</option>
+                    <option value="narrated">NARRATED (footage + narration)</option>
+                    <option value="anticipatorio">ANTICIPATORY (foreshadowing)</option>
+                </select>
+                <label>Action (¿qué pasa en esta escena?):</label>
+                <textarea class="sb-modal-input" id="addSceneAction" rows="3"
+                    placeholder='Ej: "James llega al Yukon con herramientas, luz cálida" o "Erik tala un árbol en la nieve"'></textarea>
+                <label>Narration / Dialogue (optional):</label>
+                <textarea class="sb-modal-input" id="addSceneNarration" rows="2"
+                    placeholder='Ej: "Fifteen years ago, James came here seeking peace..."'></textarea>
+                <label>Duration:</label>
+                <select class="sb-modal-input" id="addSceneDuration" style="height:auto;min-height:40px;padding:8px;">
+                    <option value="3s">3s</option>
+                    <option value="4s">4s</option>
+                    <option value="5s">5s</option>
+                    <option value="6s">6s</option>
+                    <option value="7s">7s</option>
+                    <option value="8s" selected>8s</option>
+                    <option value="10s">10s</option>
+                    <option value="12s">12s</option>
+                    <option value="15s">15s</option>
+                </select>
+            </div>
+            <div class="sb-modal-footer">
+                <button class="btn btn-ghost" onclick="closeAddModal()">Cancel</button>
+                <button class="btn btn-primary" id="addSceneSubmit" onclick="submitAddScene()">Add Scene + Generate
+                    Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Prompt Modal -->
+    <div class="sb-modal-overlay" id="editPromptModal" style="display:none;">
+        <div class="sb-modal" style="width:700px;max-width:95vw;">
+            <div class="sb-modal-header">
+                <h3>✏️ Edit Video Prompt <span id="editPromptNum"></span></h3>
+                <button class="sb-modal-close" onclick="closeEditPromptModal()">✕</button>
+            </div>
+            <div class="sb-modal-body">
+                <label>Current prompt:</label>
+                <div class="sb-modal-prompt-preview" id="editPromptCurrent"></div>
+                <label style="margin-top:12px;">Tu feedback (¿qué quieres cambiar?):</label>
+                <textarea class="sb-modal-input" id="editPromptFeedback" rows="3"
+                    placeholder='Ej: "Hazlo más dramático", "Añade más detalle del frío", "Que Jack señale con agresividad", "Quita las gafas de sol"'></textarea>
+            </div>
+            <div class="sb-modal-footer">
+                <button class="btn btn-ghost" onclick="closeEditPromptModal()">Cancel</button>
+                <button class="btn btn-primary" id="editPromptSubmit" onclick="submitEditPrompt()">🤖 Rewrite
+                    Prompt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Location Image Modal -->
+    <div class="sb-modal-overlay" id="editLocImageModal" style="display:none;">
+        <div class="sb-modal" style="width:700px;max-width:95vw;">
+            <div class="sb-modal-header">
+                <h3>🖼️ Edit Location Image <span id="editLocImageName"></span></h3>
+                <button class="sb-modal-close" onclick="closeEditLocImageModal()">✕</button>
+            </div>
+            <div class="sb-modal-body">
+                <label>Current image:</label>
+                <img id="editLocImagePreview" src="" alt=""
+                    style="width:100%;max-height:200px;object-fit:cover;border-radius:6px;margin-bottom:8px;">
+                <label>Current generation prompt:</label>
+                <div class="sb-modal-prompt-preview" id="editLocImageCurrentPrompt"
+                    style="max-height:80px;font-size:0.72rem;"></div>
+                <label style="margin-top:12px;">📎 Imagen de referencia (opcional):</label>
+                <select class="sb-modal-input" id="editLocImageRefSelect" style="padding:8px;margin-bottom:8px;">
+                    <option value="">— Sin referencia (generar desde cero) —</option>
+                </select>
+                <label style="margin-top:4px;">Tu feedback (¿qué quieres cambiar en la imagen?):</label>
+                <textarea class="sb-modal-input" id="editLocImageFeedback" rows="3"
+                    placeholder='Ej: "Vista aérea de la imagen de referencia", "Más nieve", "Iluminación más cálida"'></textarea>
+            </div>
+            <div class="sb-modal-footer">
+                <button class="btn btn-ghost" onclick="closeEditLocImageModal()">Cancel</button>
+                <button class="btn btn-primary" id="editLocImageSubmit" onclick="submitEditLocImage()">🖼️ Regenerate
+                    Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox for images -->
+    <div class="sb-lightbox" id="sbLightbox" style="display:none;" onclick="closeLightbox()">
+        <img id="sbLightboxImg" src="" alt="">
+    </div>
+
+    <script>
+        const PROJECT_ID = "{{ project_id }}";
+    </script>
+    <script src="/static/storyboard.js"></script>
+</body>
+
+</html>

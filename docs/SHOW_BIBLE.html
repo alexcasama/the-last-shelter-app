@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last Shelter — Show Bible</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #1a2235;
+            --bg-card-hover: #1f2a40;
+            --accent-orange: #e8722a;
+            --accent-orange-light: #f59e4a;
+            --accent-blue: #3b82f6;
+            --accent-blue-dark: #1e3a5f;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #1e293b;
+            --border-light: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            padding: 100px 40px 80px;
+            text-align: center;
+            background: linear-gradient(180deg, #0d1520 0%, var(--bg-primary) 100%);
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(232, 114, 42, 0.08) 0%, transparent 70%);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            border: 1px solid var(--accent-orange);
+            color: var(--accent-orange);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            position: relative;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-orange-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-tagline {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        .hero-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Sections */
+        .section {
+            padding: 64px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-orange);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--border-light);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card .stats {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-orange);
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .tag-green {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--accent-green);
+        }
+
+        .tag-red {
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--accent-red);
+        }
+
+        .tag-blue {
+            background: rgba(59, 130, 246, 0.12);
+            color: var(--accent-blue);
+        }
+
+        .tag-orange {
+            background: rgba(232, 114, 42, 0.12);
+            color: var(--accent-orange);
+        }
+
+        /* Comparison Table */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin: 24px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        thead th {
+            background: var(--bg-card);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        thead th:last-child {
+            color: var(--accent-orange);
+            background: rgba(232, 114, 42, 0.06);
+        }
+
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        tbody td:first-child {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        tbody td:last-child {
+            background: rgba(232, 114, 42, 0.03);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 14px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-orange) 0%, var(--accent-blue) 50%, var(--accent-green) 100%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -32px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-orange);
+            background: var(--bg-primary);
+        }
+
+        .timeline-item.break::before {
+            background: var(--accent-orange);
+            box-shadow: 0 0 8px rgba(232, 114, 42, 0.4);
+        }
+
+        .timeline-item.climax::before {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        }
+
+        .timeline-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-orange);
+            margin-bottom: 4px;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .timeline-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Quote */
+        .quote {
+            border-left: 3px solid var(--accent-orange);
+            padding: 16px 24px;
+            margin: 16px 0;
+            background: rgba(232, 114, 42, 0.04);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .quote strong {
+            color: var(--text-primary);
+            font-style: normal;
+        }
+
+        /* Overlay mockup */
+        .overlay-demo {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overlay-demo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.3) 0%, rgba(10, 14, 23, 0.8) 100%);
+        }
+
+        .overlay-counter {
+            position: relative;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 20px;
+            text-align: center;
+        }
+
+        .overlay-counter .day {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .overlay-counter .temp {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+        }
+
+        .overlay-progress {
+            position: relative;
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .overlay-progress .step {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-secondary);
+        }
+
+        .overlay-progress .step.done {
+            color: var(--accent-green);
+        }
+
+        .overlay-progress .step.active {
+            color: var(--accent-orange);
+        }
+
+        /* Episode Types Grid */
+        .episode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 700px) {
+            .episode-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .episode-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .episode-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-2px);
+        }
+
+        .episode-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-orange);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .episode-card h4 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .episode-card .example-title {
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            font-style: italic;
+        }
+
+        .episode-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        /* Presenter */
+        .presenter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 700px) {
+            .presenter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .presenter-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .presenter-item h4 {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .presenter-item ul {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .presenter-item li {
+            padding: 4px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .presenter-item li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+        }
+
+        /* Story checklist */
+        .story-checklist {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 700px) {
+            .story-checklist {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .story-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .story-item h4 {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .story-item ul {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .story-item li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .story-item li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: var(--accent-orange);
+            font-size: 0.8rem;
+        }
+
+        /* Pipeline */
+        .pipeline {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 8px 0;
+        }
+
+        .pipeline-step {
+            flex: 0 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 24px;
+            text-align: center;
+            min-width: 140px;
+            position: relative;
+        }
+
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .pipeline-step:last-child::after {
+            display: none;
+        }
+
+        .pipeline-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-orange);
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .pipeline-step h4 {
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .pipeline-step p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Pilot script */
+        .pilot-header {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .pilot-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+        }
+
+        .pilot-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .pilot-meta-item {
+            color: var(--text-secondary);
+        }
+
+        .pilot-meta-item strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Phase */
+        .phase {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .phase-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 6px;
+            letter-spacing: 1px;
+        }
+
+        .phase-badge.prep {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .phase-badge.pilot {
+            background: rgba(232, 114, 42, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .phase-badge.launch {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+        }
+
+        .phase ul {
+            list-style: none;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .phase li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .phase li::before {
+            content: '•';
+            position: absolute;
+            left: 4px;
+            color: var(--text-muted);
+        }
+
+        /* Idea callout */
+        .idea-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .idea-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 22px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .idea-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-orange);
+            background: rgba(232, 114, 42, 0.1);
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .idea-content h4 {
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .idea-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 48px 40px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-badge">SHOW BIBLE</div>
+        <h1>The Last Shelter</h1>
+        <p class="hero-tagline">"When everything else fails... you build."</p>
+        <p class="hero-subtitle">Docuserie en YouTube con formato de show de televisión. Historias dramáticas de
+            construcción, restauración y supervivencia en frío extremo. Todo generado con IA.</p>
+    </div>
+
+    <div class="container">
+
+        <!-- ANÁLISIS COMPETITIVO -->
+        <div class="section">
+            <div class="section-number">01 — Análisis</div>
+            <h2>Panorama Competitivo</h2>
+            <p class="section-desc">6 canales analizados. Todos tienen algo que funciona. Ninguno tiene todo lo que
+                nosotros ofrecemos.</p>
+
+            <div class="card">
+                <h3>🧊 Frozen Towns</h3>
+                <div class="stats">55.8K subs · +2M views/semana · $18-53K/mes</div>
+                <p>Historias emocionales de supervivencia en frío extremo (-71°C, Siberia). Narración AI + imágenes AI.
+                </p>
+                <div class="tags">
+                    <span class="tag tag-green">✓ Emoción</span>
+                    <span class="tag tag-green">✓ Frío</span>
+                    <span class="tag tag-red">✗ Sin presentador</span>
+                    <span class="tag tag-red">✗ Sin construcción</span>
+                    <span class="tag tag-red">✗ Repetitivo</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🚲 BikeGen Mountain</h3>
+                <div class="stats">71.3K subs · 12M views en 1 video (4 semanas)</div>
+                <p>Construcciones AI tipo ASMR. Ciclista encuentra situaciones en el bosque y construye. Visual puro,
+                    sin narración.</p>
+                <div class="tags">
+                    <span class="tag tag-green">✓ Satisfacción visual</span>
+                    <span class="tag tag-green">✓ Construcción</span>
+                    <span class="tag tag-red">✗ Sin historia</span>
+                    <span class="tag tag-red">✗ Sin narrador</span>
+                    <span class="tag tag-red">✗ Sin emoción</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🏔️ American Frontier Channel</h3>
+                <div class="stats">15.5K subs · 244 videos · 45min-1h30 por video</div>
+                <p>AI Stories de calefacción/construcción en frío. "Neighbors Laughed When She..." Imágenes AI estáticas
+                    + narración monótona.</p>
+                <div class="tags">
+                    <span class="tag tag-green">✓ Nicho calefacción</span>
+                    <span class="tag tag-red">✗ Narración plana</span>
+                    <span class="tag tag-red">✗ Imágenes estáticas</span>
+                    <span class="tag tag-red">✗ Sin estructura</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>❄️ Cold Frontier</h3>
+                <div class="stats">4.46K subs · 69 videos · Mejor video: 77K views</div>
+                <p>Similar a American Frontier con mejores thumbnails (cortes transversales de refugios underground).
+                </p>
+                <div class="tags">
+                    <span class="tag tag-green">✓ Thumbnails</span>
+                    <span class="tag tag-green">✓ Underground</span>
+                    <span class="tag tag-red">✗ Sin presentador</span>
+                    <span class="tag tag-red">✗ Sin arco narrativo</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🏕️ Alaska Cabin Adventures</h3>
+                <div class="stats">334K subs · 96 videos · 42.9M views totales · Top: 5.4M views</div>
+                <p>Contenido REAL de construcción off-grid en Alaska. Un hombre + su perro Norman. Documental personal +
+                    ASMR. Cinematografía excepcional.</p>
+                <div class="tags">
+                    <span class="tag tag-green">✓ Start to Finish</span>
+                    <span class="tag tag-green">✓ Compañero animal</span>
+                    <span class="tag tag-green">✓ ASMR</span>
+                    <span class="tag tag-green">✓ Contraste frío/calor</span>
+                    <span class="tag tag-red">✗ Sin estructura TV</span>
+                    <span class="tag tag-red">✗ Sin cliffhangers</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📖 Appalachian Storyteller</h3>
+                <div class="stats">Referencia de formato · Narración humana de alta calidad</div>
+                <p>Historias profundas con investigación real de 40-60 horas por episodio. Storytelling puro.</p>
+                <div class="tags">
+                    <span class="tag tag-green">✓ Calidad narrativa</span>
+                    <span class="tag tag-green">✓ Emoción</span>
+                    <span class="tag tag-red">✗ No es AI</span>
+                    <span class="tag tag-red">✗ No escalable</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px; margin-bottom: 16px;">Tabla Comparativa</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Componente</th>
+                            <th>Frozen Towns</th>
+                            <th>BikeGen</th>
+                            <th>Am. Frontier</th>
+                            <th>Alaska Cabin</th>
+                            <th>The Last Shelter</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Video AI (Veo)</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>N/A</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Presentador/host</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Arco narrativo 3 actos</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>Parcial</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Cliffhangers / breaks</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Factor tiempo</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Overlays (día, temp)</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Personajes con nombre</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>Parcial</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Construcción visual</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>Parcial</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Emoción / survival</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>Parcial</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Compañero animal</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>ASMR / inmersión</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="idea-grid">
+                <h3 style="margin-bottom: 4px;">Ideas extraídas de Alaska Cabin Adventures</h3>
+                <div class="idea-item">
+                    <div class="idea-num">1</div>
+                    <div class="idea-content">
+                        <h4>"Start to Finish" como formato estrella</h4>
+                        <p>Su video más visto (5.4M) muestra TODO el proceso. Episodios especiales "de principio a fin"
+                            pueden ser los más potentes.</p>
+                    </div>
+                </div>
+                <div class="idea-item">
+                    <div class="idea-num">2</div>
+                    <div class="idea-content">
+                        <h4>Compañero animal</h4>
+                        <p>El perro Norman es factor emocional enorme. Dar al protagonista un perro compañero (fácil de
+                            generar con AI).</p>
+                    </div>
+                </div>
+                <div class="idea-item">
+                    <div class="idea-num">3</div>
+                    <div class="idea-content">
+                        <h4>ASMR y sonidos naturales</h4>
+                        <p>Momentos sin narración donde solo se oye el hacha, la nieve, el fuego. Crean inmersión total.
+                        </p>
+                    </div>
+                </div>
+                <div class="idea-item">
+                    <div class="idea-num">4</div>
+                    <div class="idea-content">
+                        <h4>Contraste frío/calor como payoff</h4>
+                        <p>El momento más potente siempre es calor dentro + tormenta fuera. Debe ser EL MOMENTO de cada
+                            episodio.</p>
+                    </div>
+                </div>
+                <div class="idea-item">
+                    <div class="idea-num">5</div>
+                    <div class="idea-content">
+                        <h4>"Stranded" / "Alone" como ganchos</h4>
+                        <p>Quedar atrapado o estar solo en el bosque multiplica views. Combinar con urgencia de
+                            construir.</p>
+                    </div>
+                </div>
+                <div class="idea-item">
+                    <div class="idea-num">6</div>
+                    <div class="idea-content">
+                        <h4>Lesiones y adversidad</h4>
+                        <p>Problemas durante el build generan tensión. Los accidentes reales durante construcción atraen
+                            audiencia.</p>
+                    </div>
+                </div>
+                <div class="idea-item">
+                    <div class="idea-num">7</div>
+                    <div class="idea-content">
+                        <h4>Vida cotidiana en la cabaña</h4>
+                        <p>Episodios tranquilos (cocinar, leña, preparar invierno) funcionan como complemento entre los
+                            dramáticos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ESTRUCTURA DE VIDEO -->
+        <div class="section">
+            <div class="section-number">02 — Formato</div>
+            <h2>Estructura de Video</h2>
+            <p class="section-desc">Episodios de 15-20 minutos. 3 actos + 2 breaks del presentador + intro y cierre.</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">0:00 — 0:20</div>
+                    <div class="timeline-title">Cold Open</div>
+                    <div class="timeline-desc">La imagen más dramática del episodio + una frase del narrador. Objetivo:
+                        parar el scroll.</div>
+                    <div class="quote" style="margin-top: 12px;">"Día 28. Menos 38 grados. El techo a medias. La peor
+                        tormenta en 15 años en 72 horas."</div>
+                </div>
+
+                <div class="timeline-item break">
+                    <div class="timeline-time">0:20 — 1:00</div>
+                    <div class="timeline-title">🎙️ Intro del Presentador</div>
+                    <div class="timeline-desc">Presentador en exterior frío. Presenta personaje, lugar, stakes,
+                        deadline. Cierra con tagline.</div>
+                    <div class="quote" style="margin-top: 12px;">"Erik Lindqvist. 54 años. Carpintero retirado. Le
+                        prometió a su mujer construir un hogar. Tenía 42 días. Esto... es <strong>The Last
+                            Shelter</strong>."</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">1:00 — 5:00</div>
+                    <div class="timeline-title">Acto 1 — El Planteamiento</div>
+                    <div class="timeline-desc">Conocemos al personaje, su motivación y el lugar. Primeras fases de
+                        construcción. Momentos ASMR (hacha, nieve). Overlay: DAY 1/42 | -12°F</div>
+                </div>
+
+                <div class="timeline-item break">
+                    <div class="timeline-time">5:00 — 5:20</div>
+                    <div class="timeline-title">🎙️ Break 1 — Cliffhanger</div>
+                    <div class="timeline-desc">El presentador teasa el próximo problema sin revelarlo.</div>
+                    <div class="quote" style="margin-top: 12px;">"Pero el día 14... encontró algo en la madera que lo
+                        cambió todo."</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">5:20 — 10:00</div>
+                    <div class="timeline-title">Acto 2 — La Complicación</div>
+                    <div class="timeline-desc">Problemas graves. Reloj avanzando. Construcción bajo presión. El frío se
+                        convierte en personaje. Overlay avanza: DAY 14/42 | -28°F → DAY 22/42 | -35°F</div>
+                </div>
+
+                <div class="timeline-item break">
+                    <div class="timeline-time">10:00 — 10:20</div>
+                    <div class="timeline-title">🎙️ Break 2 — Tensión máxima</div>
+                    <div class="timeline-desc">El break más emocional. Escala la urgencia al máximo.</div>
+                    <div class="quote" style="margin-top: 12px;">"La peor tormenta en 15 años... en 72 horas. Una
+                        oportunidad. Una decisión."</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">10:20 — 15:00</div>
+                    <div class="timeline-title">Acto 3 — La Resolución</div>
+                    <div class="timeline-desc">Clímax. Carrera por terminar. Overlay: DAY 38/42 | -42°F</div>
+                </div>
+
+                <div class="timeline-item climax">
+                    <div class="timeline-time">~ Minuto 14</div>
+                    <div class="timeline-title">✨ EL MOMENTO</div>
+                    <div class="timeline-desc">Primer fuego en la estufa. Calor dentro. Ventisca fuera. El perro junto
+                        al fuego. Café caliente. Payoff emocional máximo.</div>
+                </div>
+
+                <div class="timeline-item break">
+                    <div class="timeline-time">15:00 — 16:00</div>
+                    <div class="timeline-title">🎙️ Cierre del Presentador</div>
+                    <div class="timeline-desc">Reflexión con significado + teaser del próximo episodio.</div>
+                    <div class="quote" style="margin-top: 12px;">"No construyó una cabaña. Construyó una promesa. La
+                        próxima vez en The Last Shelter..."</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">16:00 — 16:30</div>
+                    <div class="timeline-title">Teaser</div>
+                    <div class="timeline-desc">Preview de 30 segundos del próximo episodio.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OVERLAYS -->
+        <div class="section">
+            <div class="section-number">03 — Overlays</div>
+            <h2>Elementos Visuales</h2>
+            <p class="section-desc">Se añaden en postproducción. Dan sensación de show profesional y mantienen la
+                urgencia.</p>
+
+            <div class="overlay-demo">
+                <div class="overlay-counter">
+                    <div class="day">DAY 14/42</div>
+                    <div class="temp">-28°F</div>
+                </div>
+                <div class="overlay-progress">
+                    <span class="step done">✅ Cimientos</span>
+                    <span style="color: var(--text-muted);">→</span>
+                    <span class="step done">✅ Paredes</span>
+                    <span style="color: var(--text-muted);">→</span>
+                    <span class="step active">🔨 Techo</span>
+                    <span style="color: var(--text-muted);">→</span>
+                    <span class="step">○ Aislamiento</span>
+                    <span style="color: var(--text-muted);">→</span>
+                    <span class="step">○ Calefacción</span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                <div class="card">
+                    <h3>📍 Tarjeta de ubicación</h3>
+                    <p style="margin-top: 8px;">Whitehorse, Yukon · 130 km del pueblo más cercano · Mínima: -49°F</p>
+                </div>
+                <div class="card">
+                    <h3>📊 Datos curiosos</h3>
+                    <p style="margin-top: 8px;"><em>"A -40°F, la piel expuesta se congela en menos de 10 minutos"</em>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIPOS DE EPISODIO -->
+        <div class="section">
+            <div class="section-number">04 — Contenido</div>
+            <h2>Tipos de Episodio</h2>
+            <p class="section-desc">8 formatos que rotan para mantener variedad y evitar repetición.</p>
+
+            <div class="episode-grid">
+                <div class="episode-card">
+                    <div class="episode-type">TIPO A</div>
+                    <h4>Construir antes de la tormenta</h4>
+                    <div class="example-title">"He Had 42 Days to Build a Cabin Before Winter | -40°F"</div>
+                    <p>Cuenta atrás, temperatura bajando, deadline claro.</p>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-type">TIPO B</div>
+                    <h4>Rescate y construcción</h4>
+                    <div class="example-title">"Her House Was Destroyed | A Stranger Built Her a New One"</div>
+                    <p>Componente emocional: ayudar a alguien que no puede ayudarse.</p>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-type">TIPO C</div>
+                    <h4>Restauración abandonada</h4>
+                    <div class="example-title">"This 100-Year-Old Cabin Was Falling Apart"</div>
+                    <p>Misterio: ¿quién la construyó? ¿por qué fue abandonada?</p>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-type">TIPO D</div>
+                    <h4>Supervivencia de emergencia</h4>
+                    <div class="example-title">"Stranded at -50°F | 24 Hours to Build a Shelter or Die"</div>
+                    <p>Timeline corto (24-72h), máxima tensión.</p>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-type">TIPO E</div>
+                    <h4>El sistema crítico</h4>
+                    <div class="example-title">"The Heating System That Saved Their Lives"</div>
+                    <p>Focus en calefacción, aislamiento, chimenea. Todo depende de una cosa.</p>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-type">TIPO F</div>
+                    <h4>Underground / ingeniería</h4>
+                    <div class="example-title">"He Built a Secret Room Underground"</div>
+                    <p>Refugios subterráneos, reveals de corte transversal tipo BikeGen.</p>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-type">TIPO G</div>
+                    <h4>Start to Finish</h4>
+                    <div class="example-title">"Building a Complete Off-Grid Cabin | Start to Finish"</div>
+                    <p>Proceso completo, más largo (20-25 min). Potencial de views muy alto.</p>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-type">TIPO H</div>
+                    <h4>Vida en la cabaña</h4>
+                    <div class="example-title">"3 Days Alone During a Snowstorm | Cozy Cabin Life"</div>
+                    <p>ASMR, vida cotidiana. Complementa los dramáticos.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- GENERACIÓN DE HISTORIAS -->
+        <div class="section">
+            <div class="section-number">05 — Historias</div>
+            <h2>Generación de Historias</h2>
+            <p class="section-desc">Cada historia necesita estos componentes ANTES de generar cualquier visual.</p>
+
+            <div class="story-checklist">
+                <div class="story-item">
+                    <h4>👤 Personaje</h4>
+                    <ul>
+                        <li>Nombre completo</li>
+                        <li>Edad</li>
+                        <li>Profesión anterior</li>
+                        <li>Backstory (2-3 frases)</li>
+                        <li>Motivación emocional</li>
+                        <li>Compañero (perro, familiar, solo)</li>
+                    </ul>
+                </div>
+                <div class="story-item">
+                    <h4>📍 Ubicación</h4>
+                    <ul>
+                        <li>Lugar específico</li>
+                        <li>Datos climáticos</li>
+                        <li>Tipo de terreno</li>
+                        <li>Distancia a civilización</li>
+                    </ul>
+                </div>
+                <div class="story-item">
+                    <h4>🔨 Construcción</h4>
+                    <ul>
+                        <li>Tipo de build</li>
+                        <li>Materiales</li>
+                        <li>Herramientas disponibles</li>
+                        <li>Fases: cimientos → paredes → techo → aislamiento → calefacción</li>
+                    </ul>
+                </div>
+                <div class="story-item">
+                    <h4>⏱️ Timeline y Conflicto</h4>
+                    <ul>
+                        <li>Tiempo total (ej: 42 días)</li>
+                        <li>Punto de giro 1: primera complicación</li>
+                        <li>Punto de giro 2: crisis mayor</li>
+                        <li>Punto de giro 3: carrera final</li>
+                        <li>Resolución (siempre por los pelos)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 16px;">
+                <h3>🎭 Arco Emocional</h3>
+                <p style="margin-top: 12px;">
+                    <strong>Inicio:</strong> Esperanza, determinación → <em>"puedo hacerlo"</em><br>
+                    <strong>Medio:</strong> Duda, frustración, agotamiento → <em>"quizá esto fue un error"</em><br>
+                    <strong>Final:</strong> Triunfo, alivio, calor → <em>"mereció la pena"</em>
+                </p>
+            </div>
+        </div>
+
+        <!-- PRESENTADOR -->
+        <div class="section">
+            <div class="section-number">06 — Presentador</div>
+            <h2>Diseño del Presentador</h2>
+            <p class="section-desc">Es la cara del show. Siempre el mismo personaje. Siempre al aire libre.</p>
+
+            <div class="presenter-grid">
+                <div class="presenter-item">
+                    <h4>👤 Apariencia</h4>
+                    <ul>
+                        <li>Hombre, 40-55 años</li>
+                        <li>Rústico pero accesible</li>
+                        <li>Barba, cara curtida, ojos amables</li>
+                        <li>Ropa outdoor pesada: franela, chaqueta, botas</li>
+                        <li><strong>SIEMPRE el mismo personaje</strong></li>
+                    </ul>
+                </div>
+                <div class="presenter-item">
+                    <h4>🌲 Entorno</h4>
+                    <ul>
+                        <li>Nunca en estudio</li>
+                        <li>Junto a hoguera</li>
+                        <li>Al lado de cabaña</li>
+                        <li>Frente a árboles nevados</li>
+                        <li>Luz cálida del fuego, fondo frío azulado</li>
+                    </ul>
+                </div>
+                <div class="presenter-item">
+                    <h4>🗣️ Voz y Tono</h4>
+                    <ul>
+                        <li>Tranquilo, con autoridad, cálido</li>
+                        <li>Frases cortas. Pausas para efecto.</li>
+                        <li>Práctico, no académico</li>
+                        <li>Habla como alguien que ha estado ahí</li>
+                    </ul>
+                </div>
+                <div class="presenter-item">
+                    <h4>🎬 Producción</h4>
+                    <ul>
+                        <li>Avatar AI generado con Veo</li>
+                        <li>Prompt base consistente</li>
+                        <li>Clips separados, integrados en edición</li>
+                        <li>Consistencia visual entre episodios</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- EPISODIO PILOTO -->
+        <div class="section">
+            <div class="section-number">07 — Piloto</div>
+            <h2>Episodio Piloto</h2>
+            <p class="section-desc">Guión completo del primer episodio de The Last Shelter.</p>
+
+            <div class="pilot-header">
+                <h3>"He Built a Cabin Alone in -40°F | 42 Days Before Winter"</h3>
+                <div class="pilot-meta">
+                    <div class="pilot-meta-item"><strong>Personaje:</strong> Erik Lindqvist, 54, carpintero retirado
+                    </div>
+                    <div class="pilot-meta-item"><strong>Ubicación:</strong> 130 km al norte de Whitehorse, Yukon</div>
+                    <div class="pilot-meta-item"><strong>Build:</strong> Cabaña de troncos, 37 m², estufa de leña</div>
+                    <div class="pilot-meta-item"><strong>Compañero:</strong> Koda (husky)</div>
+                    <div class="pilot-meta-item"><strong>Timeline:</strong> 42 días</div>
+                    <div class="pilot-meta-item"><strong>Conflicto:</strong> Día 14: cimientos húmedos → Día 28:
+                        tormenta 72h → Día 32: chimenea no sella</div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">0:00 — Cold Open</div>
+                    <div class="timeline-desc">Ventisca, cabaña a medio construir. <em>"Día 28. Menos 38 grados. El
+                            techo a medias."</em></div>
+                </div>
+                <div class="timeline-item break">
+                    <div class="timeline-time">0:20 — Presentador</div>
+                    <div class="timeline-desc">Presenta a Erik, su promesa a Anna, los 42 días. Cierra con tagline.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">1:00 — Acto 1</div>
+                    <div class="timeline-desc">DAY 1-10. Llegada con Koda. Tala, cimientos. ASMR del hacha. <em>"Por
+                            primera vez, Erik construía algo para sí mismo."</em></div>
+                </div>
+                <div class="timeline-item break">
+                    <div class="timeline-time">5:00 — Break 1</div>
+                    <div class="timeline-desc"><em>"Pero el día 14... encontró algo en la madera que lo cambió
+                            todo."</em></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">5:20 — Acto 2</div>
+                    <div class="timeline-desc">DAY 14: madera húmeda. Refuerza, pierde 3 días. DAY 20: paredes arriba,
+                        techo comienza. DAY 25: pronóstico de tormenta brutal.</div>
+                </div>
+                <div class="timeline-item break">
+                    <div class="timeline-time">10:00 — Break 2</div>
+                    <div class="timeline-desc"><em>"72 horas. Menos 48 grados. Vientos de 100 km/h. Una
+                            oportunidad."</em></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">10:20 — Acto 3</div>
+                    <div class="timeline-desc">DAY 28: sella techo toda la noche. DAY 30: aislamiento a presión. DAY 32:
+                        estufa que no sella → la arregla con arcilla.</div>
+                </div>
+                <div class="timeline-item climax">
+                    <div class="timeline-time">~14:00 — El Momento</div>
+                    <div class="timeline-desc">Primer fuego. Calor. Ventisca fuera. Erik con café. Koda junto al fuego.
+                        <em>"Por primera vez en 42 días, Erik se sentó."</em></div>
+                </div>
+                <div class="timeline-item break">
+                    <div class="timeline-time">15:00 — Cierre</div>
+                    <div class="timeline-desc"><em>"No construyó una cabaña. Construyó una promesa."</em> + Teaser
+                        próximo episodio.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PIPELINE -->
+        <div class="section">
+            <div class="section-number">08 — Pipeline</div>
+            <h2>Pipeline de Producción</h2>
+            <p class="section-desc">Adaptación del pipeline existente de Wild America.</p>
+
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <div class="pipeline-num">PASO 1</div>
+                    <h4>Story Generator</h4>
+                    <p>Personaje, lugar, timeline, conflicto</p>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-num">PASO 2</div>
+                    <h4>Narrative Timeline</h4>
+                    <p>3 actos + breaks + intro/cierre</p>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-num">PASO 3</div>
+                    <h4>Script Generator</h4>
+                    <p>Narración + diálogos presentador</p>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-num">PASO 4</div>
+                    <h4>Visual Prompts</h4>
+                    <p>Escenas + planos presentador</p>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-num">PASO 5</div>
+                    <h4>Video Gen</h4>
+                    <p>Veo + avatar AI</p>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-num">PASO 6</div>
+                    <h4>Post</h4>
+                    <p>Overlays, música, ASMR</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLAN DE LANZAMIENTO -->
+        <div class="section">
+            <div class="section-number">09 — Lanzamiento</div>
+            <h2>Plan de Lanzamiento</h2>
+            <p class="section-desc">3 fases para llevar The Last Shelter de concepto a canal activo.</p>
+
+            <div class="phase">
+                <div class="phase-header">
+                    <span class="phase-badge prep">FASE 1</span>
+                    <strong>Preparación</strong>
+                </div>
+                <ul>
+                    <li>Generar avatar del presentador (consistencia visual)</li>
+                    <li>Crear plantillas de overlay (day counter, progress bar, location card)</li>
+                    <li>Diseñar intro/outro (logo, tagline, música)</li>
+                    <li>Adaptar pipeline de generación</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <div class="phase-header">
+                    <span class="phase-badge pilot">FASE 2</span>
+                    <strong>Piloto</strong>
+                </div>
+                <ul>
+                    <li>Generar 1 episodio completo (Erik Lindqvist)</li>
+                    <li>Validar calidad de video, narración y presentador</li>
+                    <li>Ajustar prompts según resultado</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <div class="phase-header">
+                    <span class="phase-badge launch">FASE 3</span>
+                    <strong>Lanzamiento</strong>
+                </div>
+                <ul>
+                    <li>Publicar 3-5 episodios iniciales para establecer formato</li>
+                    <li>Mínimo 2 videos/semana para alimentar algoritmo</li>
+                    <li>Analizar retención, CTR y comparar con competencia</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        THE LAST SHELTER · Show Bible · Documento interno · Febrero 2026
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+{
+    "show": {
+        "name": "The Last Shelter",
+        "tagline": "When everything else fails... you build.",
+        "default_duration_minutes": 20,
+        "test_duration_minutes": 5,
+        "scenes_per_second": 8
+    },
+    "cinematography": {
+        "suffix": "cinematic documentary photography, cold blue-teal palette with warm amber fire highlights, shallow depth of field, atmospheric mist and snow particles, film grain, raw survival realism, natural light only",
+        "style_reference": "Planet Earth meets I Shouldn't Be Alive",
+        "shot_distribution": {
+            "wide": 35,
+            "medium": 45,
+            "close_up": 15,
+            "aerial": 5
+        }
+    },
+    "image_generation": {
+        "model": "gemini-3-pro-image-preview",
+        "width": 1920,
+        "height": 1080,
+        "aspect_ratio": "16:9",
+        "character_refs_count": 4,
+        "character_ref_types": [
+            "full body standing in snow landscape",
+            "medium shot face and upper body",
+            "hands working with tools close-up",
+            "walking with companion animal in forest"
+        ]
+    },
+    "overlays": {
+        "day_counter": "DAY {current}/{total}",
+        "temperature": "{temp}°F",
+        "progress_phases": [
+            "Foundation",
+            "Walls",
+            "Roof",
+            "Insulation",
+            "Heating"
+        ]
+    }
+}

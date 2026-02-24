@@ -1,0 +1,439 @@
+{
+  "storyboard": [
+    {
+      "action": "Drone sobrevuela paisaje helado. El helicóptero crece en el plano.",
+      "camera": "lento acercamiento aéreo desde un ultra gran angular.",
+      "duration": "8s",
+      "elements": [],
+      "narration": "",
+      "prompt": {
+        "done": true,
+        "elements": [],
+        "location_id": "yukon_aerial_establishing_winter",
+        "location_image": "loc_yukon_aerial_establishing_winter.png",
+        "location_prompt": "A breathtaking ultra-wide aerial panorama of the Yukon wilderness in winter, featuring frozen rivers, dense boreal forest, and massive snow-capped mountains under a cold, overcast sky.",
+        "locations": [
+          {
+            "id": "yukon_aerial_establishing_winter",
+            "image": "loc_yukon_aerial_establishing_winter.png",
+            "prompt": "A breathtaking ultra-wide aerial panorama of the Yukon wilderness in winter, featuring frozen rivers, dense boreal forest, and massive snow-capped mountains under a cold, overcast sky."
+          }
+        ],
+        "prompt_text": "No music. A breathtaking ultra-wide aerial panorama reveals the endless Yukon wilderness in the flat, cold light of a winter morning. The camera sweeps slowly over frozen rivers snaking through dark boreal forest, gusts of wind kicking up plumes of snow from ridgelines. In the far distance, a tiny helicopter appears, a dark speck against the enormous snow-capped peaks. The camera tracks with it as it grows infinitesimally larger, emphasizing the crushing scale of the landscape.",
+        "sfx": "Deep, howling wind cutting across open terrain, the distant, faint thud of helicopter rotors slowly growing in presence."
+      },
+      "scene_image": "scene_01.png",
+      "scene_number": 1,
+      "sfx": "Wind, silence, distant rotors",
+      "type": "bridge",
+      "visual_description": "Toma aérea épica de la naturaleza salvaje del Yukón. Un helicóptero aparece como un punto diminuto contra el vasto paisaje nevado de ríos helados, un denso bosque boreal y montañas coronadas de nieve."
+    },
+    {
+      "action": "Jack mira por la ventana, gira a cámara. Enérgico, urgente.",
+      "camera": "plano medio, a la altura de los ojos, con una ligera vibración de los rotores.",
+      "duration": "12s",
+      "elements": [
+        "Jack Harlan"
+      ],
+      "narration": "In this first episode, we're heading into the wild Yukon wilderness. We're going to show you one of the most dangerous survival challenges you've ever seen.",
+      "prompt": {
+        "done": true,
+        "elements": [
+          "Jack Harlan"
+        ],
+        "location_id": "helicopter_interior_backseat_winter",
+        "location_image": "loc_helicopter_interior_backseat_winter.png",
+        "location_prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro",
+        "locations": [
+          {
+            "id": "helicopter_interior_backseat_winter",
+            "image": "loc_helicopter_interior_backseat_winter.png",
+            "prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro"
+          }
+        ],
+        "prompt_text": "No music. Medium shot from the backseat of a helicopter, deafening rotor noise filling the cabin. @Jack sits by the window, wearing aviator sunglasses and a heavy-duty mountain parka, the fur-lined hood down. Vibration shakes the frame. He turns from the window to the camera, a sharp, energetic movement. He leans in, raising his voice well above the rotor thunder. @Jack speaks loud: \"In this first episode, we're heading into the wild Yukon wilderness!\" Cut to a wider angle across the backseat — @Jack still in his gear, points a gloved finger toward the camera, his expression intense, headset cable swaying with the helicopter's movement. @Jack speaks loud: \"We're going to show you one of the most dangerous survival challenges you've ever seen!\"",
+        "sfx": "Deafening helicopter rotors, heavy wind battering the fuselage, engine drone, muffled voice projecting with force over the mechanical noise."
+      },
+      "scene_image": "scene_02.png",
+      "scene_number": 2,
+      "sfx": "Helicopter rotors",
+      "type": "presenter",
+      "visual_description": "Jack Harlan, en el asiento trasero de un helicóptero, observa el paisaje nevado a través de la ventanilla y luego se gira hacia la cámara con energía. Lleva gafas de sol de aviador y una robusta chaqueta de montaña."
+    },
+    {
+      "action": "Jack señala abajo por la ventana. Cambio de tono: entusiasmo → gravedad.",
+      "camera": "plano medio corto, con ligera vibración.",
+      "duration": "10s",
+      "elements": [
+        "Jack Harlan"
+      ],
+      "narration": "Two years ago, a war veteran named James Lindqvist died. But before he left, he made his son Erik one final promise: finish the cabin.",
+      "prompt": {
+        "done": true,
+        "elements": [
+          "Jack Harlan"
+        ],
+        "location_id": "helicopter_interior_backseat_winter",
+        "location_image": "loc_helicopter_interior_backseat_winter.png",
+        "location_prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro",
+        "locations": [
+          {
+            "id": "helicopter_interior_backseat_winter",
+            "image": "loc_helicopter_interior_backseat_winter.png",
+            "prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro"
+          }
+        ],
+        "prompt_text": "No music. Medium close-up of @Jack in the helicopter backseat, rotor noise hammering. He removes his aviator sunglasses, revealing a sudden shift in his expression from energy to deep gravity. He points down through the window, his jaw tight. @Jack raises his voice over the deafening rotors: \"Two years ago, a war veteran named James Lindqvist died.\" Cut to a tighter close-up — @Jack's hand drops slowly into his lap. His eyes are fixed forward, the weight of the words visible in the subtle tension around his eyes. He slows his pace, projecting each word deliberately against the rotor thunder. @Jack speaks loud: \"But before he left... he made his son Erik one final promise...\" Pause, his eyes drop for a beat, then rise back to the lens, raw emotion pushing through the volume. @Jack speaks loud: \"Finish the cabin.\"",
+        "sfx": "Deafening helicopter rotors, muffled wind battering glass, voice cutting through the mechanical thunder with deliberate, heavy cadence."
+      },
+      "scene_image": "scene_03.png",
+      "scene_number": 3,
+      "sfx": "Emotional music sting",
+      "type": "presenter",
+      "visual_description": "Jack Harlan, en el asiento trasero de un helicóptero, señala hacia abajo a través de la ventanilla lateral con una expresión intensa y sombría."
+    },
+    {
+      "action": "James camina por bosque otoñal con herramientas. Esperanza, calidez.",
+      "camera": "plano medio en travelling, hora dorada.",
+      "duration": "10s",
+      "elements": [
+        "Erik's Father"
+      ],
+      "narration": "Fifteen years ago, James came here seeking peace and escape. He wanted to build a place where he could leave behind the demons of war.",
+      "prompt": {
+        "done": true,
+        "elements": [
+          "Erik's Father",
+          "Jack Harlan"
+        ],
+        "location_id": "yukon_forest_autumn_clearing",
+        "location_image": "loc_yukon_forest_autumn_clearing.png",
+        "location_prompt": "A small, sun-dappled clearing in a pristine Yukon boreal forest during late autumn. The ground is covered in golden leaves, and the air is filled with warm, diffused light.",
+        "locations": [
+          {
+            "id": "helicopter_interior_backseat_winter",
+            "image": "loc_helicopter_interior_backseat_winter.png",
+            "prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below."
+          },
+          {
+            "id": "yukon_forest_autumn_clearing",
+            "image": "loc_yukon_forest_autumn_clearing.png",
+            "prompt": "A small, sun-dappled clearing in a pristine Yukon boreal forest during late autumn. The ground is covered in golden leaves, and the air is filled with warm, diffused light."
+          }
+        ],
+        "prompt_text": "No music. @Image1 Medium close-up of @Jack in the helicopter, headset on, deafening rotors hammering. He looks out the window, then turns to camera, his expression shifting from intensity to quiet reflection. @Jack raises his voice over the noise: \"Fifteen years ago, James came here seeking peace...\" Cut to flashback: @Image2 A younger, rugged @James walks through a virgin boreal forest bathed in the warm, golden light of late autumn. He carries a heavy canvas pack with a felling axe strapped to the side. @Jack's voice continues as voice-over: \"...he wanted to build a place where he could leave behind the demons of war.\" Cut to @James stopping in a sun-dappled clearing, looking around with an expression of profound hope and determination. He runs a hand over the rough bark of a massive spruce tree, a slow smile spreading across his face as he surveys the location for his future home.\nThe helicopter shot is cold and desaturated with harsh window light; the flashback is warm amber tones, golden hour backlighting, and visible film grain for a nostalgic documentary feel. 4K.",
+        "sfx": "Deafening helicopter rotors during the opening shot of @Jack. As it cuts to flashback, the rotor noise fades to a low, distant drone under the primary sounds of boots crunching on dry leaves, birdsong, and a gentle autumn breeze rustling the forest canopy."
+      },
+      "scene_image": "scene_04.png",
+      "scene_number": 4,
+      "sfx": "Birds, forest ambient, warm music",
+      "type": "flashback",
+      "visual_description": "James Lindqvist llega al Yukón en otoño, bajo una cálida luz dorada, cargando herramientas y madera para construir una cabaña. Es un hombre más joven, de aspecto rudo y expresión esperanzada, rodeado por un bosque virgen."
+    },
+    {
+      "action": "James sentado débil en la cabaña deteriorada. La esperanza se desvanece.",
+      "camera": "lento acercamiento, tonos fríos y desaturados.",
+      "duration": "8s",
+      "elements": [
+        "Erik's Father"
+      ],
+      "narration": "But a terrible illness took him before he could finish. He died knowing his dream was in ruins.",
+      "prompt": {
+        "elements": [
+          "Erik's Father"
+        ],
+        "location_id": "cabin_construction_decaying",
+        "location_image": "loc_cabin_construction_decaying.png",
+        "location_prompt": "A half-built log cabin in a forest clearing, showing signs of decay with graying logs and a light dusting of snow, under a cold, overcast sky.. Changes: cabaña mucho mas derruida. Changes: cabaña mucho mas devastada. Apenas unos troncos puestos, pero casi sin estructura. Solo restos. Changes: menos zoom a la imagen y necesito que tenga mas aspecto de restos de cabaña. Changes: menos zoom y necesito que noj haya ninguna pared en pie",
+        "locations": [
+          {
+            "id": "cabin_construction_decaying",
+            "image": "loc_cabin_construction_decaying.png",
+            "prompt": "A half-built log cabin in a forest clearing, showing signs of decay with graying logs and a light dusting of snow, under a cold, overcast sky.. Changes: cabaña mucho mas derruida. Changes: cabaña mucho mas devastada. Apenas unos troncos puestos, pero casi sin estructura. Solo restos. Changes: menos zoom a la imagen y necesito que tenga mas aspecto de restos de cabaña. Changes: menos zoom y necesito que noj haya ninguna pared en pie"
+          }
+        ],
+        "prompt_text": "No music. The half-built cabin sits in a clearing, now under a light dusting of snow. The logs are graying and showing signs of decay. Inside, an older, gaunt @James sits on a crude stool, wrapped in a threadbare blanket. His face is pale, his eyes hollowed by illness. He stares out a frosted, unfinished window frame at the falling snow. Cut to his hand, trembling slightly as it rests on his knee. Cut back to a wide shot of him inside the skeletal structure, a lonely figure engulfed by his collapsing dream.\nVoice-over narration: \"But a terrible illness took him before he could finish. He died knowing his dream was in ruins.\"",
+        "sfx": "Low, melancholic wind whistling through the gaps in the cabin walls, the soft patter of snowflakes on wood, a distant crow call."
+      },
+      "scene_image": "scene_05.png",
+      "scene_number": 5,
+      "sfx": "Wind, creaking wood, somber music",
+      "type": "flashback",
+      "visual_description": "a cabaña a medio construir deteriorándose. Nieve cubriendo los troncos podridos. James Lindqvist, más viejo, demacrado y enfermo, sentado dentro mirando su sueño inacabado a través de una ventana esmerilada."
+    },
+    {
+      "action": "Drone revela las ruinas. Confirmación visual: su sueño en ruinas.",
+      "camera": "zoom-in con dron, de plano general a medio.",
+      "duration": "5s",
+      "elements": [],
+      "narration": "",
+      "prompt": {
+        "elements": [],
+        "location_id": "cabin_ruins_aerial_deep_snow",
+        "location_image": "loc_cabin_ruins_aerial_deep_snow.png",
+        "location_prompt": "Aerial view of the collapsed ruins of a log cabin deep in a boreal forest, half-buried under a thick blanket of pristine snow.. Changes: vista aerea de la imagen de referencia con un paisaje mas desertico y nevado. Changes: bosque alrededor, todo nevado, paisaje de yukon. Changes: vista aerea de la imagen de referencia",
+        "locations": [
+          {
+            "id": "cabin_ruins_aerial_deep_snow",
+            "image": "loc_cabin_ruins_aerial_deep_snow.png",
+            "prompt": "Aerial view of the collapsed ruins of a log cabin deep in a boreal forest, half-buried under a thick blanket of pristine snow.. Changes: vista aerea de la imagen de referencia con un paisaje mas desertico y nevado. Changes: bosque alrededor, todo nevado, paisaje de yukon. Changes: vista aerea de la imagen de referencia"
+          }
+        ],
+        "prompt_text": "No music. No voice. An aerial drone shot descends slowly toward the collapsed skeleton of a cabin in a forest clearing. Rotted wooden posts and collapsed logs are half-buried under a thick blanket of fresh snow. The dense, dark spruce forest surrounds the small clearing like a monolithic wall. The camera descends in perfect silence, revealing the utter devastation inch by inch, confirming the dream is in ruins.",
+        "sfx": "Only wind — low, constant, cold, and mournful. Nothing else."
+      },
+      "scene_image": "scene_06.png",
+      "scene_number": 6,
+      "sfx": "Wind through trees, eerie silence",
+      "type": "bridge",
+      "visual_description": "ista aérea de las ruinas de una cabaña colapsada y cubierta de nieve, en lo profundo del bosque boreal. Postes podridos y troncos derrumbados, semienterrados bajo la nieve. Los restos de un sueño fallido."
+    },
+    {
+      "action": "Jack se inclina agresivo hacia cámara. Cambio de energía: grave → urgente.",
+      "camera": "plano medio, con sensación de cámara en mano.",
+      "duration": "8s",
+      "elements": [
+        "Jack Harlan"
+      ],
+      "narration": "Now Erik is here to face something absolutely insane. He has the skills, he has the experience. But what he doesn't have is time.",
+      "prompt": {
+        "elements": [
+          "Jack Harlan"
+        ],
+        "location_id": "helicopter_interior_backseat_winter",
+        "location_image": "loc_helicopter_interior_backseat_winter.png",
+        "location_prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro",
+        "locations": [
+          {
+            "id": "helicopter_interior_backseat_winter",
+            "image": "loc_helicopter_interior_backseat_winter.png",
+            "prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro"
+          }
+        ],
+        "prompt_text": "No music. Medium shot of @Jack in the helicopter backseat, rotor noise hammering. He leans forward aggressively, his face filling the frame, eyes sharp and intense. The previous solemnity is gone, replaced by raw urgency. @Jack speaks loud, his voice cutting through the noise with contained aggression: \"Now Erik is here to face something absolutely insane!\" Cut to a tighter framing, camera pushing in slowly — @Jack points directly at the lens, finger jabbing for emphasis. @Jack speaks loud: \"He has the skills, he has the experience!\" Cut to a close-up — @Jack's hand drops flat, a sharp, cutting gesture. His eyes drill into the lens. @Jack speaks loud: \"But what he doesn't have... is time.\"",
+        "sfx": "Deafening helicopter rotors, wind pressing against the fuselage, voice projecting with sharp, aggressive urgency over the mechanical roar."
+      },
+      "scene_image": "scene_07.png",
+      "scene_number": 7,
+      "sfx": "Tension music rises",
+      "type": "presenter",
+      "visual_description": "Jack Harlan, en el asiento trasero del helicóptero, se inclina agresivamente hacia la cámara. Un brusco cambio de energía abandona la solemnidad."
+    },
+    {
+      "action": "Cortes rápidos: Erik tala, carga, mide. Solo. El reloj corre.",
+      "camera": "cortes rápidos, primeros planos de manos y herramientas.",
+      "duration": "5s",
+      "elements": [
+        "Erik Lindqvist"
+      ],
+      "narration": "ONLY 90 days before winter becomes a killing machine.",
+      "prompt": {
+        "elements": [
+          "Erik Lindqvist"
+        ],
+        "location_id": "building_site_late_autumn",
+        "location_image": "loc_building_site_late_autumn.png",
+        "location_prompt": "A forest clearing in late autumn, the ground hard with the first frost. A few felled logs and basic woodworking tools are scattered around, with the dark boreal forest looming in the background.",
+        "locations": [
+          {
+            "id": "building_site_late_autumn",
+            "image": "loc_building_site_late_autumn.png",
+            "prompt": "A forest clearing in late autumn, the ground hard with the first frost. A few felled logs and basic woodworking tools are scattered around, with the dark boreal forest looming in the background."
+          }
+        ],
+        "prompt_text": "No music. A rapid-fire montage of @Erik at work. Low-angle shot of an axe biting deep into a thick log, wood chips flying. Cut to a tracking shot of @Erik straining, dragging a massive debarked log across the frozen ground. Cut to a close-up of his hands, gloved and calloused, marking a beam with a carpenter's pencil. He is rugged, focused, his face a mask of determination against the fading autumn light. Every movement is efficient, powerful, and utterly alone.\nVoice-over narration: \"ONLY 90 days before winter becomes a killing machine.\"",
+        "sfx": "Rhythmic axe strikes, the heavy scrape of wood on frozen earth, grunts of exertion, the sharp scratch of a pencil on timber."
+      },
+      "scene_image": "scene_08.png",
+      "scene_number": 8,
+      "sfx": "Axe hits, wood splitting, tense music",
+      "type": "anticipatorio",
+      "visual_description": "vance en montaje rápido: Erik Lindqvist cortando troncos con un hacha, arrastrando madera a través del bosque, midiendo vigas. Rudo y decidido, trabaja solo en la naturaleza salvaje mientras los colores del otoño se apagan."
+    },
+    {
+      "action": "Frente de tormenta avanza. La temperatura se desploma. La amenaza es REAL.",
+      "camera": "travelling lento, contrapicado a las montañas.",
+      "duration": "6s",
+      "elements": [],
+      "narration": "Ninety days before temperatures drop to negative 40. Before blizzards bury everything under meters of snow.",
+      "prompt": {
+        "elements": [],
+        "location_id": "yukon_mountains_blizzard_front",
+        "location_image": "loc_yukon_mountains_blizzard_front.png",
+        "location_prompt": "Epic wide shot of snow-covered Yukon mountains under a dark, threatening sky as a massive blizzard front advances, a wall of churning white and grey clouds.",
+        "locations": [
+          {
+            "id": "yukon_mountains_blizzard_front",
+            "image": "loc_yukon_mountains_blizzard_front.png",
+            "prompt": "Epic wide shot of snow-covered Yukon mountains under a dark, threatening sky as a massive blizzard front advances, a wall of churning white and grey clouds."
+          }
+        ],
+        "prompt_text": "No music. Epic wide landscape shot of snow-covered Yukon mountains under a dark, bruised-purple sky. A massive storm front, a wall of churning grey and white, rolls in from the north, swallowing the peaks one by one. Snow blasts horizontally across the frame. Trees in the foreground bend violently under the force of the wind. The camera holds steady as the wall of white advances, obliterating all visibility.\nVoice-over narration: \"Ninety days before temperatures drop to negative 40. Before blizzards bury everything under meters of snow.\"",
+        "sfx": "Wind howling at full force, growing from a deep moan to a high-pitched shriek. Snow particles hissing against rock. A deep, atmospheric pressure shift that feels almost subsonic."
+      },
+      "scene_image": "scene_09.png",
+      "scene_number": 9,
+      "sfx": "Howling wind, thunder, ominous score",
+      "type": "bridge",
+      "visual_description": "Montañas cubiertas de nieve bajo un cielo oscuro y amenazante. Un masivo frente de tormenta se aproxima. Un gráfico de termómetro muestra la temperatura desplomándose hacia los -40ºF."
+    },
+    {
+      "action": "Jack habla serio intercalado con montaje rápido de Erik construyendo y encendiendo fuego.",
+      "camera": "intercorte: primer plano de Jack / montaje de Erik.",
+      "duration": "8s",
+      "elements": [
+        "Jack Harlan"
+      ],
+      "narration": "This won't be a game. Erik has to build a functional cabin from scratch. He has to light a fire that keeps him alive.",
+      "prompt": {
+        "elements": [
+          "Jack Harlan"
+        ],
+        "location_id": "helicopter_interior_backseat_winter",
+        "location_image": "loc_helicopter_interior_backseat_winter.png",
+        "location_prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro",
+        "locations": [
+          {
+            "id": "helicopter_interior_backseat_winter",
+            "image": "loc_helicopter_interior_backseat_winter.png",
+            "prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro"
+          }
+        ],
+        "prompt_text": "No music. Medium close-up of @Jack in the helicopter, rotor noise hammering. His expression is dead serious, eyes locked on the lens. @Jack speaks loud: \"This won't be a game.\" Cut to a rapid montage: @Erik hammering a heavy wooden peg into a log joint. Cut to a super close-up of sparks flying from a fire bow, catching on tinder. Cut back to @Jack, same framing, same intensity. @Jack speaks loud: \"Erik has to build a functional cabin from scratch. He has to light a fire that keeps him alive.\"",
+        "sfx": "Deafening helicopter rotors, punctuated by the sharp CRACK of a hammer on wood and the frantic, scraping sound of a fire bow drill."
+      },
+      "scene_image": "scene_10.png",
+      "scene_number": 10,
+      "sfx": "Silence, then low drone",
+      "type": "presenter",
+      "visual_description": "Jack Harlan en el helicóptero, mortalmente serio, mira fijamente a la cámara. Luego, cortes rápidos intercalados: Erik martillando una estructura, chispas de un arco de fuego, manos trabajando en el frío. La voz de Jack continúa sobre el montaje."
+    },
+    {
+      "action": "Erik solo en la inmensidad. Plano abierto que muestra lo diminuto del hombre vs la naturaleza.",
+      "camera": "montaje rápido, mezcla de primeros planos y planos generales.",
+      "duration": "5s",
+      "elements": [
+        "Erik Lindqvist"
+      ],
+      "narration": "And survive alone in one of the most hostile environments on the planet.",
+      "prompt": {
+        "elements": [
+          "Erik Lindqvist"
+        ],
+        "location_id": "vast_snow_clearing",
+        "location_image": "loc_vast_snow_clearing.png",
+        "location_prompt": "An immense, empty snow-covered clearing in the Yukon, surrounded by a dense, dark wall of boreal forest under a flat grey sky.",
+        "locations": [
+          {
+            "id": "vast_snow_clearing",
+            "image": "loc_vast_snow_clearing.png",
+            "prompt": "An immense, empty snow-covered clearing in the Yukon, surrounded by a dense, dark wall of boreal forest under a flat grey sky."
+          }
+        ],
+        "prompt_text": "No music. Extreme wide shot. @Erik is a tiny, solitary figure standing in the middle of a vast, snow-covered clearing. He is surrounded on all sides by an impenetrable wall of dark spruce forest. The wind whips snow into swirling patterns around his feet. He stands perfectly still, a single vertical element in a horizontal, indifferent wilderness. The camera holds, emphasizing his total isolation and the immense scale of his challenge.\nVoice-over narration: \"And survive alone in one of the most hostile environments on the planet.\"",
+        "sfx": "Low, mournful wind, the soft hiss of blowing snow, the distant creak of frozen timber, and a profound, deep silence underneath it all."
+      },
+      "scene_image": "scene_11.png",
+      "scene_number": 11,
+      "sfx": "Hammering, fire crackling, wind",
+      "type": "anticipatorio",
+      "visual_description": "Erik Lindqvist, una figura diminuta de pie, solo, contra la inmensidad de la naturaleza nevada. El viento arremolina la nieve a su alrededor. Aislamiento total."
+    },
+    {
+      "action": "Jack señala a cámara. Advertencia final. Corta el aire con la mano.",
+      "camera": "primer plano, con un ligero acercamiento.",
+      "duration": "5s",
+      "elements": [
+        "Jack Harlan"
+      ],
+      "narration": "Because if he fails, he's trapped. No shelter, no heat, no way out.",
+      "prompt": {
+        "elements": [
+          "Jack Harlan"
+        ],
+        "location_id": "helicopter_interior_backseat_winter",
+        "location_image": "loc_helicopter_interior_backseat_winter.png",
+        "location_prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro",
+        "locations": [
+          {
+            "id": "helicopter_interior_backseat_winter",
+            "image": "loc_helicopter_interior_backseat_winter.png",
+            "prompt": "Interior of a helicopter backseat, looking toward the side window. A heavy-duty mountain parka and aviator sunglasses rest on the empty seat. Through the window, a vast, snowy Yukon landscape rushes by below.. Changes: quita la chaqueta roja y las gafas. Changes: quita la chaqueta roja y las gafas. Changes: haz que se vea un poco mas amplio el helicoptero por dentro"
+          }
+        ],
+        "prompt_text": "No music. Extreme close-up on @Jack's face in the helicopter, the frame vibrating violently. Maximum intensity in his eyes. He points a gloved finger directly at the camera lens, almost touching it. @Jack speaks loud, his voice a harsh warning over the engine's roar: \"Because if he fails, he's trapped.\" Cut to a medium shot as his hand slices down through the air, a sharp, final gesture. @Jack speaks loud: \"No shelter, no heat, no way out.\" He holds the intense, threatening gaze.",
+        "sfx": "Deafening helicopter rotors at peak volume, wind hammering the fuselage, voice cutting through the chaos with menacing clarity."
+      },
+      "scene_image": "scene_12.png",
+      "scene_number": 12,
+      "sfx": "Dramatic crescendo, then silence",
+      "type": "presenter",
+      "visual_description": "Jack Harlan, con máxima intensidad, apunta directamente a la cámara. Su mano corta el aire, casi amenazando al espectador."
+    },
+    {
+      "action": "Multishot: helicóptero aterriza (ext) → Jack habla serio (int) → abre puerta, baja → camina hacia ruinas con propósito.",
+      "camera": "intercorte: plano general ext helicóptero / primer plano int Jack / plano medio tracking Jack caminando",
+      "duration": "15s",
+      "elements": [
+        "Jack Harlan"
+      ],
+      "narration": "Can he really do it? Can one man build from scratch what his father couldn't? Or will the Yukon destroy him?",
+      "prompt": {
+        "elements": [
+          "Jack Harlan"
+        ],
+        "location_id": "landing_site_ruins",
+        "location_image": "loc_landing_site_ruins.png",
+        "location_prompt": "A snowy clearing in the Yukon forest, large enough for a helicopter to land, with the collapsed, snow-covered ruins of a log cabin visible at the edge of the clearing.",
+        "locations": [
+          {
+            "id": "landing_site_ruins",
+            "image": "loc_landing_site_ruins.png",
+            "prompt": "A snowy clearing in the Yukon forest, large enough for a helicopter to land, with the collapsed, snow-covered ruins of a log cabin visible at the edge of the clearing."
+          }
+        ],
+        "prompt_text": "No music. Wide exterior shot of the helicopter descending into a snowy clearing, rotor wash creating a blizzard of flying snow and debris. The ruined cabin is visible in the background. Cut to an interior shot of @Jack, still strapped in, speaking with grim seriousness directly to the camera. @Jack speaks loud over the winding-down rotors: \"Can he really do it? Can one man build from scratch what his father couldn't?\" Cut to exterior as @Jack pushes the door open and steps out. Aggressive handheld shot tracks backwards as he walks with purpose, boots sinking deep into the snow, directly toward the collapsed cabin. The rotors are still spinning down behind him. @Jack stops, turns to face camera, the ruins stark behind him. @Jack speaks, his voice now clearer as the engine noise fades: \"Or will the Yukon destroy him?\"",
+        "sfx": "Rotor blades winding down from a roar to a rhythmic whump-whump, boots crunching heavily in deep snow, wind gusting, snow particles hissing."
+      },
+      "scene_image": "scene_13.png",
+      "scene_number": 13,
+      "sfx": "Rotores, nieve al viento, botas en nieve, silencio gradual",
+      "type": "presenter",
+      "visual_description": "Secuencia multishot: el helicóptero desciende hacia un claro cerca de las ruinas, nieve volando por los rotores. Interior: Jack Harlan habla serio a cámara. Exterior: Jack abre la puerta, baja y camina con determinación hacia las ruinas de la cabaña entre la nieve."
+    },
+    {
+      "action": "Jack de pie en las ruinas. Pose heroica. Contacto visual directo. CORTE A NEGRO.",
+      "camera": "plano de héroe en contrapicado, estable.",
+      "duration": "8s",
+      "elements": [
+        "Jack Harlan"
+      ],
+      "narration": "This is about to begin. This is The Last Shelter.",
+      "prompt": {
+        "elements": [
+          "Jack Harlan"
+        ],
+        "location_id": "cabin_ruins_ground_snowfall",
+        "location_image": "loc_cabin_ruins_ground_snowfall.png",
+        "location_prompt": "Ground-level view of the collapsed ruins of a log cabin, half-buried in snow, during a gentle snowfall, with a dense, dark forest in the background.",
+        "locations": [
+          {
+            "id": "cabin_ruins_ground_snowfall",
+            "image": "loc_cabin_ruins_ground_snowfall.png",
+            "prompt": "Ground-level view of the collapsed ruins of a log cabin, half-buried in snow, during a gentle snowfall, with a dense, dark forest in the background."
+          }
+        ],
+        "prompt_text": "No music. Medium shot of @Jack standing beside the collapsed ruins of the cabin. Snow falls gently around him. He stands firm, a heroic silhouette against the desolate backdrop. He looks directly into the camera lens, holding the gaze for a long, silent beat. His breath is a white plume in the freezing air. @Jack speaks with quiet, unwavering conviction: \"This is about to begin.\" Pause. The camera begins a slow, deliberate push-in, tightening on his determined face. @Jack speaks: \"This is The Last Shelter.\" He holds the lens. His expression is unblinking, resolute.",
+        "sfx": "Cold wind whispering through the ruined timbers, the soft sound of falling snowflakes, absolute silence between his words."
+      },
+      "scene_image": "scene_14.png",
+      "scene_number": 14,
+      "sfx": "Wind, silence, dramatic sting",
+      "type": "presenter",
+      "visual_description": "Jack Harlan, de pie junto a las ruinas de la cabaña, mira directamente a la cámara en una pose heroica. La estructura derruida está a su espalda mientras la nieve cae suavemente. Es el plano insignia."
+    }
+  ],
+  "block_type": "intro",
+  "total_scenes": 14,
+  "total_duration": 113
+}

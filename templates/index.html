@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last Shelter — Story Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-brand">
+            <span class="brand-icon">🏔️</span>
+            <div>
+                <h1>The Last Shelter</h1>
+                <span class="tagline">When everything else fails... you build.</span>
+            </div>
+        </div>
+        <button class="btn-icon header-settings" onclick="openShowSettings()" title="Show Settings">
+            ⚙️
+        </button>
+    </header>
+
+    <main class="main">
+        <!-- LEFT PANEL — Project List + Create -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Episodes</h2>
+                <button class="btn btn-primary btn-sm" onclick="showCreateForm()">+ New</button>
+            </div>
+
+            <!-- Create Project Form (hidden by default) -->
+            <div class="create-form" id="createForm" style="display: none;">
+                <div class="form-group">
+                    <label>Episode Title</label>
+                    <input type="text" id="titleInput" class="input"
+                        placeholder='e.g. "He Built a Cabin Alone in -40°F | 90 Days Before Winter"'>
+                </div>
+                <div class="form-group">
+                    <label>Script File (.md)</label>
+                    <div class="upload-zone script-upload-zone" id="scriptUploadZone">
+                        <div class="upload-placeholder" id="scriptUploadPlaceholder">
+                            <span class="upload-icon">📄</span>
+                            <span>Drop your script .md file here or click to browse</span>
+                        </div>
+                        <div class="upload-file-info" id="scriptFileInfo" style="display: none;">
+                            <span class="upload-icon">✅</span>
+                            <span id="scriptFileName">filename.md</span>
+                            <button class="btn-icon" onclick="event.stopPropagation(); clearScriptFile()"
+                                title="Remove">✕</button>
+                        </div>
+                        <input type="file" id="scriptFileInput" accept=".md" style="display: none;">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="createProject()" id="btnCreateProject">Create
+                        Episode</button>
+                    <button class="btn btn-ghost" onclick="hideCreateForm()">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Project List -->
+            <div class="project-list" id="projectList">
+                {% for p in projects %}
+                <div class="project-card {% if loop.first %}active{% endif %}" data-project-id="{{ p.id }}"
+                    onclick="loadProject('{{ p.id }}')">
+                    <div class="project-card-row">
+                        <div class="project-title">{{ p.title }}</div>
+                        <button class="btn-delete-sidebar"
+                            onclick="event.stopPropagation(); deleteProject('{{ p.id }}')" title="Delete">🗑️</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <!-- RIGHT PANEL — Project Detail -->
+        <section class="content" id="content">
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <span class="empty-icon">🏔️</span>
+                <h2>Create your first episode</h2>
+                <p>Enter a title and duration to generate a compelling survival story.</p>
+                <button class="btn btn-primary" onclick="showCreateForm()">+ New Episode</button>
+            </div>
+
+            <!-- Project View (hidden until project loaded) -->
+            <div class="project-view" id="projectView" style="display: none;">
+
+                <!-- Sticky Navigation (title + steps) -->
+                <div class="sticky-nav">
+                    <div class="project-header">
+                        <h2 id="projectTitle"></h2>
+                        <div class="project-badges">
+                            <span class="badge" id="projectDuration"></span>
+                            <span class="badge" id="projectStatus"></span>
+                        </div>
+                    </div>
+                    <div class="steps-bar" id="stepsBar">
+                        <div class="step" data-step="script">
+                            <span class="step-number">1</span>
+                            <span class="step-label">Script</span>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step" data-step="breakdown">
+                            <span class="step-number">2</span>
+                            <span class="step-label">Breakdown</span>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step" data-step="voice">
+                            <span class="step-number">3</span>
+                            <span class="step-label">Voice</span>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step" data-step="elements">
+                            <span class="step-number">4</span>
+                            <span class="step-label">Elements</span>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step" data-step="production">
+                            <span class="step-number">5</span>
+                            <span class="step-label">Production</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Console -->
+                <div class="console" id="console" style="display: none;">
+                    <div class="console-header">
+                        <span>📟 Activity</span>
+                        <button class="btn-icon" onclick="toggleConsole()">_</button>
+                    </div>
+                    <div class="console-body" id="consoleBody"></div>
+                </div>
+
+                <!-- SECTION: Script (Step 1) -->
+                <div class="section" id="scriptSection">
+                    <div class="section-header">
+                        <h3>📝 Script</h3>
+                        <div class="section-actions">
+                            <label class="btn btn-ghost btn-sm" id="btnReuploadScript"
+                                style="display:none; cursor:pointer;">
+                                📄 Re-upload Script
+                                <input type="file" accept=".md" style="display:none;" onchange="reuploadScript(this)">
+                            </label>
+                            <button class="btn btn-ghost btn-sm" id="btnCollapseScript"
+                                onclick="toggleCollapse('scriptContent', this)" style="display:none;">▼ Expand</button>
+                        </div>
+                    </div>
+                    <div class="section-content" id="scriptContent" style="display: none;">
+                        <p class="text-muted">Upload a script .md file when creating the episode, or drag and drop one
+                            here.</p>
+                    </div>
+                </div>
+
+                <!-- SECTION: Breakdown (Step 2) -->
+                <div class="section" id="breakdownSection" style="display: none;">
+                    <div class="section-header">
+                        <h3><span>🧩</span> Breakdown</h3>
+                        <div class="section-actions">
+                            <button class="btn btn-primary btn-sm" id="btnGenerateBreakdown"
+                                onclick="generateBreakdown()">Analyze Script</button>
+                            <button class="btn btn-ghost btn-sm" id="btnRegenerateBreakdown"
+                                onclick="generateBreakdown()" style="display:none;">↻ Re-analyze</button>
+                            <button class="btn btn-ghost btn-sm" id="btnCollapseBreakdown"
+                                onclick="toggleCollapse('breakdownContent', this)" style="display:none;">▼
+                                Expand</button>
+                        </div>
+                    </div>
+                    <div class="section-content" id="breakdownContent" style="display: none;">
+                        <p class="text-muted">Click "Analyze Script" to extract characters, location, conflicts, and
+                            narrative arcs from the script.</p>
+                    </div>
+                </div>
+
+                <!-- SECTION: Voice (Step 3) — ElevenLabs TTS -->
+                <div class="section" id="voiceSection" style="display: none;">
+                    <div class="section-header">
+                        <h3>🔊 Voice</h3>
+                        <div class="section-actions">
+                            <button class="btn btn-ghost btn-sm" id="btnCollapseVoice"
+                                onclick="toggleCollapse('voiceContent', this)">▼ Expand</button>
+                            <span class="voice-total-duration" id="voiceTotalDuration" style="display:none;"></span>
+                            <button class="btn btn-ghost btn-sm" id="btnDownloadAllAudio" onclick="downloadAllAudio()"
+                                style="display:none;">📦 Download All</button>
+                            <button class="btn btn-primary btn-sm" id="btnGenerateAllVoice"
+                                onclick="generateAllVoice()">🎙️ Generate All Audio</button>
+                        </div>
+                    </div>
+                    <div class="section-content" id="voiceContent" style="display: none;">
+                        <!-- TTS Settings Bar -->
+                        <div class="voice-settings-bar" id="voiceSettingsBar">
+                            <div class="voice-setting">
+                                <label>Voice ID</label>
+                                <input type="text" class="input input-sm" id="voiceTtsVoiceId"
+                                    placeholder="ElevenLabs Voice ID" value="tkPQHnQfmFvyE5X9juYK">
+                            </div>
+                            <div class="voice-setting">
+                                <label>Model</label>
+                                <select class="input input-sm" id="voiceTtsModel">
+                                    <option value="eleven_v3" selected>v3</option>
+                                    <option value="eleven_v3_dpo_20260217">v3 DPO</option>
+                                    <option value="eleven_multilingual_v2">Multilingual v2</option>
+                                </select>
+                            </div>
+                            <div class="voice-setting">
+                                <label>Speed: <span id="voiceSpeedLabel">0.70</span></label>
+                                <input type="range" class="input input-sm" id="voiceTtsSpeed" min="0.70" max="1.20"
+                                    step="0.05" value="0.70"
+                                    oninput="document.getElementById('voiceSpeedLabel').textContent = this.value">
+                            </div>
+                            <div class="voice-setting">
+                                <label>Stability</label>
+                                <select class="input input-sm" id="voiceTtsStability">
+                                    <option value="0.0">Creative</option>
+                                    <option value="0.5" selected>Natural</option>
+                                    <option value="1.0">Robust</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Per-chapter audio cards container -->
+                        <div id="voiceChaptersContainer"></div>
+                    </div>
+                </div>
+
+                <!-- SECTION: Elements (Step 4) -->
+                <div class="section" id="elementsSection" style="display: none;">
+                    <div class="section-header">
+                        <h3>🎭 Elements</h3>
+                        <div class="section-actions">
+                            <button class="btn btn-primary btn-sm" id="btnGenerateElements"
+                                onclick="generateStep('elements')">Generate Elements</button>
+                            <button class="btn btn-ghost btn-sm" id="btnRegenerateElements"
+                                onclick="generateStep('elements')" style="display:none;">↻ Regenerate</button>
+                            <button class="btn btn-ghost btn-sm" id="btnCollapseElements"
+                                onclick="toggleCollapse('elementsContent', this)" style="display:none;">▼
+                                Expand</button>
+                        </div>
+                    </div>
+                    <div class="section-content" id="elementsContent" style="display: none;">
+                        <p class="text-muted">Characters, objects, and environment reference images will appear here.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- SECTION: Chapter Production (Step 5) -->
+                <div class="section" id="scenePromptsSection" style="display: none;">
+                    <div class="section-header">
+                        <h3>🎬 Chapter Production</h3>
+                        <div class="section-actions">
+                            <button class="btn btn-primary btn-sm" id="btnLaunchStoryboard" onclick="launchStoryboard()"
+                                style="display:none;">🚀 Launch Storyboard</button>
+                            <button class="btn btn-ghost btn-sm" id="btnCollapseScenePrompts"
+                                onclick="toggleCollapse('scenePromptsContent', this)" style="display:none;">▲
+                                Collapse</button>
+                        </div>
+                    </div>
+                    <div class="section-content" id="scenePromptsContent">
+                        <!-- Chapter Selector -->
+                        <div class="prod-controls" id="prodControls">
+                            <div class="prod-chapter-select">
+                                <label>Chapter</label>
+                                <select id="chapterSelect" class="input">
+                                    <option value="0">Loading chapters...</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary btn-sm" id="btnAnalyzeChapter" onclick="analyzeChapter()">🔍
+                                Analyze</button>
+                            <button class="btn btn-primary btn-sm" id="btnGenerateProduction"
+                                onclick="generateChapterProduction()" style="display:none;">🚀 Generate
+                                Production</button>
+                        </div>
+
+                        <!-- Validation Results -->
+                        <div id="validationResults" style="display:none;"></div>
+
+                        <!-- Storyboard Table -->
+                        <div id="storyboardContainer" style="display:none;"></div>
+
+                        <!-- Production Results -->
+                        <div id="productionResults" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- SECTION: Generate (Step 6) -->
+                <div class="section" id="generateSection" style="display: none;">
+                    <div class="section-header">
+                        <h3>🚀 Generate</h3>
+                    </div>
+                    <div class="section-content" id="generateContent">
+                        <p class="text-muted">Video generation with Kling O3 Pro coming soon.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- SHOW SETTINGS MODAL -->
+    <div class="modal-overlay" id="showSettingsOverlay" style="display: none;" onclick="closeShowSettings()">
+        <div class="modal-panel" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>⚙️ Show Settings</h3>
+                <button class="btn-icon" onclick="closeShowSettings()">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- Presenter Name -->
+                <div class="form-group">
+                    <label>Presenter Name</label>
+                    <input type="text" class="input" id="settingsPresenterName" placeholder="Jack Harlan">
+                </div>
+
+                <!-- Turnaround Image -->
+                <div class="form-group">
+                    <label>Presenter Reference (Turnaround)</label>
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <span class="upload-icon">📸</span>
+                            <span>Drag & drop turnaround image or click to browse</span>
+                        </div>
+                        <img class="upload-preview" id="uploadPreview" style="display: none;">
+                        <input type="file" id="uploadInput" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- ElevenLabs Voice ID -->
+                <div class="form-group">
+                    <label>ElevenLabs Voice ID</label>
+                    <input type="text" class="input" id="settingsVoiceId" placeholder="Paste your Voice ID here">
+                    <span class="form-hint">From ElevenLabs → Voices → Your voice → ID</span>
+                </div>
+
+                <!-- ElevenLabs Voice Settings -->
+                <div class="form-group">
+                    <label>Voice Model</label>
+                    <select class="input" id="settingsVoiceModel">
+                        <option value="eleven_v3">Eleven v3 (recommended)</option>
+                        <option value="eleven_v3_dpo_20260217">Eleven v3 DPO (experimental)</option>
+                        <option value="eleven_multilingual_v2">Multilingual v2</option>
+                    </select>
+                    <span class="form-hint">v3 = latest model, DPO = Direct Preference Optimization variant</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex:1;">
+                        <label>Stability</label>
+                        <select class="input" id="settingsVoiceStability">
+                            <option value="0.0">Creative (0.0) — Maximum emotion</option>
+                            <option value="0.5" selected>Natural (0.5) — Balanced</option>
+                            <option value="1.0">Robust (1.0) — Very stable</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Speed: <span id="speedValue">0.75</span></label>
+                        <input type="range" class="input" id="settingsVoiceSpeed" min="0.70" max="1.20" step="0.05"
+                            value="0.75" oninput="document.getElementById('speedValue').textContent = this.value">
+                        <span class="form-hint">0.70 = slow, 1.00 = normal, 1.20 = fast</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeShowSettings()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveShowSettings()">💾 Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT ELEMENT MODAL -->
+    <div class="modal-overlay" id="editElementOverlay" style="display: none;" onclick="closeEditElementModal()">
+        <div class="modal-panel" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>✏️ Edit Element Image</h3>
+                <button class="btn-icon" onclick="closeEditElementModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editElementId">
+                <div class="form-group">
+                    <img id="editElementPreview" src="" alt=""
+                        style="width:100%; max-height:200px; object-fit:contain; background:#f3f4f6; border-radius:6px; margin-bottom:8px; display:none;">
+                </div>
+                <div class="form-group">
+                    <label>Instructions for AI</label>
+                    <textarea class="input" id="editElementFeedback" rows="3"
+                        placeholder='Ej: "Haz la chaqueta azul marino", "Añade más barro a las botas", "Quita la gorra"'></textarea>
+                    <span class="form-hint">The AI will refine the visual prompt while automatically enforcing the CLEAN
+                        WHITE STUDIO BACKGROUND rule.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeEditElementModal()">Cancel</button>
+                <button class="btn btn-primary" id="btnSubmitElementEdit" onclick="submitElementEdit()">🖼️ Regenerate
+                    Image</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>

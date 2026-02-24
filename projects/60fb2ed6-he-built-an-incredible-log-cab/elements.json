@@ -1,0 +1,99 @@
+[
+  {
+    "element_id": "erik_lindqvist",
+    "label": "Erik Lindqvist",
+    "category": "character",
+    "description": "A man in his late 20s to early 30s, approximately 5'11\" with a lean, muscular build from outdoor work. His skin is tanned and weathered. He has short, practical dark brown hair and a scruffy beard. He wears layered, durable outdoor clothing: a flannel shirt, an insulated work jacket, sturdy work pants, and heavy-duty boots.",
+    "appears_in": [
+      "Arrival And Devastation",
+      "Foundation And First Logs",
+      "Racing Against The First Cold",
+      "Storm And Lost Time",
+      "Final Push To The Roof",
+      "Roof In Extreme Conditions",
+      "Chimney And Finishing",
+      "First Fire"
+    ],
+    "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A rugged Scandinavian man in his late 20s to early 30s. Tanned, weathered skin from outdoor work. Short, practical dark brown hair. Scruffy beard. Blue eyes, intense gaze. Wearing a brown Carhartt work jacket over a red flannel shirt. Facing camera directly, shoulders and head visible, eye-level angle. Sharp focus on face. Photorealistic, cinematic lighting, no shadows, clean white background.",
+    "image_filename": "erik_lindqvist.png",
+    "prompt_name": "Erik"
+  },
+  {
+    "element_id": "gus_the_dog",
+    "label": "Gus (Dog)",
+    "category": "character",
+    "description": "Erik's loyal working dog, described as a mixed breed. A sturdy, medium-to-large sized dog suited for cold weather, with a thick coat. Appears intelligent and hardy.",
+    "appears_in": [
+      "Arrival And Devastation",
+      "Storm And Lost Time",
+      "First Fire"
+    ],
+    "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A sturdy, medium-to-large Bernese Mountain Dog with a thick, characteristic tricolor coat of black, rust, and white, suited for cold weather. Intelligent, alert eyes. Facing camera directly, shoulders and head visible, eye-level angle. Sharp focus on face. Photorealistic, studio lighting, no shadows, no environment.",
+    "image_filename": "gus_the_dog.png",
+    "prompt_name": "Gus",
+    "_prompt_history": [
+      "Close-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A sturdy, medium-to-large mixed breed working dog with a thick dark coat suited for cold weather. Intelligent, alert eyes looking directly at camera. Head and chest visible. Photorealistic, studio lighting, no shadows, clean white background."
+    ]
+  },
+  {
+    "element_id": "eriks_pickup_truck",
+    "label": "Erik's Old Ford Pickup",
+    "category": "vehicle",
+    "description": "An old, well-used Ford pickup truck. It's a workhorse, likely a model from the 1990s. The script implies it's rugged and reliable, capable of handling rough forest terrain and heavy work like arriving, dragging logs, lifting logs, and transporting stones. It would have scratches, mud, and signs of wear.",
+    "appears_in": [
+      "Arrival And Devastation",
+      "Foundation And First Logs",
+      "Racing Against The First Cold",
+      "Final Push To The Roof",
+      "Chimney And Finishing"
+    ],
+    "frontal_prompt": "Studio portrait of an old Ford pickup truck on CLEAN WHITE BACKGROUND. A weathered, dark blue 1990s Ford F-150 with mud on the tires and lower body, some scratches on the paint. Three-quarter front angle, entire vehicle visible, studio lighting, no environment.",
+    "image_filename": "eriks_pickup_truck.png",
+    "prompt_name": "Pickup"
+  },
+  {
+    "element_id": "expedition_tent",
+    "label": "Erik's Tent",
+    "category": "object",
+    "description": "A durable, all-season expedition tent large enough for one man and a dog. It serves as Erik's shelter through severe weather, including a blizzard with high winds and heavy snow. It would be a practical, dome or tunnel style tent in a subdued color like orange or green.",
+    "appears_in": [
+      "Arrival And Devastation",
+      "Racing Against The First Cold",
+      "Storm And Lost Time"
+    ],
+    "frontal_prompt": "Studio portrait of a large, expedition-sized 4-season wall tent on CLEAN WHITE BACKGROUND. The tent is a deep forest green color, made from heavy-duty canvas material with a visible fabric texture, giving it a classic, traditional aesthetic rather than a modern synthetic look. It has a rugged, outdoor-ready design for heavy snow and high winds, featuring sturdy poles, guy lines, and a visible chimney. Centered, entire object visible, studio lighting, no environment.",
+    "image_filename": "expedition_tent.png",
+    "prompt_name": "Tent",
+    "_prompt_history": [
+      "Studio portrait of a 4-season expedition dome tent on CLEAN WHITE BACKGROUND. The tent is orange and gray, designed for heavy snow and high winds, with sturdy aluminum poles and guy lines. Centered, entire object visible, studio lighting, no environment.",
+      "Studio portrait of a 4-season expedition dome tent on CLEAN WHITE BACKGROUND. The tent is military green, with a rugged, outdoor-ready design for heavy snow and high winds, featuring sturdy aluminum poles and guy lines. Centered, entire object visible, studio lighting, no environment.",
+      "Studio portrait of a 4-season expedition dome tent on CLEAN WHITE BACKGROUND. The tent is a natural canvas color, made from heavy-duty canvas material with a visible fabric texture, giving it a classic, traditional aesthetic rather than a modern synthetic look. It has a rugged, outdoor-ready design for heavy snow and high winds, featuring sturdy poles and guy lines. Centered, entire object visible, studio lighting, no environment.",
+      "Studio portrait of a large, expedition-sized 4-season dome tent on CLEAN WHITE BACKGROUND. The tent is a deep forest green color, made from heavy-duty canvas material with a visible fabric texture, giving it a classic, traditional aesthetic rather than a modern synthetic look. It has a rugged, outdoor-ready design for heavy snow and high winds, featuring sturdy poles, guy lines, and a visible chimney. Centered, entire object visible, studio lighting, no environment."
+    ]
+  },
+  {
+    "element_id": "eriks_father",
+    "label": "Erik's Father",
+    "category": "character",
+    "description": "Erik's late father. A weathered Scandinavian man in his late 50s to early 60s, with gray-streaked hair, blue eyes, and a deeply lined face. He wears a plaid flannel shirt. His dream was to build a cabin in the Yukon wilderness, which Erik is now fulfilling.",
+    "appears_in": [
+      "Arrival and Devastation",
+      "First Fire"
+    ],
+    "frontal_prompt": "Inherited from previous video - manual upload",
+    "image_filename": "eriks_father.png",
+    "prompt_name": "James"
+  },
+  {
+    "element_id": "eriks_uncle",
+    "label": "Erik's Uncle",
+    "category": "character",
+    "description": "Erik's uncle. A rugged Scandinavian man in his late 50s to early 60s, weathered face from years of outdoor living in the Yukon. Gray-streaked light brown hair, blue-gray eyes, strong jaw. Wears a worn Carhartt work jacket over a flannel shirt, heavy jeans, and leather boots. Stocky, strong build. Arrives at the end to see the finished cabin.",
+    "appears_in": [
+      "First Fire"
+    ],
+    "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A Scandinavian man in his late 50s to early 60s, rugged and weathered face from years in the Yukon wilderness. Gray-streaked light brown hair, blue-gray eyes, strong jaw, deeply lined face from sun and cold. Wearing a worn Carhartt work jacket over a thick flannel shirt. Facing camera directly, shoulders and head visible, eye-level angle. Sharp focus on face. Photorealistic, cinematic lighting, no shadows, clean white background.",
+    "image_filename": "eriks_uncle.png",
+    "prompt_name": "Uncle"
+  }
+]

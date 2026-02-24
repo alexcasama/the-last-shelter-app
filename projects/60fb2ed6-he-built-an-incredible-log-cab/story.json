@@ -1,0 +1,141 @@
+{
+  "title": "The Last Shelter: Finish the Cabin",
+  "synopsis": "Erik Lindqvist faces an impossible challenge: build a functional log cabin from scratch in the brutal Yukon wilderness in just 90 days. Driven by a promise to his deceased father, he battles extreme cold, relentless storms, and the limits of his own body. Failure means certain death as winter descends with unforgiving fury.",
+  "duration_minutes": 30,
+  "episode_type": "full_build",
+  "character": {
+    "name": "Erik Lindqvist",
+    "age": "Late 20s to early 30s",
+    "physical_description": "Approximately 5'11\" with a lean, muscular build from years of outdoor work. His skin is tanned and weathered, hinting at a life spent in harsh environments. He has short, practical dark brown hair and a scruffy beard. He wears layered, durable outdoor clothing, including a flannel shirt, insulated work jacket, sturdy work pants, and heavy-duty boots.",
+    "motivation": "To fulfill his dying father's promise, honor his memory, and complete the dream his father couldn't, proving his own resilience against the unforgiving wilderness.",
+    "internal_voice": "If he fails, he's trapped. No shelter, no heat, no way out.",
+    "meaningful_object": "The unfinished cabin site, representing his father's dream and his own daunting legacy.",
+    "companion": {
+      "name": "Gus",
+      "breed": "Loyal working dog (mixed breed)",
+      "role": "Erik's sole companion and emotional support in the isolated wilderness."
+    }
+  },
+  "location": {
+    "name": "Remote Yukon wilderness",
+    "region": "Yukon, Canada",
+    "terrain": "Dense boreal forest, rocky and root-filled earth, clearings, frozen creek beds, deep snow cover.",
+    "climate": "Subarctic, characterized by extreme cold, heavy snow, blizzards, and rapid temperature drops from autumn to severe winter (-40°F).",
+    "nearest_town": "Remote wilderness (no nearby civilization mentioned)"
+  },
+  "construction": {
+    "type": "Hand-built log cabin",
+    "materials": "Pine logs, gravel, large stones, moss, mud, tar paper, shingles, collected creek stones for chimney.",
+    "scale": "A complete, functional, and insulated log cabin capable of sustaining life through an extreme Yukon winter.",
+    "unique_challenge": "Building a full log cabin from scratch, alone, in 90 days, in rapidly worsening subarctic conditions, to fulfill a deceased father's dream."
+  },
+  "timeline": {
+    "total_days": 90,
+    "season": "Late autumn transitioning into severe winter",
+    "deadline_pressure": "The onset of a deadly Yukon winter with temperatures dropping to -40°F and blizzards, making survival impossible without shelter."
+  },
+  "conflicts": [
+    {
+      "day": 1,
+      "title": "Destroyed Foundation",
+      "description": "Erik discovers his father's cabin is completely ruined, forcing him to start from scratch with no existing structure to build upon.",
+      "severity": 7
+    },
+    {
+      "day": 20,
+      "title": "Slow Progress",
+      "description": "After 20 days, Erik has only completed the foundation and laid the first logs, highlighting the immense task ahead and the rapidly dwindling time.",
+      "severity": 6
+    },
+    {
+      "day": 36,
+      "title": "Unexpected Storm",
+      "description": "A massive, unseasonal storm hits, bringing blinding snow and brutal winds, forcing Erik to halt work and lose four critical days.",
+      "severity": 9
+    },
+    {
+      "day": 40,
+      "title": "Extreme Cold During Construction",
+      "description": "Temperatures plummet to -4°F and lower, making every task physically agonizing and increasing the risk of frostbite and exhaustion.",
+      "severity": 8
+    },
+    {
+      "day": 60,
+      "title": "Heavy Ridge Beam",
+      "description": "Lifting and positioning the massive, 700-pound ridge beam for the roof is a dangerous and physically demanding task requiring precise alignment.",
+      "severity": 7
+    },
+    {
+      "day": 80,
+      "title": "Freezing Mortar",
+      "description": "Building the chimney in -13°F temperatures causes the mortar to freeze almost instantly, complicating the meticulous stone-laying process.",
+      "severity": 7
+    }
+  ],
+  "narrative_arcs": [
+    {
+      "phase": "Introduction",
+      "percentage": 5,
+      "tension": 60,
+      "description": "The presenter introduces Erik's impossible challenge: building a cabin in 90 days to fulfill his father's dying wish in the deadly Yukon.",
+      "day_range": null
+    },
+    {
+      "phase": "Arrival And Devastation",
+      "percentage": 7,
+      "tension": 70,
+      "description": "Erik arrives to find his father's dream utterly destroyed, forcing him to confront the reality of starting completely from scratch.",
+      "day_range": "Day 1"
+    },
+    {
+      "phase": "Foundation And First Logs",
+      "percentage": 24,
+      "tension": 65,
+      "description": "Erik demolishes the ruins, clears the site, digs drainage, and meticulously lays a new foundation before felling and preparing the first logs.",
+      "day_range": "Days 1-20"
+    },
+    {
+      "phase": "Racing Against The First Cold",
+      "percentage": 25,
+      "tension": 75,
+      "description": "Erik races to raise the cabin walls log by log, as the first frost and worsening weather signal the imminent arrival of winter.",
+      "day_range": "Days 21-36"
+    },
+    {
+      "phase": "Storm And Lost Time",
+      "percentage": 12,
+      "tension": 90,
+      "description": "A brutal, unexpected storm forces Erik into his tent for four critical days, burying his progress under snow and intensifying the deadline pressure.",
+      "day_range": "Days 37-40"
+    },
+    {
+      "phase": "Final Push To The Roof",
+      "percentage": 12,
+      "tension": 85,
+      "description": "With renewed urgency, Erik completes the cabin walls in freezing temperatures and begins the dangerous task of raising the massive roof frame.",
+      "day_range": "Days 41-60 (approx)"
+    },
+    {
+      "phase": "Roof In Extreme Conditions",
+      "percentage": 11,
+      "tension": 80,
+      "description": "Erik battles extreme cold and numb fingers to meticulously cut rafters, lay boards, and waterproof the roof with shingles.",
+      "day_range": "Days 61-80 (approx)"
+    },
+    {
+      "phase": "Chimney And Finishing",
+      "percentage": 3,
+      "tension": 70,
+      "description": "Erik builds the chimney stone by stone in freezing conditions, then seals the cabin and prepares a large pile of firewood.",
+      "day_range": "Days 81-89 (approx)"
+    },
+    {
+      "phase": "First Fire",
+      "percentage": 1,
+      "tension": 95,
+      "description": "Erik lights the first fire in his completed cabin as a blizzard rages outside, finding warmth and safety, and is joined by his emotional uncle.",
+      "day_range": "Day 90"
+    }
+  ],
+  "el_momento": "As a blizzard rages outside, Erik lights the first fire in his rustic cabin, filling it with warmth and light, and shares a silent, tearful moment of fulfilled promise with his uncle."
+}

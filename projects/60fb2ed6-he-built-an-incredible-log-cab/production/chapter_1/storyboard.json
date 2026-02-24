@@ -1,0 +1,957 @@
+{
+  "process_understanding": "This chapter covers Erik's arrival, the shocking discovery of his father's ruined cabin, his emotional shift from disappointment to resolve, and the initial setup of his base camp for the long-term build.",
+  "locations_needed": [
+    "truck_area",
+    "ruins_clearing",
+    "campsite_area"
+  ],
+  "storyboard": [
+    {
+      "type": "narrated",
+      "action": "La vieja camioneta Ford de Erik entra en el claro del bosque, las ruedas crujiendo sobre la tierra y las hojas. El motor se apaga, dejando un silencio repentino.",
+      "location_id": "truck_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Erik's Old Ford Pickup"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "Establishing shot. Show the isolation of the location.",
+      "scene_number": 1,
+      "narration": "Erik's truck arrives at the clearing after hours driving through the forest.",
+      "visual_description": "La vieja camioneta Ford de Erik entra en el claro del bosque, las ruedas crujiendo sobre la tierra y las hojas. El motor se apaga, dejando un silencio repentino.",
+      "duration": "10s",
+      "scene_image": "scene_01.png",
+      "prompt": {
+        "prompt_text": "No music. A low-angle tracking shot follows the worn, muddy tires of @Pickup as it rumbles slowly into @Image, an autumnal forest clearing. The tires crunch over a thick bed of damp fallen leaves and crackling twigs. Cut to an interior shot from the passenger seat, looking at @Erik behind the wheel; his hands are steady on the steering wheel, face etched with fatigue and concentration, eyes scanning the clearing ahead. Dappled sunlight filters through the dense canopy, sweeping across the dusty dashboard. Cut to a wide shot as @Pickup comes to a complete stop in the center of the clearing. @Erik cuts the engine, and the vehicle shudders slightly as it settles. The sudden, profound silence of the wilderness rushes in to fill the void left by the engine's drone.",
+        "sfx": "Old truck engine rumbling, tires crunching slowly over leaves and dirt, suspension creaking, engine cutting out abruptly followed by deep forest silence and a distant bird call.",
+        "elements": [
+          "Erik",
+          "Pickup",
+          "@Eriklindqvist",
+          "@Eriksoldfordpickup"
+        ],
+        "locations": [
+          {
+            "id": "forest_clearing_arrival",
+            "prompt": "A wide, empty clearing in a dense Yukon boreal forest in early autumn. The ground is covered in damp earth, fallen leaves, and pine needles.",
+            "image": "loc_forest_clearing_arrival.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "La puerta del conductor se abre con un chirrido. Erik Lindqvist baja, su bota aterriza firmemente en el suelo. Se detiene un momento, mirando a su alrededor.",
+      "location_id": "truck_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Erik's Old Ford Pickup"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": "EXIT VEHICLE: Character needs to get out of the truck before any other action can occur.",
+      "notes": "Sound design: creak of the door, crunch of boots on the ground.",
+      "scene_number": 2,
+      "narration": "",
+      "visual_description": "La puerta del conductor se abre con un chirrido. Erik Lindqvist baja, su bota aterriza firmemente en el suelo. Se detiene un momento, mirando a su alrededor.",
+      "duration": "5s",
+      "scene_image": "scene_02.png",
+      "prompt": {
+        "prompt_text": "No music. Extreme close-up on the weathered, slightly rusted driver-side door handle of @Pickup. @Erik's hand enters the frame, calloused fingers gripping the handle and pulling. Cut to a low-angle shot from the ground as the door swings open with a loud, metallic groan. @Erik's heavy work boot lands firmly on the damp earth, scattering a few leaves. Cut to a medium shot as he swings his body out of the cab, standing up to his full height. He places a hand on the roof of @Pickup, taking a moment to survey @Image, his eyes slowly sweeping across the treeline, his posture still and watchful.",
+        "sfx": "Creak of an old truck door, heavy boot landing on damp earth, rustle of leaves, fabric stretching, a moment of absolute silence.",
+        "elements": [
+          "Erik",
+          "Pickup",
+          "@Eriklindqvist",
+          "@Eriksoldfordpickup"
+        ],
+        "locations": [
+          {
+            "id": "forest_clearing_arrival",
+            "prompt": "A wide, empty clearing in a dense Yukon boreal forest in early autumn. The ground is covered in damp earth, fallen leaves, and pine needles.",
+            "image": "loc_forest_clearing_arrival.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Erik exhala y una nube de vaho se forma en el aire frío del Yukón. Se sube la cremallera de la chaqueta, sintiendo el frío.",
+      "location_id": "truck_area",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "Close up on Erik's face to show his reaction to the cold.",
+      "scene_number": 3,
+      "narration": "When he steps out, the cold Yukon air hits him immediately, around 50°F.",
+      "visual_description": "Erik exhala y una nube de vaho se forma en el aire frío del Yukón. Se sube la cremallera de la chaqueta, sintiendo el frío.",
+      "duration": "10s",
+      "scene_image": "scene_03.png",
+      "prompt": {
+        "prompt_text": "No music. Tight close-up on @Erik's face, profile to the camera, as he takes his first deep breath of the Yukon air. He exhales slowly, a thick, white cloud of condensation blooming from his lips and dissipating into the cold. His eyes narrow slightly against the chill. Cut to a detailed shot of his hand, knuckles raw, moving to the collar of his worn canvas jacket. The camera follows his fingers as they grip the brass zipper pull and draw it firmly upwards, the metallic rasp of the zipper echoing in the quiet clearing. He hunches his shoulders slightly, a subtle, involuntary reaction to the biting cold.",
+        "sfx": "A deep inhale and a long, slow exhale with audible breath mist, the sharp, metallic sound of a heavy-duty zipper being pulled up, the rustle of thick canvas fabric.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "forest_clearing_arrival",
+            "prompt": "A wide, empty clearing in a dense Yukon boreal forest in early autumn. The ground is covered in damp earth, fallen leaves, and pine needles.",
+            "image": "loc_forest_clearing_arrival.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Gus (Perro) salta ágilmente desde la caja de la camioneta, aterrizando suavemente. Inmediatamente empieza a olfatear el nuevo entorno con entusiasmo, moviendo la cola.",
+      "location_id": "truck_area",
+      "elements": [
+        "@Gus (Dog)",
+        "@Erik's Old Ford Pickup"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": null,
+      "scene_number": 4,
+      "narration": "Gus jumps from the truck and starts exploring.",
+      "visual_description": "Gus (Perro) salta ágilmente desde la caja de la camioneta, aterrizando suavemente. Inmediatamente empieza a olfatear el nuevo entorno con entusiasmo, moviendo la cola.",
+      "duration": "10s",
+      "scene_image": "scene_04.png",
+      "prompt": {
+        "prompt_text": "No music. A low-angle shot from inside the bed of @Pickup. @Gus, a rugged husky mix, scrambles to the edge of the tailgate, paws scratching against the metal. With a powerful push from his hind legs, he leaps. The camera follows him in a slight slow-motion arc as he sails through the air, landing with surprising grace on the leafy ground below. Cut to a ground-level tracking shot that follows @Gus's nose as he immediately begins to investigate his new surroundings, sniffing intently at the base of a large pine tree, his tail wagging with vigorous, excited energy. He kicks up a small spray of dirt with his back paws.",
+        "sfx": "Dog paws scrambling on a metal truck bed, a soft thud as the dog lands, excited sniffing sounds, tail thumping against brush, dirt being kicked up.",
+        "elements": [
+          "Gus",
+          "Pickup",
+          "@Gusdog",
+          "@Eriksoldfordpickup"
+        ],
+        "locations": [
+          {
+            "id": "forest_clearing_arrival",
+            "prompt": "A wide, empty clearing in a dense Yukon boreal forest in early autumn. The ground is covered in damp earth, fallen leaves, and pine needles.",
+            "image": "loc_forest_clearing_arrival.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "Erik cierra la puerta de la camioneta y comienza a caminar con determinación hacia la estructura distante, con Gus trotando a su lado.",
+      "location_id": "truck_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Gus (Dog)"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": "CHANGE LOCATION: Moving from the truck to the ruins.",
+      "notes": "Wide shot showing the distance between the truck and the ruins.",
+      "scene_number": 5,
+      "narration": "",
+      "visual_description": "Erik cierra la puerta de la camioneta y comienza a caminar con determinación hacia la estructura distante, con Gus trotando a su lado.",
+      "duration": "5s",
+      "scene_image": "scene_05.png",
+      "prompt": {
+        "prompt_text": "No music. Medium shot of @Erik as he pushes the driver's door of the truck shut with a solid, echoing thud. He turns, his gaze fixed on something in the distance. Cut to a wide, slow-motion tracking shot from behind, following @Erik as he begins to walk with a determined, heavy stride across the clearing. @Gus trots alongside him, occasionally looking up at his owner before returning his attention to the scents on the ground. The camera stays low, emphasizing their movement through the vast, silent wilderness.",
+        "sfx": "Heavy truck door slamming shut, echoing in the clearing. The rhythmic crunch of boots on leaves and earth, mixed with the lighter padding of dog paws.",
+        "elements": [
+          "Erik",
+          "Gus",
+          "@Eriklindqvist",
+          "@Gusdog"
+        ],
+        "locations": [
+          {
+            "id": "forest_clearing_arrival",
+            "prompt": "A wide, empty clearing in a dense Yukon boreal forest in early autumn. The ground is covered in damp earth, fallen leaves, and pine needles.",
+            "image": "loc_forest_clearing_arrival.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Erik se detiene a unos metros de las ruinas. Su paso se frena y su expresión cambia de expectación a incredulidad y profunda decepción.",
+      "location_id": "ruins_clearing",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "Focus on Erik's non-verbal reaction before revealing the cause.",
+      "scene_number": 6,
+      "narration": "Erik walks toward the structure and stops. It's worse than he imagined. Much worse.",
+      "visual_description": "Erik se detiene a unos metros de las ruinas. Su paso se frena y su expresión cambia de expectación a incredulidad y profunda decepción.",
+      "duration": "10s",
+      "scene_image": "scene_06.png",
+      "prompt": {
+        "prompt_text": "No music. A slow dolly shot follows @Erik from behind as he walks toward @Image, the ruins of the cabin. His pace is steady, expectant. The camera pushes in closer to his back. He suddenly stops dead, his body tensing. Cut to a tight reverse shot of @Erik's face. His eyebrows are furrowed, his jaw tightens, and a look of stunned disbelief washes over his features, his eyes widening as they take in the scene. The initial hope drains from his expression, replaced by the crushing weight of reality. He lets out a short, sharp breath.",
+        "sfx": "Footsteps abruptly halting, a sharp intake of breath, the low, mournful sigh of wind through the trees.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "cabin_ruins_autumn",
+            "prompt": "The rotted, collapsed skeleton of a log cabin in a forest clearing. Moss-covered logs are scattered on the damp ground.. Changes: vista mas alejada y nevado todo. Changes: usa la imagen de referencia y coloca las ruinas de la cabaña ahi. Changes: usa la iamgen de referencia y generame un plano un poco mas cercano de la imagen. Changes: un plano mas cercano de las ruinas",
+            "image": "loc_cabin_ruins_autumn.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Plano bajo que muestra los postes de la cimentación, podridos y hundiéndose en la tierra húmeda. El musgo crece sobre la madera descompuesta.",
+      "location_id": "ruins_clearing",
+      "elements": [],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "Detail shot to emphasize the decay.",
+      "scene_number": 7,
+      "narration": "It's not a half-built cabin. It's a skeleton. A few foundation posts, rotted and sunk into the earth.",
+      "visual_description": "Plano bajo que muestra los postes de la cimentación, podridos y hundiéndose en la tierra húmeda. El musgo crece sobre la madera descompuesta.",
+      "duration": "10s",
+      "scene_image": "scene_07.png",
+      "prompt": {
+        "prompt_text": "No music. An extreme low-angle macro shot reveals a single foundation post at the base of @Image, the cabin ruins. The wood is dark, waterlogged, and spongy with rot. A vibrant green moss grows in thick patches across its surface, and a line of ants marches across the decaying timber. The post is visibly sinking into the damp, black earth. The camera slowly pans upward, showing how the wood splinters and frays where it meets the ground, a testament to years of decay.",
+        "sfx": "The faint squish of waterlogged wood, the distant drip of water, the almost inaudible skittering of insects, a low gust of wind.",
+        "elements": [],
+        "locations": [
+          {
+            "id": "cabin_ruins_autumn",
+            "prompt": "The rotted, collapsed skeleton of a log cabin in a forest clearing. Moss-covered logs are scattered on the damp ground.. Changes: vista mas alejada y nevado todo. Changes: usa la imagen de referencia y coloca las ruinas de la cabaña ahi. Changes: usa la iamgen de referencia y generame un plano un poco mas cercano de la imagen. Changes: un plano mas cercano de las ruinas",
+            "image": "loc_cabin_ruins_autumn.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "La cámara panea lentamente sobre un montón de troncos colapsados, rotos y cubiertos de una gruesa capa de musgo verde, mostrando la destrucción total.",
+      "location_id": "ruins_clearing",
+      "elements": [],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": null,
+      "scene_number": 8,
+      "narration": "A couple of base logs, broken and covered in moss. The rest is a pile of collapsed wood.",
+      "visual_description": "La cámara panea lentamente sobre un montón de troncos colapsados, rotos y cubiertos de una gruesa capa de musgo verde, mostrando la destrucción total.",
+      "duration": "10s",
+      "scene_image": "scene_08.png",
+      "prompt": {
+        "prompt_text": "No music. A slow, cinematic slide shot moves laterally across a chaotic pile of collapsed logs within @Image. The logs are silvered with age but covered in a thick, velvety carpet of dark green moss. Some are snapped in half, their splintered ends exposed like broken bones. Rainwater has pooled in the crevices of the wood. The camera glides over the scene of total destruction, lingering on the textures of decay and the way nature has begun to reclaim the man-made structure.",
+        "sfx": "A gentle breeze rustling through the moss, the slow drip of water from a log onto the damp earth below, the far-off call of a crow.",
+        "elements": [],
+        "locations": [
+          {
+            "id": "cabin_ruins_autumn",
+            "prompt": "The rotted, collapsed skeleton of a log cabin in a forest clearing. Moss-covered logs are scattered on the damp ground.. Changes: vista mas alejada y nevado todo. Changes: usa la imagen de referencia y coloca las ruinas de la cabaña ahi. Changes: usa la iamgen de referencia y generame un plano un poco mas cercano de la imagen. Changes: un plano mas cercano de las ruinas",
+            "image": "loc_cabin_ruins_autumn.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Un plano cenital lento revela la totalidad del desastre: un montón de madera colapsada, completamente abierta al cielo. No hay ninguna estructura reconocible.",
+      "location_id": "ruins_clearing",
+      "elements": [],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "Emphasizes the hopelessness of the situation.",
+      "scene_number": 9,
+      "narration": "Fifteen years of storms have completely destroyed his father's dream. No walls. No roof. Nothing.",
+      "visual_description": "Un plano cenital lento revela la totalidad del desastre: un montón de madera colapsada, completamente abierta al cielo. No hay ninguna estructura reconocible.",
+      "duration": "10s",
+      "scene_image": "scene_09.png",
+      "prompt": {
+        "prompt_text": "No music. A high-angle drone shot starts directly above the clearing, looking straight down at @Image. The camera begins a slow, spiraling descent, revealing the full extent of the devastation. What was meant to be a cabin is now just a meaningless jumble of darkened timbers, a chaotic footprint on the forest floor, completely open to the gray, overcast sky. The clearing is a wound in the dense, surrounding boreal forest. The drone holds for a moment, emphasizing the profound failure of the structure.",
+        "sfx": "Only the sound of high-altitude wind, thin and cold. A vast, empty silence.",
+        "elements": [],
+        "locations": [
+          {
+            "id": "cabin_ruins_autumn",
+            "prompt": "The rotted, collapsed skeleton of a log cabin in a forest clearing. Moss-covered logs are scattered on the damp ground.. Changes: vista mas alejada y nevado todo. Changes: usa la imagen de referencia y coloca las ruinas de la cabaña ahi. Changes: usa la iamgen de referencia y generame un plano un poco mas cercano de la imagen. Changes: un plano mas cercano de las ruinas",
+            "image": "loc_cabin_ruins_autumn.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Erik camina entre los escombros. Levanta una bota y da una patada a un tronco podrido, que se desintegra en astillas y polvo al impacto.",
+      "location_id": "ruins_clearing",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "Sound design: the soft, dull thud of the kick and crumbling wood.",
+      "scene_number": 10,
+      "narration": "Erik walks through the debris. He kicks a rotten log that crumbles into splinters.",
+      "visual_description": "Erik camina entre los escombros. Levanta una bota y da una patada a un tronco podrido, que se desintegra en astillas y polvo al impacto.",
+      "duration": "12s",
+      "scene_image": "scene_10.png",
+      "prompt": {
+        "prompt_text": "No music. Low-angle shot tracking @Erik's heavy boots as he steps carefully through the debris of @Image. He navigates the treacherous footing of the collapsed logs. He stops, his boots planted amidst the wreckage. Cut to a tight shot of his leg as he draws it back and then swings it forward with force. The camera follows in slow motion as his boot connects with a large, moss-covered log. On impact, the rotten wood doesn't just crack, it explodes into a cloud of brown dust, damp splinters, and flying moss.",
+        "sfx": "Boots crunching on debris, a deep grunt of effort, followed by the wet, percussive thud of a boot hitting rotten wood and the sound of it disintegrating into powder and splinters.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "cabin_ruins_autumn",
+            "prompt": "The rotted, collapsed skeleton of a log cabin in a forest clearing. Moss-covered logs are scattered on the damp ground.. Changes: vista mas alejada y nevado todo. Changes: usa la imagen de referencia y coloca las ruinas de la cabaña ahi. Changes: usa la iamgen de referencia y generame un plano un poco mas cercano de la imagen. Changes: un plano mas cercano de las ruinas",
+            "image": "loc_cabin_ruins_autumn.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Erik se detiene en medio de las ruinas, con las manos en las caderas, mirando el montón de madera. Su mandíbula se aprieta. La cámara se inclina hacia arriba para mostrar el cielo gris.",
+      "location_id": "ruins_clearing",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "This shot visually confirms the narration.",
+      "scene_number": 11,
+      "narration": "He can't go inside. There's no inside. It's just a heap of ruins exposed to the sky.",
+      "visual_description": "Erik se detiene en medio de las ruinas, con las manos en las caderas, mirando el montón de madera. Su mandíbula se aprieta. La cámara se inclina hacia arriba para mostrar el cielo gris.",
+      "duration": "10s",
+      "scene_image": "scene_11.png",
+      "prompt": {
+        "prompt_text": "No music. Medium shot of @Erik standing motionless in the center of @Image, the ruins. His hands are planted firmly on his hips, his head shaking slowly in disbelief. He stares down at the pile of wood at his feet. The camera begins a slow, deliberate tilt upwards, moving from his boots, up his tense body, past his grim face, and continuing to rise until the frame is filled with the vast, indifferent, and overcast gray sky. He is framed as a small figure under an immense, empty expanse.",
+        "sfx": "A low, frustrated sigh from Erik, the rustle of his jacket, the sound of the wind picking up, blowing through the skeletal remains of the cabin.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "cabin_ruins_autumn",
+            "prompt": "The rotted, collapsed skeleton of a log cabin in a forest clearing. Moss-covered logs are scattered on the damp ground.. Changes: vista mas alejada y nevado todo. Changes: usa la imagen de referencia y coloca las ruinas de la cabaña ahi. Changes: usa la iamgen de referencia y generame un plano un poco mas cercano de la imagen. Changes: un plano mas cercano de las ruinas",
+            "image": "loc_cabin_ruins_autumn.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Primer plano del rostro de Erik. La decepción en sus ojos se desvanece, reemplazada por una mirada de acero y determinación. Asiente lentamente para sí mismo.",
+      "location_id": "ruins_clearing",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "Key emotional turning point of the chapter.",
+      "scene_number": 12,
+      "narration": "Disappointment hits him, but quickly turns to determination. There's nothing to repair here. He has to start again. From scratch.",
+      "visual_description": "Primer plano del rostro de Erik. La decepción en sus ojos se desvanece, reemplazada por una mirada de acero y determinación. Asiente lentamente para sí mismo.",
+      "duration": "10s",
+      "scene_image": "scene_12.png",
+      "prompt": {
+        "prompt_text": "No music. An intense, shallow-focus close-up on @Erik's face as he stands amidst the ruins of @Image. The initial shock and deep disappointment are clearly visible in his eyes. The camera holds perfectly still as a subtle shift occurs. His gaze hardens, the hurt evaporating and being replaced by a cold, steely glint of resolve. His jaw sets, a muscle twitching. He gives a single, slow, deliberate nod to himself, a silent vow. The decision is made.",
+        "sfx": "A sharp intake of breath, a long, controlled exhale. The sound of his jaw clenching, followed by absolute silence as his expression transforms.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "cabin_ruins_autumn",
+            "prompt": "The rotted, collapsed skeleton of a log cabin in a forest clearing. Moss-covered logs are scattered on the damp ground.. Changes: vista mas alejada y nevado todo. Changes: usa la imagen de referencia y coloca las ruinas de la cabaña ahi. Changes: usa la iamgen de referencia y generame un plano un poco mas cercano de la imagen. Changes: un plano mas cercano de las ruinas",
+            "image": "loc_cabin_ruins_autumn.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "Erik se da la vuelta y se aleja de las ruinas, explorando el terreno circundante hasta que encuentra un lugar más alto y nivelado para su campamento.",
+      "location_id": "ruins_clearing",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": "CHANGE LOCATION: Moving from the ruins to the new campsite location.",
+      "notes": "Shows his practical mindset taking over.",
+      "scene_number": 13,
+      "narration": "",
+      "visual_description": "Erik se da la vuelta y se aleja de las ruinas, explorando el terreno circundante hasta que encuentra un lugar más alto y nivelado para su campamento.",
+      "duration": "5s",
+      "scene_image": "scene_13.png",
+      "prompt": {
+        "prompt_text": "No music. Wide shot of @Erik turning his back decisively on the ruins in @Image2. He strides away, his purpose renewed, and begins to pace the perimeter of @Image1, the wider clearing. His eyes are scanning the ground, assessing the landscape. Low-angle tracking shot follows his boots as he walks, testing the firmness of the earth. He stops on a patch of slightly higher, more level ground, looking back and forth between the spot and the ruins, making a calculated decision.",
+        "sfx": "Determined, heavy footsteps on earth and leaves. A distant raven's caw. The sound of wind moving through the tall spruce trees surrounding the clearing.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          },
+          {
+            "id": "cabin_ruins_autumn",
+            "prompt": "The rotted, collapsed skeleton of a log cabin in a forest clearing. Moss-covered logs are scattered on the damp ground.. Changes: vista mas alejada y nevado todo. Changes: usa la imagen de referencia y coloca las ruinas de la cabaña ahi. Changes: usa la iamgen de referencia y generame un plano un poco mas cercano de la imagen. Changes: un plano mas cercano de las ruinas",
+            "image": "loc_cabin_ruins_autumn.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "Regresa a la camioneta, abre la compuerta trasera y saca la bolsa de su tienda de expedición.",
+      "location_id": "truck_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Erik's Old Ford Pickup",
+        "@Erik's Tent"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": "START NEW ACTIVITY: Retrieving the necessary equipment for setting up camp.",
+      "notes": null,
+      "scene_number": 14,
+      "narration": "",
+      "visual_description": "Regresa a la camioneta, abre la compuerta trasera y saca la bolsa de su tienda de expedición.",
+      "duration": "5s",
+      "scene_image": "scene_14.png",
+      "prompt": {
+        "prompt_text": "No music. Handheld shot follows @Erik as he walks with brisk, determined steps back to @Pickup, parked in @Image. He doesn't hesitate. Cut to a close-up on his hands as they unlatch the heavy tailgate, which drops with a loud bang. He reaches into the truck bed and his hands wrap around the heavy-duty canvas bag containing @Tent. He hauls it out with a grunt of effort, slinging it over his shoulder and turning back toward his chosen campsite.",
+        "sfx": "Rhythmic, fast-paced footsteps, the metallic clank of a tailgate latch, the heavy thud of the tailgate dropping, the scrape of a heavy canvas bag being dragged across the truck bed.",
+        "elements": [
+          "Erik",
+          "Pickup",
+          "Tent",
+          "@Eriklindqvist",
+          "@Eriksoldfordpickup",
+          "@Erikstent"
+        ],
+        "locations": [
+          {
+            "id": "forest_clearing_arrival",
+            "prompt": "A wide, empty clearing in a dense Yukon boreal forest in early autumn. The ground is covered in damp earth, fallen leaves, and pine needles.",
+            "image": "loc_forest_clearing_arrival.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Erik desdobla la lona de la tienda sobre el suelo en el lugar elegido, alisándola. Las ruinas son visibles en el fondo, desenfocadas.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Erik's Tent"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": "+25% camp setup",
+      "bridge_reason": null,
+      "notes": "Decomposing the tent setup process. This is step 1.",
+      "scene_number": 15,
+      "narration": "He sets up his tent thirty meters from the ruins, on higher ground.",
+      "visual_description": "Erik desdobla la lona de la tienda sobre el suelo en el lugar elegido, alisándola. Las ruinas son visibles en el fondo, desenfocadas.",
+      "duration": "10s",
+      "scene_image": "scene_15.png",
+      "prompt": {
+        "prompt_text": "No music. Low-angle shot from the ground at @Image, the new campsite. @Erik enters the frame and throws the heavy canvas of @Tent forward. It unfurls in a wave, spreading across the ground and covering the lens for a brief moment before settling. He gets on his hands and knees, methodically pulling the corners taut and smoothing out the wrinkles. In the background, out of focus, the skeletal ruins of the cabin stand as a silent observer.",
+        "sfx": "The heavy snap and rustle of a large canvas tent unfurling, the sound of hands smoothing fabric against the ground, a light breeze.",
+        "elements": [
+          "Erik",
+          "Tent",
+          "@Eriklindqvist",
+          "@Erikstent"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "Ensambla las varillas de aluminio de la tienda, encajando las secciones con un clic audible y metódico.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Erik's Tent"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": "+50% camp setup",
+      "bridge_reason": "DECOMPOSED ACTION: Showing the next physical step of setting up the tent.",
+      "notes": "Close up on his hands and the poles.",
+      "scene_number": 16,
+      "narration": "",
+      "visual_description": "Ensambla las varillas de aluminio de la tienda, encajando las secciones con un clic audible y metódico.",
+      "duration": "5s",
+      "scene_image": "scene_16.png",
+      "prompt": {
+        "prompt_text": "No music. Extreme close-up on @Erik's hands as he works. Dirt is ingrained under his fingernails. He takes two sections of a collapsible aluminum tent pole and, with practiced efficiency, snaps them together. The connection is made with a sharp, satisfying metallic click. He repeats the process, his movements economical and precise, assembling the long poles with a steady rhythm.",
+        "sfx": "The distinct, sharp \"click-clack\" of aluminum tent poles locking into place, the soft scrape of metal on metal, the sound of focused breathing.",
+        "elements": [
+          "Erik",
+          "Tent",
+          "@Eriklindqvist",
+          "@Erikstent"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "Introduce las varillas a través de las mangas de la tienda, levantando la estructura lentamente hasta que toma forma.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Erik's Tent"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": "+75% camp setup",
+      "bridge_reason": "DECOMPOSED ACTION: Continuing the tent setup process.",
+      "notes": null,
+      "scene_number": 17,
+      "narration": "",
+      "visual_description": "Introduce las varillas a través de las mangas de la tienda, levantando la estructura lentamente hasta que toma forma.",
+      "duration": "5s",
+      "scene_image": "scene_17.png",
+      "prompt": {
+        "prompt_text": "No music. A wide, low-angle shot captures @Erik threading one of the long, assembled poles through a sleeve on the canvas of @Tent. He pushes it through with steady pressure. As the pole reaches the other side and he flexes it into its anchor point, the fabric tightens and the structure of the dome tent begins to rise slowly from the ground, taking shape against the backdrop of the dense forest. The camera holds as the shelter is born from the flat canvas.",
+        "sfx": "The soft scraping sound of a pole sliding through a fabric sleeve, the creak and strain of the pole bending, the deep rustle of the canvas being pulled taut.",
+        "elements": [
+          "Erik",
+          "Tent",
+          "@Eriklindqvist",
+          "@Erikstent"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "Usando un mazo de goma, clava las estacas de metal en la tierra dura para asegurar las esquinas de la tienda, tensando la estructura.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Erik's Tent"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [
+        "rubber mallet"
+      ],
+      "progress_delta": "+100% camp setup",
+      "bridge_reason": "DECOMPOSED ACTION: Final step of securing the tent.",
+      "notes": "The tent is now fully assembled.",
+      "scene_number": 18,
+      "narration": "",
+      "visual_description": "Usando un mazo de goma, clava las estacas de metal en la tierra dura para asegurar las esquinas de la tienda, tensando la estructura.",
+      "duration": "8s",
+      "scene_image": "scene_18.png",
+      "prompt": {
+        "prompt_text": "No music. Tight ground-level shot focused on a corner of @Tent. @Erik's hand places a long metal stake against a fabric loop. He picks up a rubber mallet. The camera follows the mallet as he raises it and brings it down with a series of powerful, rhythmic strikes. With each impact, the stake drives deeper into the hard-packed earth, sending up small puffs of dust and debris. Cut to a wider shot showing him securing the final corner, the entire structure now taut and secure.",
+        "sfx": "The dull, percussive thud of a rubber mallet hitting a metal stake, the grating sound of the stake forcing its way into the soil, a final solid \"thump\" as it's driven home.",
+        "elements": [
+          "Erik",
+          "Tent",
+          "@Eriklindqvist",
+          "@Erikstent"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "Con la tienda montada, Erik vuelve a la camioneta para empezar a descargar sus herramientas pesadas.",
+      "location_id": "truck_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Erik's Old Ford Pickup"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": "START NEW ACTIVITY: Transitioning from camp setup to tool organization.",
+      "notes": null,
+      "scene_number": 19,
+      "narration": "",
+      "visual_description": "Con la tienda montada, Erik vuelve a la camioneta para empezar a descargar sus herramientas pesadas.",
+      "duration": "5s",
+      "scene_image": "scene_19.png",
+      "prompt": {
+        "prompt_text": "No music. With @Tent fully erect behind him, @Erik turns and walks back towards @Pickup. The camera tracks with him. A montage of quick, dynamic cuts shows the beginning of the unloading process: He drops the tailgate again. He lifts a heavy, mud-splattered chainsaw from the truck bed. He carries two large, worn axes, one in each hand. Each shot emphasizes the weight and reality of the tools he will need to survive.",
+        "sfx": "Determined footsteps, the clang of the tailgate, a grunt of effort as he lifts the chainsaw, the clink of axe heads gently knocking together.",
+        "elements": [
+          "Erik",
+          "Pickup",
+          "@Eriklindqvist",
+          "@Eriksoldfordpickup"
+        ],
+        "locations": [
+          {
+            "id": "forest_clearing_arrival",
+            "prompt": "A wide, empty clearing in a dense Yukon boreal forest in early autumn. The ground is covered in damp earth, fallen leaves, and pine needles.",
+            "image": "loc_forest_clearing_arrival.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Erik coloca una lona grande en el suelo junto a su tienda y empieza a organizar sus herramientas en filas ordenadas: motosierra, serrucho, hachas.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [
+        "Chainsaw",
+        "hand saw",
+        "axes"
+      ],
+      "progress_delta": "+50% tools organized",
+      "bridge_reason": null,
+      "notes": "Shows his methodical and organized nature.",
+      "scene_number": 20,
+      "narration": "He organizes his tools in a pile covered with a tarp. Chainsaw, hand saw, axes, chisels, level, measuring tape.",
+      "visual_description": "Erik coloca una lona grande en el suelo junto a su tienda y empieza a organizar sus herramientas en filas ordenadas: motosierra, serrucho, hachas.",
+      "duration": "12s",
+      "scene_image": "scene_20.png",
+      "prompt": {
+        "prompt_text": "No music. A high-angle, top-down shot looking directly over @Erik at @Image, his new campsite. He spreads a large, heavy-duty tarp on the ground next to @Tent. Methodically, he begins to lay out his heavy tools, retrieved from @Pickup. He places the chainsaw first, then a large felling axe, then a smaller splitting axe, and a two-man crosscut saw. He arranges them in neat, parallel lines, like a soldier preparing his weapons for battle.",
+        "sfx": "The heavy snap of a tarp being spread out, the solid, metallic clunk of a chainsaw being placed on the ground, the heavier thud of axe heads.",
+        "elements": [
+          "Erik",
+          "Tent",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "Coloca con cuidado las herramientas más pequeñas: cinceles, nivel, cinta métrica, asegurándose de que todo esté a mano y protegido.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [
+        "chisels",
+        "level",
+        "measuring tape"
+      ],
+      "progress_delta": "+90% tools organized",
+      "bridge_reason": "DECOMPOSED ACTION: Continuing the process of organizing tools.",
+      "notes": "Close up on the smaller, more precise tools.",
+      "scene_number": 21,
+      "narration": "",
+      "visual_description": "Coloca con cuidado las herramientas más pequeñas: cinceles, nivel, cinta métrica, asegurándose de que todo esté a mano y protegido.",
+      "duration": "8s",
+      "scene_image": "scene_21.png",
+      "prompt": {
+        "prompt_text": "No music. A series of macro close-up shots focusing on @Erik's hands as he continues to organize his tools on the tarp at @Image. He carefully places a set of sharp chisels, their wooden handles worn smooth with use. He lays down a long spirit level, its bubble perfectly centered. He unrolls a metal measuring tape with a sharp zipping sound. Each tool is placed with deliberation and care, creating an outdoor workshop on the forest floor.",
+        "sfx": "The soft clink of metal chisels on the tarp, the gentle thud of a wooden level, the sharp zzzzip of a metal measuring tape being unrolled.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bridge",
+      "action": "Finalmente, dobla los bordes de la lona sobre las herramientas para protegerlas de la intemperie.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": "+100% tools organized",
+      "bridge_reason": "DECOMPOSED ACTION: Completing the tool organization task.",
+      "notes": null,
+      "scene_number": 22,
+      "narration": "",
+      "visual_description": "Finalmente, dobla los bordes de la lona sobre las herramientas para protegerlas de la intemperie.",
+      "duration": "5s",
+      "scene_image": "scene_22.png",
+      "prompt": {
+        "prompt_text": "No music. Medium shot of @Erik kneeling beside the perfectly organized array of tools on the tarp at @Image. He takes one edge of the heavy tarp and carefully folds it over the tools. He repeats this with the other side, creating a protective envelope to shield his vital equipment from the dampness of the evening and any potential rain. He presses down on the edges, securing the fold.",
+        "sfx": "The heavy rustle of the tarp being folded, the soft sound of his hands pressing the fabric down, the wind sighing through the pines.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Erik se yergue, se limpia las manos en los pantalones y se gira para mirar las ruinas a lo lejos. Su campamento recién montado está en primer plano.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist",
+        "@Erik's Tent"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "A moment of quiet contemplation.",
+      "scene_number": 23,
+      "narration": "He stops and looks at the ruins. The reality of the challenge settles in.",
+      "visual_description": "Erik se yergue, se limpia las manos en los pantalones y se gira para mirar las ruinas a lo lejos. Su campamento recién montado está en primer plano.",
+      "duration": "12s",
+      "scene_image": "scene_23.png",
+      "prompt": {
+        "prompt_text": "No music. @Erik slowly rises to his feet, wiping his dirty hands on the thighs of his durable work pants. He turns his body, and the camera follows his gaze across the clearing. A classic over-the-shoulder shot frames his newly established camp—@Tent and the covered tool pile—in the foreground, with the distant, dilapidated ruins of his father's cabin visible in the background. A rack focus slowly shifts from the sharp detail of his camp to the soft, haunting image of the ruins.",
+        "sfx": "The rough sound of hands wiping on canvas pants, a deep sigh, the low and constant whisper of the wind connecting the two sites.",
+        "elements": [
+          "Erik",
+          "Tent",
+          "@Eriklindqvist",
+          "@Erikstent"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "La cámara se acerca lentamente a Erik mientras contempla las ruinas, la enormidad de la tarea de construir una cabaña en noventa días se refleja en su rostro serio y concentrado.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "The stakes are established.",
+      "scene_number": 24,
+      "narration": "Ninety days. That's all. Ninety days to build a complete cabin from scratch. To prepare for a winter that will come without mercy.",
+      "visual_description": "La cámara se acerca lentamente a Erik mientras contempla las ruinas, la enormidad de la tarea de construir una cabaña en noventa días se refleja en su rostro serio y concentrado.",
+      "duration": "12s",
+      "scene_image": "scene_24.png",
+      "prompt": {
+        "prompt_text": "No music. A slow, dramatic dolly shot pushes in on @Erik's face. He stands perfectly still, staring at the ruins. The setting sun casts a low, cold light across his features, highlighting the grim set of his jaw and the intense focus in his eyes. The full, crushing weight of the challenge ahead—building an entire cabin from nothing in just ninety days—is reflected in his somber, unblinking expression. He is alone against the wilderness, and the battle has just been defined.",
+        "sfx": "A low, atmospheric drone-like wind, the distant snap of a twig in the forest, the sound of his own steady, rhythmic breathing.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narrated",
+      "action": "Erik cierra los ojos por un momento y toma una respiración profunda y lenta. Al abrirlos, su mirada es decidida. Se agacha y coge un hacha de la pila de herramientas.",
+      "location_id": "campsite_area",
+      "elements": [
+        "@Erik Lindqvist"
+      ],
+      "time_of_day": "Afternoon",
+      "weather": "Overcast, cold",
+      "tools": [
+        "axe"
+      ],
+      "progress_delta": null,
+      "bridge_reason": null,
+      "notes": "Final shot of the chapter. The action of 'beginning' is picking up the first tool.",
+      "scene_number": 25,
+      "narration": "He takes a deep breath. He begins.",
+      "visual_description": "Erik cierra los ojos por un momento y toma una respiración profunda y lenta. Al abrirlos, su mirada es decidida. Se agacha y coge un hacha de la pila de herramientas.",
+      "duration": "12s",
+      "scene_image": "scene_25.png",
+      "prompt": {
+        "prompt_text": "No music. Extreme close-up on @Erik's eyes. He closes them for a single, long moment, as if centering himself. He takes one final, deep, cleansing breath. When his eyes open, all doubt is gone, replaced by pure, unshakeable resolve. Cut to a low-angle shot as he decisively bends down, pulls back the tarp, and his hand wraps around the smooth, worn wooden handle of his felling axe. He lifts it, the steel head glinting in the fading light. He stands, turns, and takes his first step away from the camp, axe in hand. He begins.",
+        "sfx": "A single deep inhale and a slow, controlled exhale. The sound of the tarp being pulled back, the soft sound of a hand gripping wood, the solid thud of a boot on the earth.",
+        "elements": [
+          "Erik",
+          "@Eriklindqvist"
+        ],
+        "locations": [
+          {
+            "id": "campsite_area",
+            "prompt": "A slightly elevated, level patch of ground in a Yukon forest clearing, suitable for a campsite. The ground is packed earth and fallen leaves.",
+            "image": "loc_campsite_area.png"
+          }
+        ]
+      }
+    }
+  ],
+  "total_narrated": 15,
+  "total_bridges": 10,
+  "total_scenes": 25,
+  "estimated_video_duration_seconds": 375,
+  "day_card_suggestions": [],
+  "validation": {
+    "valid": false,
+    "score": 55,
+    "errors": [
+      {
+        "check": "phantom_tool",
+        "severity": "error",
+        "message": "Scene None: uses 'Chainsaw' — a power tool in a hand-built survival scenario",
+        "details": "This tool is not plausible in the story context"
+      }
+    ],
+    "warnings": [
+      {
+        "check": "phantom_tool",
+        "severity": "warning",
+        "message": "Scene None: introduces new tool 'rubber mallet' — verify this is available",
+        "details": "Known tools so far: {'rubber mallet', 'knife', 'rope', 'axe', 'canvas_bag'}"
+      },
+      {
+        "check": "phantom_tool",
+        "severity": "warning",
+        "message": "Scene None: introduces new tool 'hand saw' — verify this is available",
+        "details": "Known tools so far: {'hand saw', 'rubber mallet', 'knife', 'rope', 'axe', 'canvas_bag'}"
+      },
+      {
+        "check": "phantom_tool",
+        "severity": "warning",
+        "message": "Scene None: introduces new tool 'axes' — verify this is available",
+        "details": "Known tools so far: {'hand saw', 'rubber mallet', 'knife', 'rope', 'axe', 'canvas_bag', 'axes'}"
+      },
+      {
+        "check": "phantom_tool",
+        "severity": "warning",
+        "message": "Scene None: introduces new tool 'chisels' — verify this is available",
+        "details": "Known tools so far: {'hand saw', 'rubber mallet', 'knife', 'rope', 'axe', 'canvas_bag', 'chisels', 'axes'}"
+      },
+      {
+        "check": "phantom_tool",
+        "severity": "warning",
+        "message": "Scene None: introduces new tool 'level' — verify this is available",
+        "details": "Known tools so far: {'hand saw', 'rubber mallet', 'knife', 'rope', 'axe', 'canvas_bag', 'level', 'chisels', 'axes'}"
+      },
+      {
+        "check": "phantom_tool",
+        "severity": "warning",
+        "message": "Scene None: introduces new tool 'measuring tape' — verify this is available",
+        "details": "Known tools so far: {'hand saw', 'rubber mallet', 'knife', 'rope', 'axe', 'canvas_bag', 'level', 'chisels', 'measuring tape', 'axes'}"
+      }
+    ],
+    "total_errors": 1,
+    "total_warnings": 6,
+    "summary": "❌ Storyboard has 1 error(s) and 6 warning(s) — fix before generating prompts"
+  }
+}
