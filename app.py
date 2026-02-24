@@ -23,8 +23,14 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "tls-dev-key-2026")
 
 # Project storage
-PROJECTS_DIR = Path(__file__).parent / "projects"
-PROJECTS_DIR.mkdir(exist_ok=True)
+# If we are in Production on Railway and the /app/data Volume exists, use it. Otherwise, use local.
+vol_proj_path = Path("/app/data/projects")
+if os.environ.get("FLASK_ENV") == "production" and vol_proj_path.parent.exists():
+    PROJECTS_DIR = vol_proj_path
+else:
+    PROJECTS_DIR = Path(__file__).parent / "projects"
+    
+PROJECTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # SSE progress streams (per project)
 _progress_streams = {}
