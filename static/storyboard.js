@@ -144,17 +144,15 @@ function getBlockElements(blockName) {
 
 async function loadExistingStoryboards() {
     for (const block of storyboardBlocks) {
-        if (block.type === 'intro') {
+        let fetchUrl = null;
+        if (block.type === 'intro') fetchUrl = `/api/project/${PROJECT_ID}/storyboard/intro`;
+        else if (block.type === 'chapter') fetchUrl = `/api/project/${PROJECT_ID}/storyboard/${block.chapterIndex}`;
+        else if (block.type === 'break') fetchUrl = `/api/project/${PROJECT_ID}/storyboard/break_${block.index + 1}`;
+        else if (block.type === 'close') fetchUrl = `/api/project/${PROJECT_ID}/storyboard/close`;
+
+        if (fetchUrl) {
             try {
-                const res = await fetch(`/api/project/${PROJECT_ID}/storyboard/intro`);
-                if (res.ok) {
-                    const data = await res.json();
-                    block.scenes = data.storyboard || [];
-                }
-            } catch (e) { /* No intro storyboard yet */ }
-        } else if (block.chapterIndex !== null) {
-            try {
-                const res = await fetch(`/api/project/${PROJECT_ID}/storyboard/${block.chapterIndex}`);
+                const res = await fetch(fetchUrl);
                 if (res.ok) {
                     const data = await res.json();
                     block.scenes = data.storyboard || [];
@@ -789,18 +787,22 @@ async function generateStoryboard(block, blockIdx) {
 
     try {
         // Choose endpoint based on block type
-        let endpoint, pollEndpoint;
+        let endpoint, pollEndpoint, body = {};
         if (block.type === 'intro') {
             endpoint = `/api/project/${PROJECT_ID}/analyze-intro`;
             pollEndpoint = `/api/project/${PROJECT_ID}/storyboard/intro`;
+        } else if (block.type === 'break') {
+            endpoint = `/api/project/${PROJECT_ID}/analyze-break`;
+            pollEndpoint = `/api/project/${PROJECT_ID}/storyboard/break_${block.index + 1}`;
+            body = { break_index: block.index };
+        } else if (block.type === 'close') {
+            endpoint = `/api/project/${PROJECT_ID}/analyze-close`;
+            pollEndpoint = `/api/project/${PROJECT_ID}/storyboard/close`;
         } else {
             endpoint = `/api/project/${PROJECT_ID}/analyze-chapter`;
             pollEndpoint = `/api/project/${PROJECT_ID}/storyboard/${block.chapterIndex}`;
+            body = { chapter_index: block.chapterIndex };
         }
-
-        const body = block.type === 'intro'
-            ? {}
-            : { chapter_index: block.chapterIndex };
 
         const res = await fetch(endpoint, {
             method: 'POST',
@@ -881,9 +883,10 @@ async function generatePrompts(block, blockIdx) {
         block.type === 'chapter' ? `chapter_${block.index + 1}` :
             block.type === 'break' ? `break_${block.index + 1}` : 'close';
 
-    const pollEndpoint = block.type === 'intro'
-        ? `/api/project/${PROJECT_ID}/storyboard/intro`
-        : `/api/project/${PROJECT_ID}/storyboard/${block.chapterIndex}`;
+    const pollEndpoint = block.type === 'intro' ? `/api/project/${PROJECT_ID}/storyboard/intro` :
+        block.type === 'chapter' ? `/api/project/${PROJECT_ID}/storyboard/${block.chapterIndex}` :
+            block.type === 'break' ? `/api/project/${PROJECT_ID}/storyboard/break_${block.index + 1}` :
+                `/api/project/${PROJECT_ID}/storyboard/close`;
 
     // Find the prompt button (the last ghost button in the block's actions)
     const actionBtns = document.querySelectorAll(`#block-${blockIdx} .sb-block-actions .btn-ghost`);
@@ -965,9 +968,10 @@ async function submitAddScene() {
         block.type === 'chapter' ? `chapter_${block.index + 1}` :
             block.type === 'break' ? `break_${block.index + 1}` : 'close';
 
-    const pollEndpoint = block.type === 'intro'
-        ? `/api/project/${PROJECT_ID}/storyboard/intro`
-        : `/api/project/${PROJECT_ID}/storyboard/${block.chapterIndex}`;
+    const pollEndpoint = block.type === 'intro' ? `/api/project/${PROJECT_ID}/storyboard/intro` :
+        block.type === 'chapter' ? `/api/project/${PROJECT_ID}/storyboard/${block.chapterIndex}` :
+            block.type === 'break' ? `/api/project/${PROJECT_ID}/storyboard/break_${block.index + 1}` :
+                `/api/project/${PROJECT_ID}/storyboard/close`;
 
     showConsole();
     addConsoleLine(`➕ Adding ${sceneType.toUpperCase()} scene at position ${insertIdx + 1}...`, 'info');
@@ -1084,9 +1088,10 @@ async function submitAiEdit() {
         block.type === 'chapter' ? `chapter_${block.index + 1}` :
             block.type === 'break' ? `break_${block.index + 1}` : 'close';
 
-    const pollEndpoint = block.type === 'intro'
-        ? `/api/project/${PROJECT_ID}/storyboard/intro`
-        : `/api/project/${PROJECT_ID}/storyboard/${block.chapterIndex}`;
+    const pollEndpoint = block.type === 'intro' ? `/api/project/${PROJECT_ID}/storyboard/intro` :
+        block.type === 'chapter' ? `/api/project/${PROJECT_ID}/storyboard/${block.chapterIndex}` :
+            block.type === 'break' ? `/api/project/${PROJECT_ID}/storyboard/break_${block.index + 1}` :
+                `/api/project/${PROJECT_ID}/storyboard/close`;
 
     showConsole();
     addConsoleLine(`✏️ Updating Scene ${itemIdx + 1}...`, 'info');

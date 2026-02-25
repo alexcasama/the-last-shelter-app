@@ -877,6 +877,18 @@ def api_get_intro_storyboard(project_id):
     return jsonify(data)
 
 
+@app.route("/api/project/<project_id>/storyboard/<block_folder>", methods=["GET"])
+def api_get_block_storyboard(project_id, block_folder):
+    """Get the storyboard data for an arbitrary block (like break_1 or close)."""
+    project_dir = get_project_dir(project_id)
+    storyboard_path = project_dir / "production" / block_folder / "storyboard.json"
+    if not storyboard_path.exists():
+        return jsonify({"error": f"{block_folder} storyboard not generated yet"}), 404
+    with open(storyboard_path) as f:
+        data = json.load(f)
+    return jsonify(data)
+
+
 @app.route("/api/project/<project_id>/scene-image/<block_folder>/<filename>")
 def api_scene_image(project_id, block_folder, filename):
     """Serve a generated scene image."""
@@ -2015,7 +2027,407 @@ Return ONLY the JSON array. No other text."""
     thread = threading.Thread(target=run)
     thread.start()
 
-    return jsonify({"status": "analyzing", "block_type": "intro"})
+
+
+@app.route("/api/project/<project_id>/analyze-break", methods=["POST"])
+def api_analyze_break(project_id):
+    """Generate break storyboard scenes via Gemini."""
+    meta = load_project_metadata(project_id)
+    if not meta:
+        return jsonify({"error": "Project not found"}), 404
+
+    project_dir = get_project_dir(project_id)
+    narration_path = project_dir / "narration.json"
+    story_path = project_dir / "story.json"
+    elements_path = project_dir / "elements.json"
+
+    for path, name in [(narration_path, "Narration"), (story_path, "Story"), (elements_path, "Elements")]:
+        if not path.exists():
+            return jsonify({"error": f"{name} not found. Generate it first."}), 400
+
+    data = request.get_json() or {}
+    break_index = data.get("break_index", 0)
+
+    with open(narration_path) as f:
+        narration = json.load(f)
+    with open(story_path) as f:
+        story = json.load(f)
+    with open(elements_path) as f:
+        elements = json.load(f)
+
+    # Load show settings for presenter
+    show_settings = load_show_settings()
+    presenter = show_settings.get("presenter", {})
+
+    breaks = narration.get("breaks", [])
+    if break_index >= len(breaks):
+        return jsonify({"error": "Break index out of range"}), 400
+    
+    break_data = breaks[break_index]
+    break_text = break_data.get("text", "")
+    if not break_text:
+        return jsonify({"error": "No break narration found"}), 400
+
+    _progress_streams[project_id] = []
+    callback = progress_callback_factory(project_id)
+
+    def run():
+        try:
+            callback(f"🎬 Analyzing break {break_index + 1} narration...", "info")
+
+            char = story.get("character", {})
+            companion = char.get("companion", {})
+            loc = story.get("location", {})
+
+            element_refs = []
+            for elem in elements:
+                element_refs.append(f"@{elem.get('label', elem.get('element_id', '?'))} — {elem.get('description', '')[:80]}")
+            element_context = "\n".join(element_refs)
+
+            presenter_name = presenter.get("name", "Jack Harlan")
+
+            callback(f"🧠 Building break storyboard with presenter {presenter_name}...", "info")
+
+            prompt = f"""You are a CINEMATIC STORYBOARD ANALYST for a survival documentary BREAK sequence.
+
+BREAK NARRATION:
+\"\"\"{break_text}\"\"\"
+
+STORY CONTEXT:
+- Presenter: {presenter_name} (delivering the mid-episode break hook/recap to camera. Can be outdoors or in studio/location)
+- Character: {char.get('name', 'Unknown')} — {char.get('description', '')}
+- Location: {loc.get('name', 'Unknown')} — {loc.get('terrain', 'wilderness')}
+
+AVAILABLE ELEMENTS:
+{element_context}
+
+═══════════════════════════════════════════════════
+YOUR TASK: Break this narration into 4-6 individual SCENES
+═══════════════════════════════════════════════════
+
+The break sequence relies mainly on the presenter recapping the challenge, mixed with visual b-roll (bridge/flashback) for emphasis.
+
+STRUCTURE RULES:
+- Start with a PRESENTER scene (delivering the hook).
+- Alternate between PRESENTER and BRIDGE/FLASHBACK (b-roll showing the stakes/hardship).
+- {presenter_name} delivers ALL narration. Non-presenter scenes are visual-only.
+- Each scene: 5-10 seconds duration
+- Total duration matches the break length (~30-45s)
+
+OUTPUT FORMAT — Return a JSON array of scenes exactly matching this structure:
+```json
+[
+  {{
+    "scene_number": 1,
+    "type": "presenter",
+    "duration": "8s",
+    "narration": "Erik has spent twenty days just clearing the mess...",
+    "action": "Jack Harlan habla directo a cámara mientras camina entre los escombros nevados.",
+    "visual_description": "Medium shot of {presenter_name} standing in snowy forest, speaking directly to camera with serious expression. Breath visible in cold air.",
+    "elements": ["{presenter_name}"],
+    "location_description": "snowy_forest",
+    "camera": "medium shot, handheld slight movement",
+    "sfx": "Wind howling, crunching snow"
+  }},
+  {{
+    "scene_number": 2,
+    "type": "bridge",
+    "duration": "6s",
+    "narration": "",
+    "action": "Plano general de la cabaña destruida bajo la nieve.",
+    "visual_description": "Wide establishing shot of the ruined cabin site buried in snow, looking bleak and impossible.",
+    "elements": ["@Ruined Cabin"],
+    "location_description": "ruined_cabin_wide",
+    "camera": "slow pan right",
+    "sfx": "Bleak wind"
+  }}
+]
+```
+
+CRITICAL RULES:
+- location_description must be a short snake_case identifier for the background image
+- All images will be generated in 16:9 landscape format
+- Each scene MUST have visual_description detailed enough to generate a video prompt
+- Each scene MUST have an `action` field describing what happens in the scene clearly.
+- Split narration naturally across presenter scenes
+- IDIOMA ESPAÑOL: La `narration`, `visual_description`, `action` y `sfx` DEBEN estar en español.
+
+Return ONLY the JSON array. No other text."""
+
+            callback("📡 Calling Gemini for break analysis...", "info")
+            response_text = story_engine.generate_text(prompt, temperature=0.3, max_tokens=8000, model="gemini-2.5-flash")
+            callback("📋 Parsing storyboard response...", "info")
+
+            text = response_text.strip()
+            if text.startswith("```"):
+                text = text.split("\n", 1)[1]
+                if text.endswith("```"):
+                    text = text[:-3]
+                elif "```" in text:
+                    text = text[:text.rindex("```")]
+            text = text.strip()
+
+            storyboard = json.loads(text)
+            callback(f"✅ Generated {len(storyboard)} break scenes", "info")
+
+            break_dir = project_dir / "production" / f"break_{break_index + 1}"
+            break_dir.mkdir(parents=True, exist_ok=True)
+            images_dir = break_dir / "images"
+            images_dir.mkdir(parents=True, exist_ok=True)
+
+            callback(f"🎨 Generating images for {len(storyboard)} scenes...", "info")
+            img_config = {"image_generation": {"aspect_ratio": "16:9"}}
+            elements_dir = project_dir / "elements"
+            show_settings = json.loads((Path("config/show_settings.json")).read_text())
+            presenter_img = Path("config/presenter") / show_settings.get("presenter", {}).get("turnaround_image", "")
+            
+            for i, scene in enumerate(storyboard):
+                scene_num = scene.get("scene_number", i + 1)
+                img_filename = f"scene_{scene_num:02d}.png"
+                img_path = images_dir / img_filename
+                vis_desc = scene.get("visual_description", "")
+                scene_type = scene.get("type", "bridge")
+                
+                if not vis_desc:
+                    callback(f"  ⏭️ Scene {scene_num}: no visual description, skipping image", "info")
+                    continue
+
+                img_prompt = f"Cinematic 16:9 film still. {vis_desc} Photorealistic, dramatic lighting, nature documentary style."
+                ref_path = None
+                scene_elements = scene.get("elements", [])
+                
+                if scene_type == "presenter" and presenter_img.exists():
+                    ref_path = str(presenter_img)
+                elif scene_elements:
+                    for elem_name in scene_elements:
+                        elem_file = elem_name.lower().replace(" ", "_").replace("'", "").replace("(", "").replace(")", "") + ".png"
+                        elem_path = elements_dir / elem_file
+                        if elem_path.exists():
+                            ref_path = str(elem_path)
+                            break
+                
+                try:
+                    callback(f"  🖼️ Scene {scene_num}/{len(storyboard)}: generating image{'  (with ref)' if ref_path else ''}...", "info")
+                    if ref_path:
+                        story_engine.generate_image_with_ref(img_prompt, str(img_path), ref_path, config=img_config)
+                    else:
+                        story_engine.generate_image(img_prompt, str(img_path), config=img_config)
+                    scene["scene_image"] = img_filename
+                    callback(f"  ✅ Scene {scene_num}: image saved", "info")
+                except Exception as img_err:
+                    callback(f"  ⚠️ Scene {scene_num}: image failed — {str(img_err)[:100]}", "error")
+                    scene["scene_image"] = None
+
+            result = {
+                "storyboard": storyboard,
+                "block_type": "break",
+                "total_scenes": len(storyboard),
+                "total_duration": sum(int(str(s.get("duration", "8s")).replace("s", "")) for s in storyboard)
+            }
+
+            with open(break_dir / "storyboard.json", "w") as f:
+                json.dump(result, f, indent=2, ensure_ascii=False)
+
+            generated_count = sum(1 for s in storyboard if s.get("scene_image"))
+            callback(f"✅ Break {break_index + 1} storyboard saved! {len(storyboard)} scenes, {generated_count} images.", "complete")
+
+        except Exception as e:
+            callback(f"❌ Break analysis failed: {str(e)}", "error")
+
+    thread = threading.Thread(target=run)
+    thread.start()
+
+    return jsonify({"status": "analyzing", "block_type": "break"})
+
+
+@app.route("/api/project/<project_id>/analyze-close", methods=["POST"])
+def api_analyze_close(project_id):
+    """Generate close storyboard scenes via Gemini."""
+    meta = load_project_metadata(project_id)
+    if not meta:
+        return jsonify({"error": "Project not found"}), 404
+
+    project_dir = get_project_dir(project_id)
+    narration_path = project_dir / "narration.json"
+    story_path = project_dir / "story.json"
+    elements_path = project_dir / "elements.json"
+
+    for path, name in [(narration_path, "Narration"), (story_path, "Story"), (elements_path, "Elements")]:
+        if not path.exists():
+            return jsonify({"error": f"{name} not found. Generate it first."}), 400
+
+    with open(narration_path) as f:
+        narration = json.load(f)
+    with open(story_path) as f:
+        story = json.load(f)
+    with open(elements_path) as f:
+        elements = json.load(f)
+
+    # Load show settings for presenter
+    show_settings = load_show_settings()
+    presenter = show_settings.get("presenter", {})
+
+    close_text = narration.get("close", {}).get("text", "")
+    if not close_text:
+        return jsonify({"error": "No close narration found"}), 400
+
+    _progress_streams[project_id] = []
+    callback = progress_callback_factory(project_id)
+
+    def run():
+        try:
+            callback("🎬 Analyzing close narration...", "info")
+
+            char = story.get("character", {})
+            loc = story.get("location", {})
+
+            element_refs = []
+            for elem in elements:
+                element_refs.append(f"@{elem.get('label', elem.get('element_id', '?'))} — {elem.get('description', '')[:80]}")
+            element_context = "\n".join(element_refs)
+
+            presenter_name = presenter.get("name", "Jack Harlan")
+
+            callback(f"🧠 Building close storyboard with presenter {presenter_name}...", "info")
+
+            prompt = f"""You are a CINEMATIC STORYBOARD ANALYST for a survival documentary CLOSE sequence.
+
+CLOSE NARRATION:
+\"\"\"{close_text}\"\"\"
+
+STORY CONTEXT:
+- Presenter: {presenter_name} (delivering the outro/conclusion to camera)
+- Character: {char.get('name', 'Unknown')} — {char.get('description', '')}
+- Location: {loc.get('name', 'Unknown')} — {loc.get('terrain', 'wilderness')}
+
+AVAILABLE ELEMENTS:
+{element_context}
+
+═══════════════════════════════════════════════════
+YOUR TASK: Break this narration into 5-8 individual SCENES
+═══════════════════════════════════════════════════
+
+The close sequence wraps up the episode, highlighting the character's triumph/survival.
+
+STRUCTURE RULES:
+- Start with a PRESENTER scene (delivering the conclusion).
+- Mix with BRIDGE/RECAP (b-roll showing the finished shelter, the survivor resting, wide shots of the environment).
+- End with a final establishing wide shot or presenter sign-off.
+- {presenter_name} delivers ALL narration. Non-presenter scenes are visual-only.
+- Each scene: 5-10 seconds duration
+
+OUTPUT FORMAT — Return a JSON array of scenes exactly matching this structure:
+```json
+[
+  {{
+    "scene_number": 1,
+    "type": "presenter",
+    "duration": "10s",
+    "narration": "Ninety days. Erik did the impossible...",
+    "action": "Jack Harlan habla directo a cámara de pie junto al campamento al atardecer.",
+    "visual_description": "Medium shot of {presenter_name} standing near a crackling campfire at dusk, looking into camera with respect.",
+    "elements": ["{presenter_name}"],
+    "location_description": "dusk_campfire",
+    "camera": "medium shot, static",
+    "sfx": "Crackling fire, gentle wind"
+  }}
+]
+```
+
+CRITICAL RULES:
+- location_description must be a short snake_case identifier for the background image
+- All images will be generated in 16:9 landscape format
+- Each scene MUST have visual_description detailed enough to generate a video prompt
+- Each scene MUST have an `action` field describing what happens in the scene clearly.
+- Split narration naturally across presenter scenes
+- IDIOMA ESPAÑOL: La `narration`, `visual_description`, `action` y `sfx` DEBEN estar en español.
+
+Return ONLY the JSON array. No other text."""
+
+            callback("📡 Calling Gemini for close analysis...", "info")
+            response_text = story_engine.generate_text(prompt, temperature=0.3, max_tokens=8000, model="gemini-2.5-flash")
+            callback("📋 Parsing storyboard response...", "info")
+
+            text = response_text.strip()
+            if text.startswith("```"):
+                text = text.split("\n", 1)[1]
+                if text.endswith("```"):
+                    text = text[:-3]
+                elif "```" in text:
+                    text = text[:text.rindex("```")]
+            text = text.strip()
+
+            storyboard = json.loads(text)
+            callback(f"✅ Generated {len(storyboard)} close scenes", "info")
+
+            close_dir = project_dir / "production" / "close"
+            close_dir.mkdir(parents=True, exist_ok=True)
+            images_dir = close_dir / "images"
+            images_dir.mkdir(parents=True, exist_ok=True)
+
+            callback(f"🎨 Generating images for {len(storyboard)} scenes...", "info")
+            img_config = {"image_generation": {"aspect_ratio": "16:9"}}
+            elements_dir = project_dir / "elements"
+            show_settings = json.loads((Path("config/show_settings.json")).read_text())
+            presenter_img = Path("config/presenter") / show_settings.get("presenter", {}).get("turnaround_image", "")
+            
+            for i, scene in enumerate(storyboard):
+                scene_num = scene.get("scene_number", i + 1)
+                img_filename = f"scene_{scene_num:02d}.png"
+                img_path = images_dir / img_filename
+                vis_desc = scene.get("visual_description", "")
+                scene_type = scene.get("type", "bridge")
+                
+                if not vis_desc:
+                    callback(f"  ⏭️ Scene {scene_num}: no visual description, skipping image", "info")
+                    continue
+
+                img_prompt = f"Cinematic 16:9 film still. {vis_desc} Photorealistic, dramatic lighting, nature documentary style."
+                ref_path = None
+                scene_elements = scene.get("elements", [])
+                
+                if scene_type == "presenter" and presenter_img.exists():
+                    ref_path = str(presenter_img)
+                elif scene_elements:
+                    for elem_name in scene_elements:
+                        elem_file = elem_name.lower().replace(" ", "_").replace("'", "").replace("(", "").replace(")", "") + ".png"
+                        elem_path = elements_dir / elem_file
+                        if elem_path.exists():
+                            ref_path = str(elem_path)
+                            break
+                
+                try:
+                    callback(f"  🖼️ Scene {scene_num}/{len(storyboard)}: generating image{'  (with ref)' if ref_path else ''}...", "info")
+                    if ref_path:
+                        story_engine.generate_image_with_ref(img_prompt, str(img_path), ref_path, config=img_config)
+                    else:
+                        story_engine.generate_image(img_prompt, str(img_path), config=img_config)
+                    scene["scene_image"] = img_filename
+                    callback(f"  ✅ Scene {scene_num}: image saved", "info")
+                except Exception as img_err:
+                    callback(f"  ⚠️ Scene {scene_num}: image failed — {str(img_err)[:100]}", "error")
+                    scene["scene_image"] = None
+
+            result = {
+                "storyboard": storyboard,
+                "block_type": "close",
+                "total_scenes": len(storyboard),
+                "total_duration": sum(int(str(s.get("duration", "8s")).replace("s", "")) for s in storyboard)
+            }
+
+            with open(close_dir / "storyboard.json", "w") as f:
+                json.dump(result, f, indent=2, ensure_ascii=False)
+
+            generated_count = sum(1 for s in storyboard if s.get("scene_image"))
+            callback(f"✅ Close storyboard saved! {len(storyboard)} scenes, {generated_count} images.", "complete")
+
+        except Exception as e:
+            callback(f"❌ Close analysis failed: {str(e)}", "error")
+
+    thread = threading.Thread(target=run)
+    thread.start()
+
+    return jsonify({"status": "analyzing", "block_type": "close"})
 
 
 @app.route("/api/project/<project_id>/analyze-chapter", methods=["POST"])
