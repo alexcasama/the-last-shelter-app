@@ -248,6 +248,7 @@ function createBlockElement(block, blockIdx) {
             const img = document.createElement('img');
             img.className = 'sb-element-thumb';
             img.src = imgSrc;
+            img.loading = 'lazy';
             img.alt = el.label;
             img.title = el.label;
             img.onclick = (e) => { e.stopPropagation(); openLightbox(imgSrc); };
@@ -418,6 +419,7 @@ function createSceneCard(scene, sceneIdx, blockIdx) {
         const img = document.createElement('img');
         img.className = 'sb-card-img';
         img.src = imgSrc;
+        img.loading = 'lazy';
         img.alt = `Scene ${sceneNum}`;
         img.onerror = () => { img.replaceWith(createPlaceholder(scene.visual_description)); };
         img.onclick = () => openLightbox(imgSrc);
