@@ -1273,7 +1273,7 @@ CRITICAL QUALITY RULES:
 2. Use @CharacterName when a character appears (e.g. @Jack, @Erik)
 3. EVERY scene MUST be highly cinematic. Use multiple "Cut to" angles, tracking shots, close-ups, and sweeping wides. NEVER generate a short, simple, or static scene description.
 4. Write DENSE, HYPER-SPECIFIC visual paragraphs: detail body mechanics, dirt, sweat, texturing of clothes, lighting behavior (dappled light, rim lighting), weather interaction (snow blowing off a roof, breath misting), and camera movement (hand-held tracking, low-angle drone). The prompt text should be long and exhaustively detailed.
-5. For PRESENTER scenes (intro/outro) with dialogue, include the EXACT narration split across the multishot cuts: @Jack speaks to camera: "exact text"
+5. For PRESENTER scenes (intro/outro) with dialogue, include the exact narration split across the multishot cuts. IMPORTANT LANGUAGE RULE: The input narration is provided to you in Spanish, but you MUST translate it back to the original documentary ENGLISH when including it in the video prompt (e.g. @Jack speaks to camera: "exact english text").
 6. For all other NON-PRESENTER scenes (flashback, anticipatorio, bridge, chapter action), DO NOT include any dialogue, speech, or "Voice-over narration" in the video prompt text. Voice-overs are added in post-production. Focus 100% on pure cinematic visual action.
 7. ALWAYS end the prompt with lighting/color palette description + "4K."
 8. ALWAYS include a separate SFX line with detailed, layered sound design.
