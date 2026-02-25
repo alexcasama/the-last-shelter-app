@@ -2651,8 +2651,33 @@ def api_analyze_chapter(project_id):
         "chapter_index": chapter_index
     })
 
-
-
+@app.route("/api/upload-project", methods=["POST"])
+def api_upload_project():
+    """Endpoint for migrating local projects to the persistent volume via ZIP upload."""
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+        
+    if file and file.filename.endswith('.zip'):
+        import zipfile
+        zip_path = Path("tmp") / file.filename
+        zip_path.parent.mkdir(exist_ok=True)
+        file.save(zip_path)
+        
+        # Determine extraction directory (assumes ZIP contains the project folder inside)
+        extract_dir = Path("projects")
+        extract_dir.mkdir(exist_ok=True)
+        
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(extract_dir)
+            
+        zip_path.unlink()
+        return jsonify({"status": "Imported successfully!"})
+    
+    return jsonify({"error": "Invalid file format, need .zip"}), 400
 
 
 @app.route("/api/project/<project_id>/storyboard/<block_folder>", methods=["PUT"])
