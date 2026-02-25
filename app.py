@@ -881,6 +881,11 @@ def api_get_intro_storyboard(project_id):
 def api_get_block_storyboard(project_id, block_folder):
     """Get the storyboard data for an arbitrary block (like break_1 or close)."""
     project_dir = get_project_dir(project_id)
+    
+    # Check if this is a legacy chapter index request (e.g. "1" instead of "chapter_1")
+    if block_folder.isdigit():
+        block_folder = f"chapter_{int(block_folder) + 1}"
+        
     storyboard_path = project_dir / "production" / block_folder / "storyboard.json"
     if not storyboard_path.exists():
         return jsonify({"error": f"{block_folder} storyboard not generated yet"}), 404
@@ -2647,22 +2652,7 @@ def api_analyze_chapter(project_id):
     })
 
 
-@app.route("/api/project/<project_id>/storyboard/<block_folder>", methods=["GET"])
-def api_get_storyboard(project_id, block_folder):
-    """Get the storyboard table for a block (for user review)."""
-    project_dir = get_project_dir(project_id)
-    
-    # Check if this is a legacy chapter index request (e.g. "1" instead of "chapter_1")
-    if block_folder.isdigit():
-        block_folder = f"chapter_{int(block_folder) + 1}"
-        
-    storyboard_path = project_dir / "production" / block_folder / "storyboard.json"
-    
-    if not storyboard_path.exists():
-        return jsonify({"error": "Storyboard not found. Run analyze first."}), 404
-    
-    with open(storyboard_path) as f:
-        return jsonify(json.load(f))
+
 
 
 @app.route("/api/project/<project_id>/storyboard/<block_folder>", methods=["PUT"])
