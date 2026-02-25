@@ -2647,14 +2647,19 @@ def api_analyze_chapter(project_id):
     })
 
 
-@app.route("/api/project/<project_id>/storyboard/<int:chapter_index>", methods=["GET"])
-def api_get_storyboard(project_id, chapter_index):
-    """Get the storyboard table for a chapter (for user review)."""
+@app.route("/api/project/<project_id>/storyboard/<block_folder>", methods=["GET"])
+def api_get_storyboard(project_id, block_folder):
+    """Get the storyboard table for a block (for user review)."""
     project_dir = get_project_dir(project_id)
-    storyboard_path = project_dir / "production" / f"chapter_{chapter_index + 1}" / "storyboard.json"
+    
+    # Check if this is a legacy chapter index request (e.g. "1" instead of "chapter_1")
+    if block_folder.isdigit():
+        block_folder = f"chapter_{int(block_folder) + 1}"
+        
+    storyboard_path = project_dir / "production" / block_folder / "storyboard.json"
     
     if not storyboard_path.exists():
-        return jsonify({"error": "Storyboard not found. Run analyze-chapter first."}), 404
+        return jsonify({"error": "Storyboard not found. Run analyze first."}), 404
     
     with open(storyboard_path) as f:
         return jsonify(json.load(f))
