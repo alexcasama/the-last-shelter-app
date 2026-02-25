@@ -1350,6 +1350,11 @@ Add the missing scenes until every process is fully decomposed.
         
         storyboard = result.get("storyboard", [])
         
+        # Normalize scene_number to scene_num for internal engine processing
+        for scene in storyboard:
+            if "scene_number" in scene and "scene_num" not in scene:
+                scene["scene_num"] = scene.pop("scene_number")
+        
         if progress_callback:
             narrated = sum(1 for s in storyboard if s.get("type") == "narrated")
             bridges = sum(1 for s in storyboard if s.get("type") == "bridge")
