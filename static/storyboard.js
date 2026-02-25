@@ -195,6 +195,31 @@ function renderAllBlocks() {
         totalDuration > 0 ? `${mins}:${String(secs).padStart(2, '0')} total` : '—';
 }
 
+let allExpanded = false;
+
+function toggleAllBlocks() {
+    allExpanded = !allExpanded;
+    storyboardBlocks.forEach(block => {
+        block.isExpanded = allExpanded;
+    });
+
+    const btn = document.getElementById('toggleAllBtn');
+    if (btn) {
+        btn.innerHTML = allExpanded ? '▲ Collapse All' : '▼ Expand All';
+    }
+
+    // Brief timeout allows the browser to render the button state before heavy DOM creation
+    if (allExpanded) {
+        document.body.style.cursor = 'wait';
+        setTimeout(() => {
+            renderAllBlocks();
+            document.body.style.cursor = 'default';
+        }, 10);
+    } else {
+        renderAllBlocks();
+    }
+}
+
 function createBlockElement(block, blockIdx) {
     const div = document.createElement('div');
     div.className = 'sb-block';
@@ -219,6 +244,14 @@ function createBlockElement(block, blockIdx) {
     name.className = 'sb-block-name';
     name.textContent = block.name;
     info.appendChild(name);
+
+    header.onclick = (e) => {
+        // Prevent toggle if clicking on any action button inside the header
+        if (e.target.closest('.sb-block-actions')) return;
+
+        block.isExpanded = !block.isExpanded;
+        setTimeout(() => renderAllBlocks(), 10);
+    };
 
     // Scene count + duration
     if (block.scenes.length > 0) {
@@ -270,12 +303,25 @@ function createBlockElement(block, blockIdx) {
     const actions = document.createElement('div');
     actions.className = 'sb-block-actions';
 
+    // The Expand/Collapse toggle button for this specific block
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'btn btn-ghost btn-sm';
+    toggleBtn.style.marginRight = '8px'; // slight separation from action buttons
+    toggleBtn.textContent = block.isExpanded ? '▲ Collapse' : '▼ Expand';
+    toggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        toggleBtn.textContent = '⏳';
+        block.isExpanded = !block.isExpanded;
+        setTimeout(() => renderAllBlocks(), 10);
+    };
+    actions.appendChild(toggleBtn);
+
     // Generate Storyboard button — show for ALL block types when no scenes exist
     if (block.scenes.length === 0) {
         const genBtn = document.createElement('button');
         genBtn.className = 'btn btn-primary btn-sm';
         genBtn.textContent = '🔍 Generate Storyboard';
-        genBtn.onclick = () => generateStoryboard(block, blockIdx);
+        genBtn.onclick = (e) => { e.stopPropagation(); generateStoryboard(block, blockIdx); };
         actions.appendChild(genBtn);
     }
 
@@ -284,7 +330,7 @@ function createBlockElement(block, blockIdx) {
         const regenBtn = document.createElement('button');
         regenBtn.className = 'btn btn-ghost btn-sm';
         regenBtn.textContent = '🔄 Regenerate Scenes';
-        regenBtn.onclick = () => openRegenConfirmModal(block, blockIdx);
+        regenBtn.onclick = (e) => { e.stopPropagation(); openRegenConfirmModal(block, blockIdx); };
         actions.appendChild(regenBtn);
 
         // Generate/Regenerate prompts button
@@ -292,25 +338,26 @@ function createBlockElement(block, blockIdx) {
         const promptBtn = document.createElement('button');
         promptBtn.className = 'btn btn-ghost btn-sm';
         promptBtn.textContent = hasPrompts ? '🔄 Regenerate Prompts' : '📝 Generate Prompts';
-        promptBtn.onclick = () => generatePrompts(block, blockIdx);
+        promptBtn.onclick = (e) => { e.stopPropagation(); generatePrompts(block, blockIdx); };
         actions.appendChild(promptBtn);
     }
 
     header.appendChild(actions);
     div.appendChild(header);
 
-    // Scene cards row
-    if (block.scenes.length > 0) {
-        const row = createSceneRow(block, blockIdx);
-        div.appendChild(row);
-    } else {
-        const empty = document.createElement('div');
-        empty.className = 'sb-empty-block';
-        const actionText = 'Click "Generate Storyboard" to analyze this block.';
-        empty.innerHTML = `<p>No scenes yet. ${actionText}</p>`;
-        div.appendChild(empty);
+    // Scene cards row (only render if expanded)
+    if (block.isExpanded) {
+        if (block.scenes.length > 0) {
+            const row = createSceneRow(block, blockIdx);
+            div.appendChild(row);
+        } else {
+            const empty = document.createElement('div');
+            empty.className = 'sb-empty-block';
+            const actionText = 'Click "Generate Storyboard" to analyze this block.';
+            empty.innerHTML = `<p>No scenes yet. ${actionText}</p>`;
+            div.appendChild(empty);
+        }
     }
-
 
     return div;
 }
@@ -780,6 +827,10 @@ function selectScene(blockIdx, sceneIdx) {
 }
 
 async function generateStoryboard(block, blockIdx) {
+    // Auto-expand the block so the user sees the incoming results
+    block.isExpanded = true;
+    renderAllBlocks();
+
     const btn = document.querySelector(`#block-${blockIdx} .btn-primary`);
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Analyzing...'; }
 

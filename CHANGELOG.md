@@ -18,10 +18,13 @@
 - UI Modal added alongside location edits to allow inputting custom revision instructions, viewing the current prompt, and auto-refreshing the element image upon completion.
 
 ### ✨ UI and Sidebar Tweaks
-**Frontend (`index.html`, `app.js`, `storyboard.js`, `style.css`)**
+**Frontend (`index.html`, `app.js`, `storyboard.js`, `style.css`, `storyboard.css`)**
+- **Collapsible Storyboard Blocks**: Implemented a lazy-loading accordion UI for the Storyboard view. Blocks now load collapsed by default, drastically saving memory by deferring the DOM creation and image loading of hundreds of scenes until the block is explicitly expanded.
+- **Global Expand/Collapse All**: Added a generic toggle button to the top-bar navigation that expands or collapses every block in the project simultaneously with visual hover feedback.
+- **Individual Block Toggles**: Replaced default emojis with discrete UI ghost buttons styled as `▼ Expand` / `▲ Collapse`, relocated to the right-hand actions area of each block header. Clicking anywhere on the block header also triggers expansion.
 - **Sidebar Cleanup**: Removed the `duration` and `elements_generated` system status badges from project cards for a cleaner interface.
 - **Text Wrapping**: Allowed long Episode Titles in the sidebar to wrap natively onto two lines using `-webkit-line-clamp`.
-- **Button Feedback**: Added visual feedback (disabled state + "⏳ Generating..." text) when the "Regenerate Prompts" button is clicked in the storyboard workflow.
+- **Button Feedback**: Added visual feedback (disabled state + "⏳ Generating..." text) when the "Regenerate Prompts" button is clicked in the storyboard workflow, and auto-expands the block on click.
 - **Storyboard Labels**: Fixed hardcoded label rendering so that single images read as `@Image` instead of `@Image1` in the prompt image captions and Modal headers.
 
 ### 🐛 Parsing Bug Fix

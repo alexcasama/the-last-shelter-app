@@ -9,8 +9,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="stylesheet" href="/static/storyboard.css">
+    <link rel="stylesheet" href="/static/style.css?v=5">
+    <link rel="stylesheet" href="/static/storyboard.css?v=5">
 </head>
 
 <body class="sb-body">
@@ -19,7 +19,8 @@
     <div class="sb-topbar">
         <a href="/" class="sb-back-btn">← Back</a>
         <h1 class="sb-title">{{ project_title }}</h1>
-        <div class="sb-topbar-actions">
+        <div class="sb-topbar-actions" style="display:flex; align-items:center; gap:1rem;">
+            <button class="btn btn-ghost btn-sm" onclick="toggleAllBlocks()" id="toggleAllBtn">🔽 Expand All</button>
             <span class="sb-total-duration" id="totalDuration">—</span>
         </div>
     </div>
@@ -191,7 +192,7 @@
     <script>
         const PROJECT_ID = "{{ project_id }}";
     </script>
-    <script src="/static/storyboard.js"></script>
+    <script src="/static/storyboard.js?v=5"></script>
 </body>
 
 </html>
