@@ -1298,8 +1298,10 @@ FINAL RULES
 - Use FULL element names as they appear in AVAILABLE ELEMENTS (e.g. "@Erik Lindqvist" not "@Erik")
 - Be GENEROUS with bridges — they make the video feel real and cinematic
 - NEVER skip the setup for an action (grabbing tools, walking, positioning)
-- Think like a FILM DIRECTOR — if you wouldn't cut directly between two shots, add a bridge
-- LANGUAGE: Write ALL "action" descriptions IN SPANISH. Keep element names (@Erik Lindqvist) in English. Example: "Erik sale de la camioneta y mira el terreno nevado" NOT "Erik exits the truck and looks at the snowy terrain"
+- LANGUAGE RULES: 
+  1. Write the `action`, `visual_description`, and `sfx` fields IN SPANISH (e.g. "Erik sale de la camioneta"). 
+  2. Keep ALL element names (@Erik Lindqvist) in English.
+  3. CRITICAL: The `narration` field MUST BE the EXACT text in ENGLISH from the original script. DO NOT translate the narration to Spanish.
 
 ⚠️ CRITICAL: NO MONTAGES — DECOMPOSE EVERY PROCESS ⚠️
 

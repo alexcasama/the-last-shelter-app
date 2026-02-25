@@ -2155,7 +2155,8 @@ CRITICAL RULES:
 - Each scene MUST have visual_description detailed enough to generate a video prompt
 - Each scene MUST have an `action` field describing what happens in the scene clearly.
 - Split narration naturally across presenter scenes
-- IDIOMA ESPAÑOL: La `narration`, `visual_description`, `action` y `sfx` DEBEN estar en español.
+- IDIOMA: La `visual_description`, `action` y `sfx` DEBEN estar en ESPAÑOL.
+- NARRATION: La `narration` DEBE ser el texto EXACTO en INGLÉS del guion original. NO lo traduzcas al español.
 
 Return ONLY the JSON array. No other text."""
 
@@ -2345,7 +2346,8 @@ CRITICAL RULES:
 - Each scene MUST have visual_description detailed enough to generate a video prompt
 - Each scene MUST have an `action` field describing what happens in the scene clearly.
 - Split narration naturally across presenter scenes
-- IDIOMA ESPAÑOL: La `narration`, `visual_description`, `action` y `sfx` DEBEN estar en español.
+- IDIOMA: La `visual_description`, `action` y `sfx` DEBEN estar en ESPAÑOL.
+- NARRATION: La `narration` DEBE ser el texto EXACTO en INGLÉS del guion original. NO lo traduzcas al español.
 
 Return ONLY the JSON array. No other text."""
 
