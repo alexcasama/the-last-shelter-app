@@ -17,6 +17,12 @@
 - Automatically triggers a backend AI revision of the `frontal_prompt`, maintaining the strict constraint of rendering elements against a clean white portrait background.
 - UI Modal added alongside location edits to allow inputting custom revision instructions, viewing the current prompt, and auto-refreshing the element image upon completion.
 
+### 🖼️ Cross-Chapter Location Referencing
+**Backend (`app.py`)** & **Frontend (`storyboard.js`)**
+- Upgraded the "Regenerate Image" modal for locations to allow referencing any previously generated image from the entire project.
+- The reference image dropdown now aggregates images across all Intros, Chapters, Breaks, and Closes, correctly labeled by their origin.
+- The backend API (`/api/project/<project_id>/edit-location-image`) was updated to dynamically locate reference images from different block folders, ensuring visual consistency across the entire episode.
+
 ### ✨ UI and Sidebar Tweaks
 **Frontend (`index.html`, `app.js`, `storyboard.js`, `style.css`, `storyboard.css`)**
 - **Collapsible Storyboard Blocks**: Implemented a lazy-loading accordion UI for the Storyboard view. Blocks now load collapsed by default, drastically saving memory by deferring the DOM creation and image loading of hundreds of scenes until the block is explicitly expanded.
