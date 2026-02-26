@@ -1376,27 +1376,38 @@ function openEditLocImageModal(blockIdx, sceneIdx, locIdx = 0) {
     // Show current generation prompt
     document.getElementById('editLocImageCurrentPrompt').textContent = loc.prompt || '(no prompt saved)';
 
-    // Populate reference image dropdown with all location images
+    // Populate reference image dropdown with all location images across all blocks
     const refSelect = document.getElementById('editLocImageRefSelect');
     refSelect.innerHTML = '<option value="">— Sin referencia (generar desde cero) —</option>';
     const seen = new Set();
-    for (const s of (block.scenes || [])) {
-        const locs = s.prompt?.locations || [];
-        // Also handle old format
-        if (locs.length === 0 && s.prompt?.location_id) {
-            locs.push({ id: s.prompt.location_id, image: s.prompt.location_image, prompt: s.prompt.location_prompt });
-        }
-        for (const l of locs) {
-            if (l.image && !seen.has(l.image) && l.image !== loc.image) {
-                seen.add(l.image);
-                const sceneNum = s.scene_number || '?';
-                const opt = document.createElement('option');
-                opt.value = l.image;
-                opt.textContent = `Scene ${sceneNum}: ${l.id.replace(/_/g, ' ')}`;
-                refSelect.appendChild(opt);
+
+    storyboardBlocks.forEach(b => {
+        const bFolder = b.type === 'intro' ? 'intro' :
+            b.type === 'close' ? 'close' :
+                b.type === 'chapter' ? `chapter_${b.index + 1}` :
+                    b.type === 'break' ? `break_${b.index + 1}` : 'intro';
+        const blockLabel = b.type === 'chapter' ? `CH ${b.index + 1}` :
+            b.type === 'break' ? `BRK ${b.index + 1}` :
+                b.type.toUpperCase();
+
+        for (const s of (b.scenes || [])) {
+            const locs = s.prompt?.locations || [];
+            // Also handle old format
+            if (locs.length === 0 && s.prompt?.location_id) {
+                locs.push({ id: s.prompt.location_id, image: s.prompt.location_image, prompt: s.prompt.location_prompt });
+            }
+            for (const l of locs) {
+                if (l.image && !seen.has(l.image) && l.image !== loc.image) {
+                    seen.add(l.image);
+                    const sceneNum = s.scene_number || '?';
+                    const opt = document.createElement('option');
+                    opt.value = `${bFolder}|${l.image}`;
+                    opt.textContent = `${blockLabel} - Scene ${sceneNum}: ${l.id.replace(/_/g, ' ')}`;
+                    refSelect.appendChild(opt);
+                }
             }
         }
-    }
+    });
 
     document.getElementById('editLocImageFeedback').value = '';
     document.getElementById('editLocImageSubmit').disabled = false;
@@ -1432,6 +1443,15 @@ async function submitEditLocImage() {
                 block.type === 'chapter' ? `chapter_${block.index + 1}` :
                     block.type === 'break' ? `break_${block.index + 1}` : 'intro';
 
+    const refVal = document.getElementById('editLocImageRefSelect').value || '';
+    let refBlockFolder = '';
+    let refImage = '';
+    if (refVal) {
+        const parts = refVal.split('|');
+        refBlockFolder = parts[0];
+        refImage = parts[1];
+    }
+
     try {
         const resp = await fetch(`/api/project/${PROJECT_ID}/edit-location-image`, {
             method: 'POST',
@@ -1442,7 +1462,8 @@ async function submitEditLocImage() {
                 location_image: loc.image,
                 current_prompt: loc.prompt || '',
                 feedback: feedback,
-                reference_image: document.getElementById('editLocImageRefSelect').value || ''
+                reference_image: refImage,
+                reference_block_folder: refBlockFolder
             })
         });
 

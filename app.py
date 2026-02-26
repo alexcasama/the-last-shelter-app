@@ -1588,6 +1588,7 @@ def api_edit_location_image(project_id):
     current_prompt = data.get("current_prompt", "")
     feedback = data.get("feedback", "")
     reference_image = data.get("reference_image", "")  # optional: filename of image to use as visual reference
+    reference_block_folder = data.get("reference_block_folder", block_folder)
 
     if not feedback.strip():
         return jsonify({"error": "No feedback provided"}), 400
@@ -1615,7 +1616,8 @@ def api_edit_location_image(project_id):
 
         if reference_image:
             # Use reference image for visual consistency (image-to-image)
-            ref_path = images_dir / reference_image
+            ref_dir = project_dir / "production" / reference_block_folder / "images"
+            ref_path = ref_dir / reference_image
             if ref_path.exists():
                 story_engine.generate_image_with_ref(img_prompt, str(loc_path), str(ref_path), config=img_config)
             else:
