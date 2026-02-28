@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-02-28 — Storyboard Break Generation & Rendering Fixes
+
+### 🐛 Bug Fixes
+**Backend (`app.py`)** & **Frontend (`storyboard.js`)**
+- **Phantom Break Blocks Removed**: Fixed a UI bug in `storyboard.js` where a visual "Break" block was unconditionally rendered after every single chapter phase. The UI now strictly checks the `narration.json` file to see if a break actually exists for a specific phase (using `after_phase_index`) before rendering the block.
+- **Dynamic Fallback Break Generation**: Fixed a crash (`Index out of range`) in `app.py` when the frontend requested a break index that didn't exist in the pre-generated `narration.json`. 
+- **Context-Aware Fallback**: If a requested break index is missing, the backend now dynamically queries the Gemini API on the fly to generate a unique, contextually accurate short Break script. The prompt explicitly feeds Gemini the exact phase that was just completed and the one that is about to start to ensure 100% temporal consistency.
+
+---
+
 ## 2026-02-24 — Prompt Generation Rules + UI Polish + Edit Elements
 
 ### 🎬 Video Prompt Generation — Rule Refinement
