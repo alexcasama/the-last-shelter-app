@@ -42,6 +42,7 @@ function buildBlocks() {
     storyboardBlocks = [];
     const narration = projectData.narration || {};
     const phases = narration.phases || [];
+    const breaks = narration.breaks || [];
 
     // Intro block
     storyboardBlocks.push({
@@ -67,16 +68,24 @@ function buildBlocks() {
             elements: getBlockElements(phaseName)
         });
 
-        // Break after each chapter (except last)
-        if (i < phases.length - 1) {
+        // Determine if a true presenter break follows this phase
+        let breakIndex = -1;
+        if (breaks.length > 0 && breaks[0].after_phase_index !== undefined) {
+            breakIndex = breaks.findIndex(b => b.after_phase_index === i);
+        } else if (i < phases.length - 1 && i < breaks.length) {
+            // Fallback for older projects prior to after_phase_index
+            breakIndex = i;
+        }
+
+        if (breakIndex !== -1) {
             storyboardBlocks.push({
                 type: 'break',
-                name: `BREAK ${i + 1}`,
-                index: i,
+                name: `BREAK ${breakIndex + 1}`,
+                index: breakIndex,
                 chapterIndex: null,
                 scenes: [],
                 prompts: [],
-                elements: getBlockElements('break')
+                elements: getBlockElements(`break_${breakIndex + 1}`)
             });
         }
     });
