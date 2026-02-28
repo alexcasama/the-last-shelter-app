@@ -2082,17 +2082,28 @@ def api_analyze_break(project_id):
         
         char_name = story.get("character", {}).get("name", "He")
         
+        phases = narration.get("phases", [])
+        just_finished = "a major phase of construction"
+        up_next = "the next harsh phase"
+        
+        if break_index < len(phases):
+            just_finished = phases[break_index].get("phase_name", just_finished)
+        if break_index + 1 < len(phases):
+            up_next = phases[break_index + 1].get("phase_name", up_next)
+        
         fallback_prompt = f"""
 Generate a short PRESENTER BREAK (cliffhanger) for a survival documentary called The Last Shelter.
 Style: AGGRESSIVE, direct, confrontational. Like a sports commentator calling the action.
 Short punchy sentences that HIT.
 
 STORY CONTEXT:
-{char_name} is building a shelter in the wilderness. The work is physically brutal and the elements are unforgiving. He just finished a major phase of construction and is about to start the next one.
+{char_name} is building a shelter in the wilderness. The work is physically brutal and the elements are unforgiving.
+He just finished: "{just_finished}"
+He is about to start: "{up_next}"
 
 RULES:
-1. Acknowledge the brutal progress just made.
-2. Confront with the harsh reality of what's still left to do.
+1. Acknowledge the brutal progress just made on '{just_finished}'.
+2. Confront with the harsh reality of what's still left to do for '{up_next}'.
 3. Be AGGRESSIVE and DIRECT, not poetic or mysterious. Punchy. Confrontational.
 4. Be 30-50 words.
 5. End with a gut-punch line — short, brutal, final.
