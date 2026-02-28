@@ -2067,14 +2067,57 @@ def api_analyze_break(project_id):
     presenter = show_settings.get("presenter", {})
 
     breaks = narration.get("breaks", [])
-    if not breaks:
-        return jsonify({"error": "No breaks generated in this narration"}), 400
-        
-    # Clamp index to available breaks (since sometimes fewer breaks are generated than phases)
-    safe_index = min(break_index, len(breaks) - 1)
     
-    break_data = breaks[safe_index]
-    break_text = break_data.get("text", "")
+    # Check if the requested break index is out of bounds of the pre-generated breaks
+    if breaks and break_index < len(breaks):
+        # We have a pre-generated break for this index
+        break_data = breaks[break_index]
+        break_text = break_data.get("text", "")
+    else:
+        # The frontend uses flattened phases for break indices, while the backend generated
+        # breaks based on original un-flattened chapters. This causes the frontend to request
+        # breaks that don't exist in the JSON.
+        # Fallback: Generate a generic but unique break on the fly for this index.
+        from story_engine import init_client, GEMINI_MODEL_FLASH
+        
+        char_name = story.get("character", {}).get("name", "He")
+        
+        fallback_prompt = f"""
+Generate a short PRESENTER BREAK (cliffhanger) for a survival documentary called The Last Shelter.
+Style: AGGRESSIVE, direct, confrontational. Like a sports commentator calling the action.
+Short punchy sentences that HIT.
+
+STORY CONTEXT:
+{char_name} is building a shelter in the wilderness. The work is physically brutal and the elements are unforgiving. He just finished a major phase of construction and is about to start the next one.
+
+RULES:
+1. Acknowledge the brutal progress just made.
+2. Confront with the harsh reality of what's still left to do.
+3. Be AGGRESSIVE and DIRECT, not poetic or mysterious. Punchy. Confrontational.
+4. Be 30-50 words.
+5. End with a gut-punch line — short, brutal, final.
+
+Return ONLY the raw spoken text. No formatting, no JSON, no quotes."""
+
+        try:
+            client = init_client()
+            response = client.models.generate_content(
+                model=GEMINI_MODEL_FLASH,
+                contents=[fallback_prompt]
+            )
+            break_text = response.text.strip()
+            # Clean up potential markdown formatting
+            if break_text.startswith("`") and break_text.endswith("`"):
+                break_text = break_text.strip("`")
+            if break_text.startswith('"') and break_text.endswith('"'):
+                break_text = break_text.strip('"')
+            break_data = {"text": break_text, "duration_seconds": 25}
+        except Exception as e:
+            print(f"Fallback break generation failed: {e}")
+            # Absolute worst-case scenario fallback
+            break_text = f"The Yukon doesn't forgive, and it doesn't forget. {char_name} has pushed himself to the absolute limit to get this far. But the hardest part is yet to come. The clock is ticking. And winter... is arriving."
+            break_data = {"text": break_text, "duration_seconds": 25}
+
     if not break_text:
         return jsonify({"error": "No break narration found"}), 400
 
