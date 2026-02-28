@@ -2067,10 +2067,13 @@ def api_analyze_break(project_id):
     presenter = show_settings.get("presenter", {})
 
     breaks = narration.get("breaks", [])
-    if break_index >= len(breaks):
-        return jsonify({"error": "Break index out of range"}), 400
+    if not breaks:
+        return jsonify({"error": "No breaks generated in this narration"}), 400
+        
+    # Clamp index to available breaks (since sometimes fewer breaks are generated than phases)
+    safe_index = min(break_index, len(breaks) - 1)
     
-    break_data = breaks[break_index]
+    break_data = breaks[safe_index]
     break_text = break_data.get("text", "")
     if not break_text:
         return jsonify({"error": "No break narration found"}), 400
