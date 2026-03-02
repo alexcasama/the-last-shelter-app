@@ -772,21 +772,69 @@ def api_generate_elements(project_id):
             # Step 1: Analyze elements needed using the pre-extracted characters from the script
             elements_list = story_engine.analyze_elements(story, narration, script_data, callback)
             
-            # Step 2: Generate reference images
-            generated = story_engine.generate_elements(elements_list, str(project_dir), callback)
+            # Step 1.5: INJECT GLOBAL PRESENTER (Jack Harlan)
+            # We never generate Jack, we use the global reference image
+            try:
+                settings_path = Path("config/show_settings.json")
+                if settings_path.exists():
+                    with open(settings_path) as sf:
+                        settings = json.load(sf)
+                    
+                    presenter_name = settings.get("presenter_name", "Jack Harlan")
+                    turnaround = settings.get("turnaround_image", "")
+                    
+                    if turnaround:
+                        # Copy the turnaround image to the project's elements folder
+                        elements_dir = project_dir / "elements"
+                        elements_dir.mkdir(exist_ok=True)
+                        
+                        src_img = Path("config/presenter") / turnaround
+                        if src_img.exists():
+                            import shutil
+                            # We create the element first to skip generation
+                            jack_element = {
+                                "id": "presenter_jack",
+                                "label": presenter_name,
+                                "category": "character",
+                                "description": "The show's main presenter and host.",
+                                "appears_in": ["Intro", "Breaks", "Outro"],
+                                "frontal_prompt": settings.get("presenter_prompt", "Presenter portrait"),
+                                "is_global_presenter": True,
+                                "image_filename": f"presenter_{turnaround}" # Save with prefix to avoid overwrites
+                            }
+                            
+                            dest_img = elements_dir / jack_element["image_filename"]
+                            shutil.copy2(src_img, dest_img)
+                            
+                            # Insert Jack at the very top of the elements list
+                            # Remove any hallucinatory 'Jack' the LLM might have output
+                            elements_list = [e for e in elements_list if "jack" not in e.get("label", "").lower()]
+                            elements_list.insert(0, jack_element)
+                            callback(f"👤 Injected global presenter: {presenter_name}", "info")
+            except Exception as se:
+                print(f"[Elements] Failed to inject presenter: {se}")
+            
+            # Step 2: Generate reference images (story_engine will skip existing images if we tell it to)
+            # We need to filter out the global presenter before sending to generate_elements so we don't overwrite him
+            ai_elements_to_generate = [e for e in elements_list if not e.get("is_global_presenter")]
+            generated_ai_elements = story_engine.generate_elements(ai_elements_to_generate, str(project_dir), callback)
+            
+            # Re-combine the lists
+            global_elements = [e for e in elements_list if e.get("is_global_presenter")]
+            final_elements = global_elements + generated_ai_elements
             
             # Save elements data
             with open(project_dir / "elements.json", "w") as f:
-                json.dump(generated, f, indent=2, ensure_ascii=False)
+                json.dump(final_elements, f, indent=2, ensure_ascii=False)
             
             meta["status"] = "elements_generated"
             if "elements" not in meta.get("steps_completed", []):
                 meta.setdefault("steps_completed", []).append("elements")
             save_project_metadata(project_id, meta)
             
-            callback("\u2705 Elements generated and saved!", "complete")
+            callback("✅ Elements generated and saved!", "complete")
         except Exception as e:
-            callback(f"\u274c Error: {str(e)}", "error")
+            callback(f"❌ Error: {str(e)}", "error")
     
     thread = threading.Thread(target=run)
     thread.start()

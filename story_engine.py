@@ -801,13 +801,30 @@ FULL NARRATION SCRIPT FOR CONTEXT:
 
 ═══ JSON FORMAT ═══
 
-For each element, provide:
-- id: snake_case identifier
-- label: Display name
-- category: "character" | "vehicle" | "object"
-- description: Extremely detailed visual description
-- appears_in: List of phase names where this element appears (be thorough!)
-- frontal_prompt: Image generation prompt (see rules below)
+You must return a JSON object with exactly two arrays: "characters" and "objects".
+
+{
+  "characters": [
+    {
+      "id": "snake_case_identifier",
+      "label": "Display Name",
+      "category": "character", // or "animal", "family"
+      "description": "Extremely detailed visual description",
+      "appears_in": ["Phase 1", "Phase 2"],
+      "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND..."
+    }
+  ],
+  "objects": [
+    {
+      "id": "snake_case_identifier",
+      "label": "Display Name",
+      "category": "object", // or "vehicle"
+      "description": "Extremely detailed visual description",
+      "appears_in": ["Phase 1", "Phase 3"],
+      "frontal_prompt": "Studio portrait of [object] on CLEAN WHITE BACKGROUND..."
+    }
+  ]
+}
 
 FRONTAL PROMPT RULES (ALL elements get PORTRAIT 3:4 format with STUDIO BACKGROUND):
 - For CHARACTERS: "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. [extremely detailed face and upper body description]. 
