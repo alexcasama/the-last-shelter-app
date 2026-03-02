@@ -1537,6 +1537,7 @@ FINAL RULES
 - Use FULL element names as they appear in AVAILABLE ELEMENTS (e.g. "@Erik Lindqvist" not "@Erik")
 - Be GENEROUS with bridges — they make the video feel real and cinematic
 - NEVER skip the setup for an action (grabbing tools, walking, positioning)
+- EXTREME CONTEXT RULE: Ensure all `visual_description` and `action` fields perfectly match the specified Location ({loc.get('terrain', 'wilderness')}). If it's the Arctic, there must be snow. If it's a desert, there is sand. NEVER invent a jungle if the story is in the Arctic.
 - LANGUAGE RULES: 
   1. Write the `action`, `visual_description`, and `sfx` fields IN SPANISH (e.g. "Erik sale de la camioneta"). 
   2. Keep ALL element names (@Erik Lindqvist) in English.

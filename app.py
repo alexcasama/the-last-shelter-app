@@ -2085,6 +2085,7 @@ OUTPUT FORMAT — Return a JSON array of scenes:
     "duration": "6s",
     "narration": "",
     "visual_description": "Aerial drone shot over vast Arctic wilderness...",
+    "action": "Dron sobrevuela el desierto helado del Ártico",
     "elements": [],
     "location_description": "arctic_aerial",
     "camera": "slow push in",
@@ -2096,6 +2097,7 @@ OUTPUT FORMAT — Return a JSON array of scenes:
     "duration": "8s",
     "narration": "We are fifteen feet beneath the snow...",
     "visual_description": "Medium shot of Presenter delivering the line according to stage directions.",
+    "action": "Jack habla a cámara con urgencia mientras cae nieve",
     "elements": ["{presenter_name}"],
     "location_description": "presenter_location",
     "camera": "handheld medium",
@@ -2107,6 +2109,7 @@ OUTPUT FORMAT — Return a JSON array of scenes:
     "duration": "5s",
     "narration": "",
     "visual_description": "Close up of crashed plane smoking in the snow...",
+    "action": "Plano detalle de un avión estrellado en un bosque nevado",
     "elements": [],
     "location_description": "plane_wreck",
     "camera": "static wide",
@@ -2119,7 +2122,8 @@ OUTPUT FORMAT — Return a JSON array of scenes:
 CRITICAL RULES:
 - location_description must be a short snake_case identifier for the background
 - All images will be generated in 16:9 landscape format
-- For presenter scenes, location is always "helicopter_interior_backseat"
+- For presenter scenes, location is always "presenter_location"
+- EXTREME CONTEXT RULE: Ensure all `visual_description` and `action` fields perfectly match the specified Location ({loc.get('terrain', 'wilderness')}). If it's the Arctic, there must be snow. If it's a desert, there is sand. NEVER invent a jungle if the story is in the Arctic.
 - The narration MUST be the exact English text provided. DO NOT TRANSLATE IT.
 - The `visual_description`, `action`, and `sfx` fields MUST be in SPANISH.
 
@@ -2395,6 +2399,7 @@ CRITICAL RULES:
 - All images will be generated in 16:9 landscape format
 - Each scene MUST have visual_description detailed enough to generate a video prompt
 - Each scene MUST have an `action` field describing what happens in the scene clearly.
+- EXTREME CONTEXT RULE: Ensure all `visual_description` and `action` fields perfectly match the specified Location ({loc.get('terrain', 'wilderness')}). If it's the Arctic, there must be snow. If it's a desert, there is sand. NEVER invent a jungle if the story is in the Arctic.
 - Split narration naturally across presenter scenes
 - IDIOMA: La `visual_description`, `action` y `sfx` DEBEN estar en ESPAÑOL.
 - NARRATION: La `narration` DEBE ser el texto EXACTO en INGLÉS del guion original. NO lo traduzcas al español.
@@ -2596,6 +2601,7 @@ CRITICAL RULES:
 - All images will be generated in 16:9 landscape format
 - Each scene MUST have visual_description detailed enough to generate a video prompt
 - Each scene MUST have an `action` field describing what happens in the scene clearly.
+- EXTREME CONTEXT RULE: Ensure all `visual_description` and `action` fields perfectly match the specified Location ({loc.get('terrain', 'wilderness')}). If it's the Arctic, there must be snow. If it's a desert, there is sand. NEVER invent a jungle if the story is in the Arctic.
 - Split narration naturally across presenter scenes
 - IDIOMA: La `visual_description`, `action` y `sfx` DEBEN estar en ESPAÑOL.
 - NARRATION: La `narration` DEBE ser el texto EXACTO en INGLÉS del guion original. NO lo traduzcas al español.
