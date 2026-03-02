@@ -1998,6 +1998,18 @@ def api_analyze_intro(project_id):
         story = json.load(f)
     with open(elements_path) as f:
         elements = json.load(f)
+        
+    script_path = project_dir / "script.json"
+    intro_stage_directions = []
+    if script_path.exists():
+        with open(script_path) as f:
+            script_data = json.load(f)
+            for section in script_data.get("sections", []):
+                if section.get("type") == "intro":
+                    intro_stage_directions = section.get("stage_directions", [])
+                    break
+    
+    stage_dir_context = " ".join(intro_stage_directions) if intro_stage_directions else "Deliver the intro directly to camera in the primary location."
 
     # Load show settings for presenter
     show_settings = load_show_settings()
@@ -2032,8 +2044,11 @@ def api_analyze_intro(project_id):
 INTRO NARRATION:
 \"\"\"{intro_text}\"\"\"
 
+SCRIPT STAGE DIRECTIONS:
+{stage_dir_context}
+
 STORY CONTEXT:
-- Presenter: {presenter_name} (delivering the intro from inside a helicopter backseat, wearing aviation headset, speaking loud over rotor noise)
+- Presenter: {presenter_name} (delivering the intro based on the stage directions above)
 - Character: {char.get('name', 'Unknown')} — {char.get('description', '')}
 - Companion: {companion.get('type', 'none')} — {companion.get('description', '')}
 - Location: {loc.get('name', 'Unknown')} — {loc.get('terrain', 'wilderness')}
@@ -2048,7 +2063,7 @@ You MUST NOT output fewer than 10 scenes under any circumstances.
 
 The intro sequence requires dynamic visual pacing. You MUST use all four of these scene types to construct the sequence:
 
-1. **PRESENTER** — {presenter_name} inside the helicopter backseat, headset on, speaking to camera over rotor noise.
+1. **PRESENTER** — {presenter_name} delivering the intro based on the provided stage directions.
 2. **BRIDGE** — Atmospheric establishing b-roll shorts (aerials, wilderness, extreme weather). NO people.
 3. **FLASHBACK** — B-roll showing the backstory elements mentioned in the text (the pilot, the past, the crash aftermath).
 4. **ANTICIPATORIO** — B-roll showing the challenge ahead (the snow, the digging, the isolation).
@@ -2080,11 +2095,11 @@ OUTPUT FORMAT — Return a JSON array of scenes:
     "type": "presenter",
     "duration": "8s",
     "narration": "We are fifteen feet beneath the snow...",
-    "visual_description": "Medium shot from helicopter backseat. Presenter in headset...",
+    "visual_description": "Medium shot of Presenter delivering the line according to stage directions.",
     "elements": ["{presenter_name}"],
-    "location_description": "helicopter_interior",
+    "location_description": "presenter_location",
     "camera": "handheld medium",
-    "sfx": "Deafening helicopter rotors"
+    "sfx": "Environmental ambience"
   }},
   {{
     "scene_number": 3,
