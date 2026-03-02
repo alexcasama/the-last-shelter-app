@@ -346,10 +346,14 @@ def serve_audio_zip(project_id):
     buf.seek(0)
 
     meta = load_project_metadata(project_id)
-    title = (meta.get("title") or project_id).replace(" ", "_")
+    # Scrub invalid characters to prevent Werkzeug header errors
+    import re
+    raw_title = meta.get("title") or project_id
+    clean_title = re.sub(r'[^a-zA-Z0-9_\-]', '_', raw_title)
+    
     return send_file(buf, mimetype="application/zip",
                      as_attachment=True,
-                     download_name=f"{title}_audio.zip")
+                     download_name=f"{clean_title}_audio.zip")
 
 
 @app.route("/api/project/<project_id>/generate_audio_segment", methods=["POST"])
