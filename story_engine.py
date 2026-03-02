@@ -872,11 +872,19 @@ CRITICAL RULES:
 - Pay special attention to vehicles — they are almost always missed!
 - Characters ALWAYS get WHITE BACKGROUND prompts
 - All other elements get cinematic 16:9 in their natural setting
+- DO NOT generate scenes or storyboards. Provide ONLY the character and object definitions.
 
 Return ONLY the JSON object."""
 
     result = generate_json(prompt, temperature=0.3, max_tokens=6000)
-    elements = result.get("elements", [])
+    
+    # Combine everything into a flat list for the generator
+    chars = result.get("characters", [])
+    objs = result.get("objects", [])
+    # Legacy fallback in case Gemini decides to ignore the schema
+    legacy = result.get("elements", [])
+    
+    elements = chars + objs + legacy
     
     if progress_callback:
         progress_callback(
