@@ -5,3 +5,4 @@ Pillow>=10.0.0
 fal-client>=0.13.0
 elevenlabs>=1.0.0
 gunicorn>=21.0.0
+pymupdf>=1.23.0
