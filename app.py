@@ -8,6 +8,8 @@ import time
 import uuid
 import threading
 from pathlib import Path
+from werkzeug.utils import secure_filename
+import fitz  # PyMuPDF
 
 from flask import Flask, render_template, request, jsonify, Response, send_from_directory, send_file
 from dotenv import load_dotenv
@@ -152,7 +154,18 @@ def create_project():
         project_dir = get_project_dir(project_id)
         
         # Save raw script
-        raw_content = script_file.read().decode("utf-8")
+        filename = script_file.filename.lower()
+        if filename.endswith(".pdf"):
+            # Use PyMuPDF (fitz) for better line break preservation
+            pdf_bytes = script_file.read()
+            doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+            raw_content = ""
+            for page in doc:
+                # get_text("text") usually preserves double newlines better
+                raw_content += page.get_text("text") + "\n"
+        else:
+            raw_content = script_file.read().decode("utf-8")
+            
         with open(project_dir / "script_raw.md", "w") as f:
             f.write(raw_content)
         
@@ -235,6 +248,13 @@ def get_project(project_id):
     if audio_manifest_path.exists():
         with open(audio_manifest_path) as f:
             audio_manifest = json.load(f)
+            
+    # Load knowledge audit if exists
+    knowledge_audit_path = project_dir / "knowledge_audit.json"
+    knowledge_audit = None
+    if knowledge_audit_path.exists():
+        with open(knowledge_audit_path) as f:
+            knowledge_audit = json.load(f)
     
     return jsonify({
         "metadata": meta,
@@ -246,6 +266,7 @@ def get_project(project_id):
         "scene_prompts": scene_prompts,
         "quality_report": quality_report,
         "audio_manifest": audio_manifest,
+        "knowledge_audit": knowledge_audit,
     })
 
 
@@ -619,6 +640,103 @@ def api_generate_story(project_id):
     return jsonify({"status": "generating", "message": "Story generation started"})
 
 
+@app.route("/api/project/<project_id>/audit-knowledge", methods=["POST"])
+def api_audit_knowledge(project_id):
+    """Step 1.5: Audit survival knowledge requirements from the script."""
+    meta = load_project_metadata(project_id)
+    if not meta:
+        return jsonify({"error": "Project not found"}), 404
+        
+    project_dir = get_project_dir(project_id)
+    script_path = project_dir / "script.json"
+    
+    if not script_path.exists():
+        return jsonify({"error": "Script not found. Upload a script first."}), 400
+        
+    with open(script_path) as f:
+        script_data = json.load(f)
+        
+    _progress_streams[project_id] = []
+    callback = progress_callback_factory(project_id)
+    
+    def run():
+        try:
+            callback("📚 Starting knowledge audit...", "info")
+            
+            # Send the script breakdown essentially to see what mechanics are used
+            audit_result = story_engine.audit_survival_knowledge(script_data, callback)
+            
+            with open(project_dir / "knowledge_audit.json", "w") as f:
+                json.dump(audit_result, f, indent=2, ensure_ascii=False)
+                
+            meta["status"] = "knowledge_audited"
+            if "knowledge_audit" not in meta.get("steps_completed", []):
+                meta.setdefault("steps_completed", []).append("knowledge_audit")
+            save_project_metadata(project_id, meta)
+            
+            if audit_result.get("confidence_score", 0) < 100:
+                callback(f"⚠️ Audit complete! Missing knowledge: {', '.join(audit_result.get('missing_topics', []))}", "complete")
+            else:
+                callback("✅ Audit complete! All survival mechanics are documented.", "complete")
+                
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            callback(f"❌ Audit failed: {str(e)}", "error")
+            
+    thread = threading.Thread(target=run)
+    thread.start()
+    
+    return jsonify({"status": "auditing", "message": "Knowledge audit started"})
+
+
+@app.route("/api/project/<project_id>/auto-research", methods=["POST"])
+def api_auto_research(project_id):
+    """Execute auto-research for missing knowledge topics."""
+    meta = load_project_metadata(project_id)
+    if not meta:
+        return jsonify({"error": "Project not found"}), 404
+        
+    project_dir = get_project_dir(project_id)
+    audit_path = project_dir / "knowledge_audit.json"
+    
+    if not audit_path.exists():
+        return jsonify({"error": "Audit not found. Run knowledge audit first."}), 400
+        
+    with open(audit_path) as f:
+        audit_result = json.load(f)
+        
+    missing_topics = audit_result.get("missing_topics", [])
+    if not missing_topics:
+        return jsonify({"message": "No missing topics to research"}), 200
+        
+    _progress_streams[project_id] = []
+    callback = progress_callback_factory(project_id)
+    
+    def run():
+        try:
+            callback(f"📚 Starting auto-research for {len(missing_topics)} topics...", "info")
+            research_results = story_engine.auto_research_mechanics(missing_topics, callback)
+            
+            # Re-audit to update the score/report
+            callback("📚 Re-running audit to confirm knowledge...", "info")
+            with open(project_dir / "script.json") as f:
+                script_data = json.load(f)
+                
+            new_audit = story_engine.audit_survival_knowledge(script_data, callback)
+            
+            with open(project_dir / "knowledge_audit.json", "w") as f:
+                json.dump(new_audit, f, indent=2, ensure_ascii=False)
+                
+            callback("✅ Auto-research complete! Knowledge base updated.", "complete")
+        except Exception as e:
+            callback(f"❌ Auto-research failed: {str(e)}", "error")
+            
+    thread = threading.Thread(target=run)
+    thread.start()
+    
+    return jsonify({"status": "researching", "message": "Auto-research started"})
+
 
 @app.route("/api/project/<project_id>/generate-elements", methods=["POST"])
 def api_generate_elements(project_id):
@@ -631,23 +749,28 @@ def api_generate_elements(project_id):
     
     story_path = project_dir / "story.json"
     narration_path = project_dir / "narration.json"
+    script_path = project_dir / "script.json"
     if not story_path.exists():
         return jsonify({"error": "Story not found. Generate story first."}), 400
     if not narration_path.exists():
         return jsonify({"error": "Narration not found. Generate narration first."}), 400
+    if not script_path.exists():
+        return jsonify({"error": "Script not found."}), 400
     
     with open(story_path) as f:
         story = json.load(f)
     with open(narration_path) as f:
         narration = json.load(f)
+    with open(script_path) as f:
+        script_data = json.load(f)
     
     _progress_streams[project_id] = []
     callback = progress_callback_factory(project_id)
     
     def run():
         try:
-            # Step 1: Analyze elements needed
-            elements_list = story_engine.analyze_elements(story, narration, callback)
+            # Step 1: Analyze elements needed using the pre-extracted characters from the script
+            elements_list = story_engine.analyze_elements(story, narration, script_data, callback)
             
             # Step 2: Generate reference images
             generated = story_engine.generate_elements(elements_list, str(project_dir), callback)
@@ -1870,32 +1993,24 @@ AVAILABLE ELEMENTS:
 {element_context}
 
 ═══════════════════════════════════════════════════
-YOUR TASK: Break this intro into 12-16 individual SCENES
+YOUR TASK: Break this intro into EXACTLY 10 to 14 individual SCENES.
+You MUST NOT output fewer than 10 scenes under any circumstances.
 ═══════════════════════════════════════════════════
 
-The intro has FOUR types of scenes. You MUST use all four:
+The intro sequence requires dynamic visual pacing. You MUST use all four of these scene types to construct the sequence:
 
-1. **PRESENTER** — {presenter_name} in helicopter backseat, headset on, speaking loud over rotor noise to camera.
-   He raises his voice over the deafening rotors (NOT yelling/shouting, just projecting).
-   Camera is medium/close-up inside the helicopter cabin.
-
-2. **BRIDGE** — Atmospheric shots of the landscape. Aerial views, wilderness, weather.
-   NO people. Just environment. These separate presenter segments.
-
-3. **FLASHBACK** — Scenes showing the backstory (the father, the past, the promise).
-   Warm amber tones fading to cold. Emotional, literary.
-
-4. **ANTICIPATORIO** — B-roll showing what's coming. The challenge ahead.
-   The cabin site, the approaching winter, the tools, the isolation.
+1. **PRESENTER** — {presenter_name} inside the helicopter backseat, headset on, speaking to camera over rotor noise.
+2. **BRIDGE** — Atmospheric establishing b-roll shorts (aerials, wilderness, extreme weather). NO people.
+3. **FLASHBACK** — B-roll showing the backstory elements mentioned in the text (the pilot, the past, the crash aftermath).
+4. **ANTICIPATORIO** — B-roll showing the challenge ahead (the snow, the digging, the isolation).
 
 STRUCTURE RULES:
-- Start with a BRIDGE (establishing aerial shot)
-- Alternate between PRESENTER and BRIDGE/FLASHBACK/ANTICIPATORIO
-- {presenter_name} delivers ALL narration. Non-presenter scenes are visual-only.
-- FLASHBACK scenes appear when narration mentions the past/father/promise
-- End with an ANTICIPATORIO scene (what's about to happen)
-- Each scene: 5-12 seconds duration
-- Total: ~90-110 seconds
+- SCENE COUNT: You must generate between 10 and 14 scenes. Do not group too much text into one scene.
+- PACING: Alternate frequently between PRESENTER scenes and visual-only b-roll (BRIDGE/FLASHBACK/ANTICIPATORIO).
+- NARRATION: Only PRESENTER scenes can contain `narration`. Spread the text across 4-6 different PRESENTER scenes.
+- SILENCE: All BRIDGE, FLASHBACK, and ANTICIPATORIO scenes must have empty `narration` (""). They are visual intercuts.
+- AUDIO: Every scene must have `sfx` to maintain the soundscape.
+- DURATION: Each scene should be 5 to 8 seconds.
 
 OUTPUT FORMAT — Return a JSON array of scenes:
 ```json
@@ -1903,56 +2018,57 @@ OUTPUT FORMAT — Return a JSON array of scenes:
   {{
     "scene_number": 1,
     "type": "bridge",
-    "duration": "8s",
+    "duration": "6s",
     "narration": "",
-    "visual_description": "Aerial drone shot over vast Yukon wilderness at dawn. Frozen rivers cutting through dark boreal forest, snow-capped peaks on horizon.",
+    "visual_description": "Aerial drone shot over vast Arctic wilderness...",
     "elements": [],
-    "location_description": "yukon_aerial_dawn",
-    "camera": "slow aerial push-in from ultra-wide",
-    "sfx": "Wind, distant helicopter rotors approaching"
+    "location_description": "arctic_aerial",
+    "camera": "slow push in",
+    "sfx": "Wind howling"
   }},
   {{
     "scene_number": 2,
     "type": "presenter",
-    "duration": "12s",
-    "narration": "In this first episode, we're heading into the wild Yukon wilderness...",
-    "visual_description": "Medium shot from helicopter backseat. Presenter in headset, jaw set, turns to camera with energy. Raises voice over rotor noise.",
+    "duration": "8s",
+    "narration": "We are fifteen feet beneath the snow...",
+    "visual_description": "Medium shot from helicopter backseat. Presenter in headset...",
     "elements": ["{presenter_name}"],
-    "location_description": "helicopter_interior_backseat",
-    "camera": "medium shot, slight vibration from rotors",
-    "sfx": "Deafening helicopter rotors, wind buffeting fuselage"
+    "location_description": "helicopter_interior",
+    "camera": "handheld medium",
+    "sfx": "Deafening helicopter rotors"
+  }},
+  {{
+    "scene_number": 3,
+    "type": "flashback",
+    "duration": "5s",
+    "narration": "",
+    "visual_description": "Close up of crashed plane smoking in the snow...",
+    "elements": [],
+    "location_description": "plane_wreck",
+    "camera": "static wide",
+    "sfx": "Metal creaking, distant fire"
   }}
+  // ... continue alternating up to 10-14 scenes
 ]
 ```
 
 CRITICAL RULES:
-- location_description must be a short snake_case identifier for the background image
+- location_description must be a short snake_case identifier for the background
 - All images will be generated in 16:9 landscape format
 - For presenter scenes, location is always "helicopter_interior_backseat"
-- For flashback scenes, use warm/amber descriptors
-- Each scene MUST have visual_description detailed enough to generate a video prompt
-- Split narration naturally across presenter scenes (don't cram too much per scene)
-- The emotional arc: excitement → gravity → emotion (father's death) → determination → anticipation
+- The narration MUST be the exact English text provided. DO NOT TRANSLATE IT.
+- The `visual_description`, `action`, and `sfx` fields MUST be in SPANISH.
 
 Return ONLY the JSON array. No other text."""
 
             callback("📡 Calling Gemini for intro analysis...", "info")
 
-            response_text = story_engine.generate_text(prompt, temperature=0.3, max_tokens=8000, model="gemini-2.5-flash")
-
-            callback("📋 Parsing storyboard response...", "info")
-
-            # Extract JSON from response
-            text = response_text.strip()
-            if text.startswith("```"):
-                text = text.split("\n", 1)[1]
-                if text.endswith("```"):
-                    text = text[:-3]
-                elif "```" in text:
-                    text = text[:text.rindex("```")]
-            text = text.strip()
-
-            storyboard = json.loads(text)
+            storyboard = story_engine.generate_json(
+                prompt, 
+                temperature=0.3, 
+                max_tokens=8000, 
+                model="gemini-2.5-flash"
+            )
 
             callback(f"✅ Generated {len(storyboard)} intro scenes", "info")
 
@@ -2034,8 +2150,7 @@ Return ONLY the JSON array. No other text."""
     thread = threading.Thread(target=run)
     thread.start()
 
-
-
+    return jsonify({"status": "analyzing", "block_type": "intro"})
 @app.route("/api/project/<project_id>/analyze-break", methods=["POST"])
 def api_analyze_break(project_id):
     """Generate break storyboard scenes via Gemini."""
@@ -2166,17 +2281,20 @@ AVAILABLE ELEMENTS:
 {element_context}
 
 ═══════════════════════════════════════════════════
-YOUR TASK: Break this narration into 4-6 individual SCENES
+YOUR TASK: Break this narration into EXACTLY 5 to 8 individual SCENES.
+You MUST NOT output fewer than 5 scenes under any circumstances.
 ═══════════════════════════════════════════════════
 
 The break sequence relies mainly on the presenter recapping the challenge, mixed with visual b-roll (bridge/flashback) for emphasis.
 
 STRUCTURE RULES:
+- SCENE COUNT: You must generate between 5 and 8 scenes.
 - Start with a PRESENTER scene (delivering the hook).
 - Alternate between PRESENTER and BRIDGE/FLASHBACK (b-roll showing the stakes/hardship).
 - {presenter_name} delivers ALL narration. Non-presenter scenes are visual-only.
-- Each scene: 5-10 seconds duration
-- Total duration matches the break length (~30-45s)
+- Spread the narration text across 3-4 different PRESENTER scenes. Do not cram it all into one.
+- Each scene: 5-8 seconds duration.
+- Total duration matches the break length (~30-45s).
 
 OUTPUT FORMAT — Return a JSON array of scenes exactly matching this structure:
 ```json
@@ -2220,19 +2338,14 @@ CRITICAL RULES:
 Return ONLY the JSON array. No other text."""
 
             callback("📡 Calling Gemini for break analysis...", "info")
-            response_text = story_engine.generate_text(prompt, temperature=0.3, max_tokens=8000, model="gemini-2.5-flash")
-            callback("📋 Parsing storyboard response...", "info")
 
-            text = response_text.strip()
-            if text.startswith("```"):
-                text = text.split("\n", 1)[1]
-                if text.endswith("```"):
-                    text = text[:-3]
-                elif "```" in text:
-                    text = text[:text.rindex("```")]
-            text = text.strip()
+            storyboard = story_engine.generate_json(
+                prompt,
+                temperature=0.3,
+                max_tokens=8000,
+                model="gemini-2.5-flash"
+            )
 
-            storyboard = json.loads(text)
             callback(f"✅ Generated {len(storyboard)} break scenes", "info")
 
             break_dir = project_dir / "production" / f"break_{break_index + 1}"
@@ -2369,17 +2482,20 @@ AVAILABLE ELEMENTS:
 {element_context}
 
 ═══════════════════════════════════════════════════
-YOUR TASK: Break this narration into 5-8 individual SCENES
+YOUR TASK: Break this narration into EXACTLY 5 to 8 individual SCENES.
+You MUST NOT output fewer than 5 scenes under any circumstances.
 ═══════════════════════════════════════════════════
 
 The close sequence wraps up the episode, highlighting the character's triumph/survival.
 
 STRUCTURE RULES:
+- SCENE COUNT: You must generate between 5 and 8 scenes.
 - Start with a PRESENTER scene (delivering the conclusion).
 - Mix with BRIDGE/RECAP (b-roll showing the finished shelter, the survivor resting, wide shots of the environment).
 - End with a final establishing wide shot or presenter sign-off.
 - {presenter_name} delivers ALL narration. Non-presenter scenes are visual-only.
-- Each scene: 5-10 seconds duration
+- Spread the narration text across 3-4 different PRESENTER scenes. Do not cram it all into one.
+- Each scene: 5-8 seconds duration.
 
 OUTPUT FORMAT — Return a JSON array of scenes exactly matching this structure:
 ```json
@@ -2387,7 +2503,7 @@ OUTPUT FORMAT — Return a JSON array of scenes exactly matching this structure:
   {{
     "scene_number": 1,
     "type": "presenter",
-    "duration": "10s",
+    "duration": "8s",
     "narration": "Ninety days. Erik did the impossible...",
     "action": "Jack Harlan habla directo a cámara de pie junto al campamento al atardecer.",
     "visual_description": "Medium shot of {presenter_name} standing near a crackling campfire at dusk, looking into camera with respect.",
@@ -2395,6 +2511,18 @@ OUTPUT FORMAT — Return a JSON array of scenes exactly matching this structure:
     "location_description": "dusk_campfire",
     "camera": "medium shot, static",
     "sfx": "Crackling fire, gentle wind"
+  }},
+  {{
+    "scene_number": 2,
+    "type": "bridge",
+    "duration": "6s",
+    "narration": "",
+    "action": "Plano general de Erik descansando frente al fuego, exhausto pero vivo.",
+    "visual_description": "Wide shot of the survivor resting by the fire, the harsh environment retreating into the background.",
+    "elements": ["@Erik"],
+    "location_description": "survivor_resting",
+    "camera": "slow push in",
+    "sfx": "Distant wolf howl, fire crackling"
   }}
 ]
 ```
@@ -2411,19 +2539,14 @@ CRITICAL RULES:
 Return ONLY the JSON array. No other text."""
 
             callback("📡 Calling Gemini for close analysis...", "info")
-            response_text = story_engine.generate_text(prompt, temperature=0.3, max_tokens=8000, model="gemini-2.5-flash")
-            callback("📋 Parsing storyboard response...", "info")
 
-            text = response_text.strip()
-            if text.startswith("```"):
-                text = text.split("\n", 1)[1]
-                if text.endswith("```"):
-                    text = text[:-3]
-                elif "```" in text:
-                    text = text[:text.rindex("```")]
-            text = text.strip()
+            storyboard = story_engine.generate_json(
+                prompt,
+                temperature=0.3,
+                max_tokens=8000,
+                model="gemini-2.5-flash"
+            )
 
-            storyboard = json.loads(text)
             callback(f"✅ Generated {len(storyboard)} close scenes", "info")
 
             close_dir = project_dir / "production" / "close"

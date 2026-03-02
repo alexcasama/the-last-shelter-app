@@ -569,6 +569,22 @@ Genera una historia completa a partir del título del episodio.
 
 ---
 
+### Paso 1.5 · 📚 Survival Knowledge Audit
+
+**API:** `POST /api/project/<id>/audit-knowledge`  
+**Auto-Research:** `POST /api/project/<id>/auto-research`
+
+Analiza el guion (o texto RAW extraído de un PDF) buscando mecánicas de supervivencia complejas ("micro-acciones") para asegurar que el motor entiende la física y construcción real de la escena antes de generar los visuales.
+
+| Componente | Detalle |
+|---|---|
+| **Extractor** | Localiza mecánicas tangibles, estructuras y herramientas específicas. Ignora acciones triviales (caminar, comer). |
+| **Encyclopedia** | Compara las mecánicas extraídas contra la base de datos global en `resources/encyclopedia/*.md` |
+| **Output** | `knowledge_audit.json` — Confidence score (0-100), temas conocidos, temas faltantes. |
+| **Auto-Research** | Si hay falta de conocimiento, usa Gemini + Web Search para generar nuevas guías hiper-detalladas y conectarlas en la enciclopedia permanentemente. |
+
+---
+
 ### Paso 2 · 🎬 Scene Breakdown (Deep Continuity)
 
 **API:** `POST /api/project/<id>/generate-scenes`
