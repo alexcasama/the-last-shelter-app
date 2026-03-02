@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-03-01 — Survival Knowledge Audit + PDF Uploads
+
+### 📚 Survival Knowledge Audit (Step 1.5)
+**Backend (`story_engine.py`, `app.py`)** & **Frontend (`app.js`, `index.html`)**
+- **Knowledge Extractor**: Added a new pipeline step that reads the parsed script (or PDF text) to identify complex survival, building, or technical mechanics that require factual accuracy before generating visuals.
+- **Global Encyclopedia**: Created a `resources/encyclopedia` directory to act as the single source of truth for survival mechanics.
+- **Auditing System**: The engine compares extracted mechanics against the global encyclopedia to determine a confidence score.
+- **Auto-Research**: If knowledge is missing, the system uses an LLM with Web Search capabilities to auto-generate highly detailed, factual `.md` markdown guides, continuously expanding the engine's permanent knowledge base.
+
+### 🔄 UI & Elements Generation Sync
+**Backend (`story_engine.py`, `app.py`)** & **Frontend (`app.js`)**
+- **Seamless UI Re-rendering**: Fixed a bug where the frontend `loadProject` would aggressively collapse (`display: none`) all UI tabs whenever a background task (like Breakdown or Elements generation) finished. The UI now intelligently detects `isInitialLoad` to keep active tabs open, allowing the user to watch the generated content instantly populate without manual page refreshes.
+- **Strict Elements Enforcement**: Discovered and fixed a critical disconnect where the Elements generation step was completely ignoring the intelligently extracted Characters and Objects from the Script Upload step. 
+- **Prompt Synchronization**: Rewrote `story_engine.py`'s `analyze_elements` prompt to strictly adopt the `script.json` entities, explicitly forcing the LLM to only write visual generation prompts for the exact list of characters and objects verified during script parsing, eliminating LLM hallucination of phantom objects.
+
+### 📄 PDF Upload Pipeline Upgrade
+**Backend (`app.py`, `script_parser.py`)** & **Frontend (`index.html`)**
+- **Native PDF Parsing**: Replaced basic file reading with `PyMuPDF (fitz)` to accurately extract text from PDF script uploads while preserving exact line breaks and formatting.
+- **Flexible Section Parsing**: Upgraded `script_parser.py` Regex to accept plain-text headers without Markdown (`##`) prefixes, allowing it to correctly identify `PHASE` and `CHAPTER` breaks directly from raw PDF text.
+
+## 2026-03-01 — Storyboard Generation Robustness & Pacing
+
+### 🎬 Storyboard Pacing & Scene Constraints
+**Backend (`app.py`)**
+- **Strict Scene Counts**: Fixed a bug where Gemini would lazily compress entire 90-second script blocks into 1 or 2 massive scenes. `api_analyze_intro`, `api_analyze_break`, and `api_analyze_close` now feature absolute, capitalized constraints (e.g., `You MUST NOT output fewer than 10 scenes under any circumstances`).
+- **Forced Visual Intercutting**: Prompts now explicitly demand that the AI alternate between `presenter` scenes and visual B-roll (`bridge`, `flashback`, etc.), ensuring dynamic, cinematic pacing that matches the original show structure.
+- **Text Distribution**: Added rules forcing the AI to spread the narrator's text across 3-6 distinct presenter camera angles instead of cramming it all into a single JSON block.
+
+### 🛡️ Backend Error Handling & JSON Repair
+**Backend (`app.py`, `story_engine.py`)** & **Frontend (`storyboard.js`)**
+- **500 Error Fix**: Resolved a critical crash in `/api/project/<id>/analyze-intro` caused by a missing `return jsonify()` statement after the background thread was spawned.
+- **Robust JSON Parsing**: Replaced manual `json.loads` in all storyboard endpoints with `story_engine.generate_json()`. This inherently protects against malformed or truncated LLM output by automatically attempting to repair broken brackets and syntax before failing.
+- **Infinite Polling Prevention**: Fixed a frontend UI bug where a backend storyboard generation failure (like an API timeout) would cause `storyboard.js` to get stuck in an infinite `pollForNewImages()` loop. The SSE progress listener now correctly detects `error` events, kills the polling loop, and resets the UI state (re-enabling action buttons).
 ## 2026-02-28 — Storyboard Break Generation & Rendering Fixes
 
 ### 🐛 Bug Fixes

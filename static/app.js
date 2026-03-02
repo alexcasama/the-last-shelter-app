@@ -62,7 +62,7 @@ function setScriptFile(file) {
     const titleInput = document.getElementById('titleInput');
     if (!titleInput.value.trim()) {
         // Remove extension and clean up filename
-        let name = file.name.replace(/\.md$/i, '').replace(/_/g, ' ');
+        let name = file.name.replace(/\.(md|pdf)$/i, '').replace(/_/g, ' ');
         titleInput.value = name;
     }
 }
@@ -138,6 +138,9 @@ function createProjectCard(id, title, status, duration) {
 }
 
 async function loadProject(projectId) {
+    // Check if this is the first time we load this project
+    const isInitialLoad = !currentProject || currentProject.metadata.id !== projectId;
+
     // Highlight in sidebar
     document.querySelectorAll('.project-card').forEach(c => c.classList.remove('active'));
     const card = document.querySelector(`[data-project-id="${projectId}"]`);
@@ -196,32 +199,43 @@ async function loadProject(projectId) {
     // Other sections: show based on steps completed
     // Keep old sections visible for backward compatibility (old projects)
     const hasScript = steps.includes('script') || steps.includes('story');
+
+    // Show knowledge audit section if script is loaded
+    const knowledgeSection = document.getElementById('knowledgeAuditSection');
+    if (knowledgeSection) knowledgeSection.style.display = hasScript ? 'block' : 'none';
+
+    // Render Knowledge Audit Data
+    renderKnowledgeAudit(data.knowledge_audit);
+
     // Show breakdown section if script is loaded
     const breakdownSection = document.getElementById('breakdownSection');
     if (breakdownSection) breakdownSection.style.display = hasScript ? 'block' : 'none';
 
     // Other sections: show based on steps
-    document.getElementById('voiceSection').style.display = steps.includes('breakdown') ? 'block' : 'none';
-    document.getElementById('elementsSection').style.display = steps.includes('breakdown') ? 'block' : 'none';
-    document.getElementById('scenePromptsSection').style.display = (steps.includes('elements') || steps.includes('scene_prompts')) ? 'block' : 'none';
+    document.getElementById('voiceSection').style.display = hasScript ? 'block' : 'none';
+    document.getElementById('elementsSection').style.display = hasScript ? 'block' : 'none';
+    document.getElementById('scenePromptsSection').style.display = hasScript ? 'block' : 'none';
+
     // Show Launch Storyboard button when production section is visible
     const launchBtn = document.getElementById('btnLaunchStoryboard');
-    if (launchBtn) launchBtn.style.display = (steps.includes('elements') || steps.includes('scene_prompts')) ? 'inline-flex' : 'none';
-    const generateSection = document.getElementById('generateSection');
-    if (generateSection) generateSection.style.display = steps.includes('scene_prompts') ? 'block' : 'none';
+    if (launchBtn) launchBtn.style.display = hasScript ? 'inline-flex' : 'none';
+
+
 
     // Toggle buttons
     toggleStepButtons(steps);
 
-    // Collapse ALL sections by default on load
-    ['scriptContent', 'breakdownContent', 'voiceContent', 'elementsContent', 'narrationContent', 'scenePromptsContent'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
-    ['btnCollapseScript', 'btnCollapseBreakdown', 'btnCollapseVoice', 'btnCollapseElements', 'btnCollapseNarration', 'btnCollapseScenePrompts'].forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) btn.textContent = '▼ Expand';
-    });
+    // Only collapse ALL sections by default on FIRST load of a project
+    if (isInitialLoad) {
+        ['scriptContent', 'knowledgeContent', 'breakdownContent', 'voiceContent', 'elementsContent', 'narrationContent', 'scenePromptsContent'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+        ['btnCollapseScript', 'btnCollapseKnowledge', 'btnCollapseBreakdown', 'btnCollapseVoice', 'btnCollapseElements', 'btnCollapseNarration', 'btnCollapseScenePrompts'].forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.textContent = '▼ Expand';
+        });
+    }
 }
 
 function updateStepsBar(completed) {
@@ -318,6 +332,10 @@ function renderScript(scriptData) {
 
     // Render each section
     for (const section of scriptData.sections) {
+        if (section.type === 'unknown') {
+            continue; // Skip the TITLE / unknown headers 
+        }
+
         const typeClass = `script-section-${section.type}`;
         const typeIcon = {
             'intro': '🎬',
@@ -330,8 +348,10 @@ function renderScript(scriptData) {
         const typeLabel = {
             'intro': 'INTRO',
             'phase': `CH${numLabel}`,
+            'chapter': `CH${numLabel}`,
             'jack_break': `BREAK${numLabel}`,
-            'outro': 'OUTRO'
+            'outro': 'OUTRO',
+            'unknown': 'TITLE'
         }[section.type] || section.type.toUpperCase();
 
         const tsLabel = section.timestamps
@@ -391,6 +411,171 @@ function toggleAllScriptSections() {
         }
     });
     if (btn) btn.textContent = allCollapsed ? '▲ Collapse All' : '▼ Expand All';
+}
+
+// =============================================================================
+// KNOWLEDGE AUDIT (Step 1.5)
+// =============================================================================
+
+function renderKnowledgeAudit(knowledgeAuditData) {
+    const resultsDiv = document.getElementById('knowledgeResults');
+    const btnAudit = document.getElementById('btnAuditKnowledge');
+    const btnResearch = document.getElementById('btnAutoResearch');
+    const scoreSpan = document.getElementById('knowledgeScore');
+    const listKnown = document.getElementById('listKnownTopics');
+    const listMissing = document.getElementById('listMissingTopics');
+    const placeholder = document.getElementById('knowledgePlaceholder');
+    const btnCollapse = document.getElementById('btnCollapseKnowledge');
+
+    if (!knowledgeAuditData) {
+        if (resultsDiv) resultsDiv.style.display = 'none';
+        if (btnResearch) btnResearch.style.display = 'none';
+        if (placeholder) placeholder.style.display = 'block';
+        if (btnCollapse) btnCollapse.style.display = 'none';
+        return;
+    }
+
+    if (placeholder) placeholder.style.display = 'none';
+    if (resultsDiv) resultsDiv.style.display = 'block';
+    if (btnCollapse) btnCollapse.style.display = 'inline-block';
+
+    // Update Score
+    const score = knowledgeAuditData.confidence_score || 0;
+    if (scoreSpan) {
+        scoreSpan.textContent = `${score}%`;
+        scoreSpan.style.color = score === 100 ? '#2ecc71' : score > 50 ? '#f39c12' : '#e74c3c';
+    }
+
+    // Populate Known
+    if (listKnown) {
+        listKnown.innerHTML = '';
+        const known = knowledgeAuditData.known_topics || [];
+        if (known.length === 0) {
+            listKnown.innerHTML = '<li>None</li>';
+        } else {
+            known.forEach(t => {
+                const li = document.createElement('li');
+                li.textContent = t;
+                listKnown.appendChild(li);
+            });
+        }
+    }
+
+    // Populate Missing
+    if (listMissing) {
+        listMissing.innerHTML = '';
+        const missing = knowledgeAuditData.missing_topics || [];
+        if (missing.length === 0) {
+            listMissing.innerHTML = '<li>None</li>';
+            if (btnResearch) btnResearch.style.display = 'none';
+            if (btnAudit) btnAudit.textContent = '🔄 Re-Run Audit';
+        } else {
+            missing.forEach(t => {
+                const li = document.createElement('li');
+                li.textContent = t;
+                listMissing.appendChild(li);
+            });
+            if (btnResearch) {
+                btnResearch.style.display = 'inline-block';
+                btnResearch.textContent = `🔍 Fix Missing (${missing.length})`;
+            }
+        }
+    }
+}
+
+async function startKnowledgeAudit() {
+    const projectId = currentProject?.metadata?.id;
+    if (!projectId) return;
+
+    if (isGenerating) return;
+    isGenerating = true;
+
+    const btn = document.getElementById('btnAuditKnowledge');
+    const origHtml = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '⏳ Auditing...';
+
+    showConsole();
+    clearConsole();
+    logConsole('📚 Starting Knowledge Audit...', 'info');
+
+    try {
+        const res = await fetch(`/api/project/${projectId}/audit-knowledge`, { method: 'POST' });
+        if (!res.ok) throw new Error('Failed to start knowledge audit');
+
+        pollKnowledgeAudit(projectId, () => {
+            isGenerating = false;
+            btn.disabled = false;
+            btn.textContent = '🔄 Re-Run Audit';
+            loadProject(projectId); // Reload to get updated knowledge_audit
+        });
+    } catch (err) {
+        logConsole(`❌ Error: ${err.message}`, 'error');
+        isGenerating = false;
+        btn.disabled = false;
+        btn.textContent = origHtml;
+    }
+}
+
+async function startAutoResearch() {
+    const projectId = currentProject?.metadata?.id;
+    if (!projectId) return;
+
+    if (isGenerating) return;
+    isGenerating = true;
+
+    const btn = document.getElementById('btnAutoResearch');
+    const origHtml = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '⏳ Researching...';
+
+    showConsole();
+    clearConsole();
+    logConsole('🔍 Starting Auto-Research for missing topics...', 'info');
+
+    try {
+        const res = await fetch(`/api/project/${projectId}/auto-research`, { method: 'POST' });
+        if (!res.ok) throw new Error('Failed to start auto research');
+
+        pollKnowledgeAudit(projectId, () => {
+            isGenerating = false;
+            btn.disabled = false;
+            loadProject(projectId); // Reload to get updated knowledge_audit
+        });
+    } catch (err) {
+        logConsole(`❌ Error: ${err.message}`, 'error');
+        isGenerating = false;
+        btn.disabled = false;
+        btn.textContent = origHtml;
+    }
+}
+
+function pollKnowledgeAudit(projectId, onComplete) {
+    const evtSource = new EventSource(`/api/project/${projectId}/progress`);
+    let gotComplete = false;
+
+    evtSource.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
+            logConsole(data.message, data.type || 'info');
+
+            if (data.type === 'complete' || data.type === 'error') {
+                gotComplete = true;
+                evtSource.close();
+                if (onComplete) onComplete();
+            }
+        } catch (e) {
+            logConsole(event.data, 'info');
+        }
+    };
+
+    evtSource.onerror = () => {
+        evtSource.close();
+        if (!gotComplete) {
+            logConsole('Connection interrupted. Reconnecting...', 'info');
+            setTimeout(() => pollKnowledgeAudit(projectId, onComplete), 3000);
+        }
+    };
 }
 
 // =============================================================================
@@ -2643,7 +2828,7 @@ const stepToSection = {
     'voice': 'voiceSection',
     'elements': 'elementsSection',
     'scene_prompts': 'scenePromptsSection',
-    'generate': 'generateSection',
+
 };
 
 

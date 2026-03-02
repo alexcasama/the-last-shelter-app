@@ -18,6 +18,7 @@ For each section, extracts:
 
 import re
 import json
+from story_engine import generate_json, GEMINI_MODEL_FLASH
 
 
 def parse_script(raw_md: str) -> dict:
@@ -57,16 +58,29 @@ def parse_script(raw_md: str) -> dict:
     current_lines = []
     
     for line in lines:
-        # Detect section headers (## INTRO, ## PHASE, ## JACK BREAK, ## OUTRO)
-        section_match = re.match(r'^##\s+(.+)$', line)
-        if section_match and not line.startswith("## Complete"):
+        # Detect section headers with or without '## ' prefix
+        # Allowed headers: INTRO, OUTRO, PHASE X, CHAPTER X, JACK BREAK
+        is_header = False
+        header_text = ""
+        
+        # Check standard markdown format
+        md_match = re.match(r'^##\s+(.+)$', line)
+        if md_match and not line.startswith("## Complete"):
+            is_header = True
+            header_text = md_match.group(1).strip()
+            
+        # Check plain text headers (from PDF extraction)
+        elif re.match(r'^(?:INTRO|OUTRO|PHASE\s+\d+|CHAPTER\s+\d+|JACK\s+BREAK.*)(?:\s*\(.*?\))?(?:\s*:.*)?$', line.strip(), re.IGNORECASE):
+            is_header = True
+            header_text = line.strip()
+            
+        if is_header:
             # Save previous section
             if current_section is not None:
                 current_section["raw_body"] = "\n".join(current_lines).strip()
                 sections.append(current_section)
             
-            header = section_match.group(1).strip()
-            current_section = _parse_section_header(header)
+            current_section = _parse_section_header(header_text)
             current_lines = []
         elif current_section is not None:
             current_lines.append(line)
@@ -88,10 +102,11 @@ def parse_script(raw_md: str) -> dict:
         if clean:
             word_count += len(clean.split())
     
-    # Extract characters and objects
+    # Extract characters and objects intelligently using LLM
     full_text = raw_md
-    characters = _extract_characters(full_text)
-    objects = _extract_objects(full_text)
+    extracted = _extract_entities_with_llm(full_text)
+    characters = extracted.get("characters", [])
+    objects = extracted.get("objects", [])
     
     return {
         "title": title,
@@ -142,8 +157,8 @@ def _parse_section_header(header: str) -> dict:
     elif re.match(r'OUTRO', header_clean, re.IGNORECASE):
         section["type"] = "outro"
         section["title"] = "Outro"
-    elif re.match(r'PHASE\s+(\d+)', header_clean, re.IGNORECASE):
-        m = re.match(r'PHASE\s+(\d+)\s*:\s*(.*)', header_clean, re.IGNORECASE)
+    elif re.match(r'(?:PHASE|CHAPTER)\s+(\d+)', header_clean, re.IGNORECASE):
+        m = re.match(r'(?:PHASE|CHAPTER)\s+(\d+)\s*:\s*(.*)', header_clean, re.IGNORECASE)
         section["type"] = "phase"
         section["number"] = int(m.group(1)) if m else None
         section["title"] = m.group(2).strip().title() if m and m.group(2) else header_clean
@@ -237,157 +252,60 @@ def _process_section_body(section: dict):
     section["speaker"] = speaker
 
 
-def _extract_characters(text: str) -> list:
-    """Extract recognizable characters from the full script text."""
-    characters = []
-    
-    # Common patterns for character identification
-    # Look for names that appear multiple times in action context
-    # We focus on proper nouns that are actors in the story
-    
-    # Find named characters: words that appear as subjects doing actions
-    # Pattern: "Name verb..." or "Name's"
-    name_pattern = re.compile(r'\b([A-Z][a-z]+)\b')
-    name_counts = {}
-    
-    # Common non-character words to exclude
-    exclude = {
-        'The', 'This', 'That', 'But', 'And', 'Now', 'When', 'Then',
-        'His', 'Her', 'He', 'She', 'It', 'They', 'We', 'You', 'In',
-        'On', 'At', 'To', 'For', 'By', 'Is', 'Are', 'Was', 'Were',
-        'Has', 'Had', 'Can', 'Will', 'Would', 'Could', 'Should',
-        'Day', 'Days', 'Not', 'No', 'Yes', 'If', 'Or', 'So',
-        'Just', 'Only', 'Even', 'Still', 'Yet', 'All', 'Each',
-        'Every', 'One', 'Two', 'Three', 'Four', 'Five', 'Over',
-        'About', 'Into', 'From', 'With', 'After', 'Before', 'During',
-        'Between', 'Under', 'Until', 'Without', 'Nothing', 'Everything',
-        'Something', 'Here', 'There', 'Where', 'How', 'What', 'Why',
-        'Who', 'Whose', 'Which', 'Much', 'Many', 'More', 'Most',
-        'First', 'Last', 'Next', 'Phase', 'Break', 'Jack', 'Complete',
-        'Script', 'Minutes', 'Intro', 'Outro', 'Cut', 'Zoom',
-        'Aerial', 'Epic', 'Brutal', 'Temperature', 'Temperatures',
-        'Wind', 'Snow', 'Winter', 'Ninety', 'Fifteen', 'Twenty',
-        'Thirty', 'Forty', 'Fifty', 'Sixty', 'Finally', 'Suddenly',
-        'Outside', 'Inside', 'Behind', 'Beside', 'Also', 'Very',
-        'Almost', 'Already', 'Enough',        'JACK', 'BUILT', 'INCREDIBLE',
-        'LOG', 'CABIN', 'ALONE', 'BEFORE', 'WINTER', 'HELICOPTER',
-        'FLYING', 'LOOKING', 'STANDING', 'POINTING',
-        # Geographic names that appear as proper nouns
-        'Yukon', 'Alaska', 'Siberia', 'Montana', 'Colorado', 'Maine',
-        'Quebec', 'Scandinavia', 'Norway', 'Sweden', 'Finland', 'Iceland',
-        'Scotland', 'Patagonia', 'Ford', 'Whitehorse', 'Dawson',
-        'Fairbanks', 'Denali', 'America', 'Canada', 'Russia',
-        'Stockholm', 'Alone', 'Hatchet', 'Wild',
-    }
-    
-    for match in name_pattern.finditer(text):
-        name = match.group(1)
-        if name not in exclude and len(name) > 2:
-            name_counts[name] = name_counts.get(name, 0) + 1
-    
-    # Characters are names that appear 3+ times (significant presence)
-    for name, count in sorted(name_counts.items(), key=lambda x: -x[1]):
-        if count >= 3:
-            char_type = "character"
-            # Detect if it's an animal name (often the dog)
-            # Check context around the name for animal indicators
-            animal_check = re.search(
-                rf'{name}\s+(?:jumps|curls|presses|barks|whines|howls|sniffs|wags)',
-                text, re.IGNORECASE
-            )
-            if animal_check:
-                char_type = "animal"
-            
-            characters.append({
-                "name": name,
-                "type": char_type,
-                "mentions": count,
-            })
-    
-    # Also detect Jack (the presenter) — always present
-    jack_present = bool(re.search(r'\*\*JACK:?\*\*', text))
-    if jack_present and not any(c["name"] == "Jack" for c in characters):
-        characters.insert(0, {
-            "name": "Jack",
-            "type": "presenter",
-            "mentions": len(re.findall(r'\*\*JACK:?\*\*', text)),
-        })
-    
-    # Detect relationship-based characters (uncle, father, brother, etc.)
-    relationships = {
-        'uncle': r'\b(?:uncle|his uncle|the uncle)\b',
-        'father': r'\b(?:father|his father|the father|his dad)\b',
-        'mother': r'\b(?:mother|his mother|the mother|his mom)\b',
-        'brother': r'\b(?:brother|his brother|the brother)\b',
-        'sister': r'\b(?:sister|his sister|the sister)\b',
-        'wife': r'\b(?:wife|his wife|the wife)\b',
-        'grandfather': r'\b(?:grandfather|his grandfather|grandpa)\b',
-    }
-    
-    for rel_type, pattern in relationships.items():
-        rel_matches = re.findall(pattern, text, re.IGNORECASE)
-        if len(rel_matches) >= 1:
-            # Try to find the actual name nearby: "His uncle [Name]" or "named [Name]"
-            name_nearby = re.search(
-                rf'(?:uncle|father|mother|brother|sister|wife|grandfather)\s+([A-Z][a-z]+)',
-                text
-            )
-            # Also check if there's a named character earlier: "Name ... his uncle"
-            if name_nearby:
-                rel_name = name_nearby.group(1)
-                display = f"{rel_name} ({rel_type})"
-            else:
-                # Use the relationship as display if no name found
-                display = rel_type.title()
-                rel_name = rel_type.title()
-            
-            # Don't add if already in characters list
-            if not any(c["name"] == rel_name for c in characters):
-                characters.append({
-                    "name": display,
-                    "type": "family",
-                    "mentions": len(rel_matches),
-                })
-    
-    return characters
-
-
-def _extract_objects(text: str) -> list:
+def _extract_entities_with_llm(text: str) -> dict:
     """
-    Extract large, recognizable objects from the script.
-    Only objects big enough for a Kling element (vehicles, large machines).
-    NOT small hand tools (axe, chisel, saw, etc.)
+    Use Gemini to intelligently extract characters and key objects from the script text.
+    This replaces the legacy regex-based extraction.
     """
-    objects = []
+    # Truncate text if too long to save tokens, though usually scripts are short enough
+    # If the script is huge, we grab the first 15000 chars as it usually has all characters
+    truncated_text = text[:15000]
     
-    # Patterns for large recognizable objects
-    large_objects = {
-        "pickup": r'\b(?:pickup|pick-up|truck)\b',
-        "chainsaw": r'\bchainsaw\b',
-        "helicopter": r'\bhelicopter\b',
-        "atv": r'\b(?:ATV|atv|quad|four-wheeler)\b',
-        "snowmobile": r'\bsnowmobile\b',
-        "boat": r'\b(?:boat|canoe|kayak)\b',
-        "cabin": r'\bcabin\b',
-        "tent": r'\btent\b',
-        "generator": r'\bgenerator\b',
-        "wood_stove": r'\b(?:wood stove|chimney|fireplace)\b',
-    }
+    prompt = f"""You are a story analyst. Read this script and extract exactly two lists of entities.
+
+SCRIPT TEXT:
+{truncated_text}
+
+═══ EXTRACT THE FOLLOWING ═══
+Analyze the script deeply and return a JSON with this EXACT structure:
+
+{{
+    "characters": [
+        {{
+            "name": "Full name or Role (e.g. Jack, Matt, Pilot, Uncle)",
+            "type": "character or animal or family",
+            "mentions": <integer, estimated importance/mentions>
+        }}
+    ],
+    "objects": [
+        {{
+            "id": "lowercase_id",
+            "name": "Display Name (e.g. Helicopter, Plane, Chainsaw, Pick-up Truck)",
+            "mentions": <integer, estimated importance/mentions>
+        }}
+    ]
+}}
+
+RULES:
+- "characters" should include human performers, family roles, and significant animals (like wolves, dogs).
+- "objects" should ONLY include large, narratively significant mechanical or structural objects (e.g. Plane, Snow Shelter, Cabin, Truck). Do not include small hand tools unless critical to the plot.
+- Estimate "mentions" based on their significance to the story (1-20+).
+"""
     
-    text_lower = text.lower()
-    for obj_id, pattern in large_objects.items():
-        matches = re.findall(pattern, text_lower)
-        if len(matches) >= 2:  # Must appear at least twice to be significant
-            # Get a display name from the first match in original text
-            first_match = re.search(pattern, text, re.IGNORECASE)
-            display_name = first_match.group(0) if first_match else obj_id
-            objects.append({
-                "id": obj_id,
-                "name": display_name.title(),
-                "mentions": len(matches),
-            })
-    
-    return objects
+    try:
+        print("[Parser] Running intelligent LLM extraction for entities...")
+        result = generate_json(prompt, temperature=0.2, model=GEMINI_MODEL_FLASH)
+        print(f"[Parser] LLM returned keys: {list(result.keys())}")
+        return {
+            "characters": result.get("characters", []),
+            "objects": result.get("objects", [])
+        }
+    except Exception as e:
+        import traceback
+        print(f"[Parser] LLM extraction failed: {e}")
+        traceback.print_exc()
+        return {"characters": [], "objects": []}
+
 
 
 # Quick test when run directly

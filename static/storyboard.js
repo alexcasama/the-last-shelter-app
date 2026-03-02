@@ -169,7 +169,6 @@ async function loadExistingStoryboards() {
             } catch (e) { /* No storyboard yet */ }
         }
     }
-    // Re-compute elements now that scenes are loaded (initial call had empty scenes)
     for (const block of storyboardBlocks) {
         const blockName = block.type === 'intro' ? 'intro' :
             block.type === 'close' ? 'close' :
@@ -178,6 +177,17 @@ async function loadExistingStoryboards() {
         block.elements = getBlockElements(blockName);
     }
     renderAllBlocks();
+}
+
+async function reloadProjectData() {
+    try {
+        const res = await fetch(`/api/project/${PROJECT_ID}`);
+        if (res.ok) {
+            projectData = await res.json();
+        }
+    } catch (e) {
+        console.error("Failed to reload project data", e);
+    }
 }
 
 // ─── Render ───
@@ -897,8 +907,25 @@ function startProgressStream(blockIdx, pollEndpoint) {
             if (data.type === 'complete' || data.type === 'error') {
                 gotComplete = true;
                 evtSource.close();
-                // Reload the storyboard data
-                loadCompleted(blockIdx, pollEndpoint);
+
+                if (data.type === 'complete') {
+                    // Reload the storyboard data only on success
+                    loadCompleted(blockIdx, pollEndpoint);
+                } else {
+                    // Stop polling and restore UI buttons on error
+                    const btnStoryboard = document.querySelector(`#block-${blockIdx} .btn-primary`);
+                    if (btnStoryboard) {
+                        btnStoryboard.disabled = false;
+                        btnStoryboard.textContent = '🔍 Generate Storyboard';
+                    }
+
+                    const actionBtns = document.querySelectorAll(`#block-${blockIdx} .sb-block-actions .btn-ghost`);
+                    const promptBtn = actionBtns.length > 0 ? actionBtns[actionBtns.length - 1] : null;
+                    if (promptBtn && promptBtn.textContent === '⏳ Generating...') {
+                        promptBtn.disabled = false;
+                        promptBtn.textContent = '📝 Generate Prompts';
+                    }
+                }
             }
         } catch (e) {
             addConsoleLine(event.data, 'info');

@@ -1,0 +1,3 @@
+Starting auto_research test...
+Loaded story_engine
+Result: [{'topic': 'Building a Log Cabin', 'filename': 'building_a_log_cabin.md', 'status': 'success'}]

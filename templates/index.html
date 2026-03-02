@@ -55,7 +55,7 @@
                             <button class="btn-icon" onclick="event.stopPropagation(); clearScriptFile()"
                                 title="Remove">✕</button>
                         </div>
-                        <input type="file" id="scriptFileInput" accept=".md" style="display: none;">
+                        <input type="file" id="scriptFileInput" accept=".md,.pdf" style="display: none;">
                     </div>
                 </div>
                 <div class="form-actions">
@@ -147,7 +147,8 @@
                             <label class="btn btn-ghost btn-sm" id="btnReuploadScript"
                                 style="display:none; cursor:pointer;">
                                 📄 Re-upload Script
-                                <input type="file" accept=".md" style="display:none;" onchange="reuploadScript(this)">
+                                <input type="file" accept=".md,.pdf" style="display:none;"
+                                    onchange="reuploadScript(this)">
                             </label>
                             <button class="btn btn-ghost btn-sm" id="btnCollapseScript"
                                 onclick="toggleCollapse('scriptContent', this)" style="display:none;">▼ Expand</button>
@@ -156,6 +157,51 @@
                     <div class="section-content" id="scriptContent" style="display: none;">
                         <p class="text-muted">Upload a script .md file when creating the episode, or drag and drop one
                             here.</p>
+                    </div>
+                </div>
+
+                <!-- SECTION: Knowledge Audit (Step 1.5) -->
+                <div class="section" id="knowledgeAuditSection" style="display: none;">
+                    <div class="section-header">
+                        <h3>📚 Survival Knowledge Audit</h3>
+                        <div class="section-actions">
+                            <button class="btn btn-primary btn-sm" id="btnAuditKnowledge"
+                                onclick="startKnowledgeAudit()">🔄 Run Audit</button>
+                            <button class="btn btn-ghost btn-sm" id="btnAutoResearch" onclick="startAutoResearch()"
+                                style="display:none;">🔍 Complete Knowledge</button>
+                            <button class="btn btn-ghost btn-sm" id="btnCollapseKnowledge"
+                                onclick="toggleCollapse('knowledgeContent', this)" style="display:none;">▼
+                                Expand</button>
+                        </div>
+                    </div>
+                    <div class="section-content" id="knowledgeContent" style="display: none;">
+                        <p class="text-muted" id="knowledgePlaceholder">Run a knowledge audit against the Survival
+                            Encyclopedia to ensure accurate scene generation.</p>
+
+                        <div id="knowledgeResults" style="display:none; margin-top: 16px;">
+                            <div style="margin-bottom: 12px;">
+                                <strong>Confidence Score: </strong>
+                                <span id="knowledgeScore" style="font-weight: bold; font-size: 1.1rem;">-</span>
+                            </div>
+
+                            <div style="display: flex; gap: 16px;">
+                                <div
+                                    style="flex: 1; background: rgba(39, 174, 96, 0.05); border: 1px solid rgba(39, 174, 96, 0.2); padding: 16px; border-radius: 6px;">
+                                    <h4 style="margin: 0 0 12px 0; color: #2ecc71;">✅ Known Mechanics</h4>
+                                    <ul id="listKnownTopics" class="text-sm"
+                                        style="margin: 0; padding-left: 20px; color: var(--text-muted);">
+                                    </ul>
+                                </div>
+
+                                <div
+                                    style="flex: 1; background: rgba(231, 76, 60, 0.05); border: 1px solid rgba(231, 76, 60, 0.2); padding: 16px; border-radius: 6px;">
+                                    <h4 style="margin: 0 0 12px 0; color: #e74c3c;">❌ Missing Mechanics</h4>
+                                    <ul id="listMissingTopics" class="text-sm"
+                                        style="margin: 0; padding-left: 20px; color: var(--text-muted);">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -288,15 +334,7 @@
                     </div>
                 </div>
 
-                <!-- SECTION: Generate (Step 6) -->
-                <div class="section" id="generateSection" style="display: none;">
-                    <div class="section-header">
-                        <h3>🚀 Generate</h3>
-                    </div>
-                    <div class="section-content" id="generateContent">
-                        <p class="text-muted">Video generation with Kling O3 Pro coming soon.</p>
-                    </div>
-                </div>
+
 
             </div>
         </section>
@@ -400,7 +438,7 @@
         </div>
     </div>
 
-    <script src="/static/app.js"></script>
+    <script src="/static/app.js?v=3"></script>
 </body>
 
 </html>

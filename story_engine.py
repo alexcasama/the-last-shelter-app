@@ -131,10 +131,15 @@ def _repair_truncated_json(text):
     except json.JSONDecodeError:
         # Try more aggressive repair: find last complete key-value pair
         # Remove trailing partial content after last complete value
-        for end_pattern in ['"}', '"]', '},', '],']:
+        for end_pattern in ['"}', '"]', '},', '],', '}']:
             last_idx = text.rfind(end_pattern)
             if last_idx > 0:
                 truncated = text[:last_idx + len(end_pattern)]
+                
+                # Strip trailing comma before closing structures!
+                if truncated.endswith(','):
+                    truncated = truncated[:-1]
+                    
                 # Close remaining structure
                 for bracket in reversed(stack):
                     if bracket == '{':
@@ -196,11 +201,13 @@ def generate_json(prompt, temperature=0.3, max_tokens=8000, model=None):
     except json.JSONDecodeError as e:
         # Attempt repair on truncated JSON
         print(f"[generate_json] JSON parse failed: {e}. Attempting repair...")
+        with open("failed_json.txt", "w") as f:
+            f.write(text)
         repaired = _repair_truncated_json(text)
         if repaired is not None:
             print(f"[generate_json] JSON repair successful! Salvaged {len(str(repaired))} chars")
             return repaired
-        raise  # re-raise original error if repair failed
+        raise ValueError(f"JSON Parse Error: {e}\nRaw Text saved to failed_json.txt")
 
 
 def generate_json_with_search(prompt, temperature=0.5, max_tokens=8000, model=None):
@@ -716,7 +723,7 @@ def generate_story_variants(title, duration_minutes=20, episode_type="build", pr
 # STEP 3: ELEMENTS — Analyze & Generate Character/Object References
 # =============================================================================
 
-def analyze_elements(story, narration, progress_callback=None):
+def analyze_elements(story, narration, script_data, progress_callback=None):
     """
     Analyze story + narration to identify ALL recurring Elements needed for video generation.
     
@@ -729,18 +736,26 @@ def analyze_elements(story, narration, progress_callback=None):
     Args:
         story: Complete story dict
         narration: Complete narration dict
+        script_data: Pre-parsed script data containing the exact characters and objects to generate
         progress_callback: Optional callback(message, type)
     
     Returns:
         List of element dicts with id, label, description, and frontal_prompt
     """
     if progress_callback:
-        progress_callback("🔍 Analyzing narration for ALL recurring visual elements...", "info")
+        progress_callback("🔍 Generating visual prompts for strict script elements...", "info")
     
     char = story.get("character", {})
     companion = char.get("companion", {})
     loc = story.get("location", {})
     construction = story.get("construction", {})
+    
+    # Extract strict lists from script_data
+    strict_chars = script_data.get("characters", [])
+    strict_objs = script_data.get("objects", [])
+    
+    char_list_str = "\n".join([f"- {c.get('name', '')} (Type: {c.get('type', 'character')})" for c in strict_chars])
+    obj_list_str = "\n".join([f"- {o.get('name', '')}" for o in strict_objs])
     
     # Build FULL narration text for thorough analysis
     full_narration_parts = []
@@ -755,44 +770,34 @@ def analyze_elements(story, narration, progress_callback=None):
     
     full_narration_text = "\n\n".join(full_narration_parts)
     
-    prompt = f"""You are a video production supervisor. Read this narration script carefully and 
-identify EVERY visual element that appears MORE THAN ONCE across different scenes.
+    prompt = f"""You are a video production supervisor. We already have a STRICT list of elements that appear in the script.
+Your job is ONLY to write the extremely detailed visual descriptions and the `frontal_prompt` for THESE EXACT ELEMENTS.
+DO NOT INVENT NEW ELEMENTS. DO NOT SKIP ANY OF THESE ELEMENTS.
 
-The goal is to create reference images so that Kling 3 video generation produces consistent visuals.
-If an object, vehicle, tool, or location appears in 2 or more scenes, it MUST be listed as an element.
+STRICT CHARACTERS TO GENERATE:
+{char_list_str if char_list_str else "None"}
 
-STORY CHARACTER:
+STRICT OBJECTS TO GENERATE:
+{obj_list_str if obj_list_str else "None"}
+
+To help you write accurate descriptions, here is the context of the story:
+STORY PROTAGONIST DATA:
 - Name: {char.get('name', 'Unknown')}
 - Age: {char.get('age', 'Unknown')}
 - Physical: {char.get('physical_description', 'Unknown')}
-- Companion: {companion.get('name', 'None')} ({companion.get('breed', 'None')})
 
-LOCATION: {loc.get('name', 'Unknown')} — {loc.get('terrain', 'wilderness')}
-
-CONSTRUCTION: {construction.get('type', 'shelter')} — {construction.get('materials', 'Unknown')}
-
-FULL NARRATION SCRIPT:
+FULL NARRATION SCRIPT FOR CONTEXT:
 {full_narration_text}
 
 ═══ EXTRACTION RULES ═══
 
-Read the narration above WORD BY WORD. Extract elements in these categories ONLY:
-
-1. CHARACTERS — protagonist + companion (if any). Extreme physical detail:
+1. For each character in the STRICT CHARACTERS list, write an extreme physical detail:
    age, height, build, skin tone, hair color/style, facial hair, eye color, 
    clothing (specific brands/types), footwear, accessories (glasses, hat, watch).
 
-2. VEHICLES & TRANSPORT — ANY vehicle mentioned: truck, car, ATV, snowmobile, canoe, 
-   horse, etc. Include make/model/color if mentioned or implied. If the character 
-   "drives" or "arrives" somewhere, there's a vehicle!
+2. For each object in the STRICT OBJECTS list, write a detailed visual design for a highly specific measuring/building object or vehicle.
 
-3. SPECIFIC MEASURABLE OBJECTS — objects that must look identical across scenes:
-   tents, stoves, boats, generators, trailers, backpacks, specific tools that are
-   visually prominent (a distinctive axe, a custom knife). Do NOT include generic
-   hand tools or small items.
-
-⚠️ DO NOT INCLUDE ENVIRONMENTS OR LOCATIONS — these are handled separately by the
-   Visual Storyboard Chain system.
+⚠️ DO NOT INCLUDE ENVIRONMENTS OR LOCATIONS — these are handled separately by the Visual Storyboard Chain system.
 
 ═══ JSON FORMAT ═══
 
@@ -1061,6 +1066,187 @@ Return ONLY the new, complete image generation prompt as plain text. No markdown
         raise Exception(f"Failed to edit element: {e}")
 
 
+
+# =============================================================================
+# SURVIVAL KNOWLEDGE SYSTEM
+# =============================================================================
+
+def get_encyclopedia_dir(project_dir=None):
+    """Returns the path to the encyclopedia directory."""
+    return os.path.join(os.path.dirname(__file__), "resources", "encyclopedia")
+
+def load_encyclopedia_rules():
+    """Loads all knowledge rules from the encyclopedia markdown files."""
+    enc_dir = get_encyclopedia_dir()
+    rules = {}
+    if os.path.exists(enc_dir):
+        import glob
+        for filepath in glob.glob(os.path.join(enc_dir, "*.md")):
+            topic = os.path.basename(filepath).replace(".md", "")
+            with open(filepath, "r", encoding="utf-8") as f:
+                rules[topic] = f.read()
+    return rules
+
+def audit_survival_knowledge(script_data, progress_callback=None):
+    """
+    Analyzes the script data to find required survival mechanics and audits them against 
+    the existing survival encyclopedia.
+    
+    Returns:
+        Dict with "confidence_score" (0-100), "known_topics", "missing_topics", and "report_text".
+    """
+    if progress_callback:
+        progress_callback("📚 Auditing required survival knowledge...", "info")
+        
+    rules = load_encyclopedia_rules()
+    known_topics_list = list(rules.keys())
+    
+    prompt = f"""You are a SURVIVAL MECHANICS AUDITOR for a video generator.
+Your job is to read the provided episode script and identify all the *physical/mechanical survival processes* taking place.
+
+CRITICAL INSTRUCTION ON GRANULARITY & TOOLING:
+DO NOT group mechanics into broad, high-level categories like "Building a Log Cabin" or "Lighting a survival fire". 
+You MUST break them down into specific, physical MICRO-ACTIONS.
+Crucially, you MUST also identify any tools, ladders, sawhorses, hoists, or temporary support structures required to execute these actions.
+For example, instead of "Building a Log Cabin", you must extract:
+- "Selecting and felling appropriate straight pine trees using a felling axe"
+- "Stripping bark from logs using a drawknife and a wooden sawhorse"
+- "Carving saddle notches with an axe and wooden mallet"
+- "Lifting and placing heavy base logs using ropes or makeshift ramps"
+- "Packing moss between logs for insulation using a wooden wedge"
+
+CRITICAL INSTRUCTION ON EXCLUSIONS:
+DO NOT extract trivial, everyday, or non-technical actions. If an action does NOT require specific survival/technical knowledge to look realistic, IGNOR IT.
+Examples of things to IGNORE:
+- "Taking tools out of a truck"
+- "Organizing tools under a tarp"
+- "Piling up firewood"
+- "Walking through the forest"
+- "Sitting by the fire"
+
+CRITICAL INSTRUCTION ON JSON FORMATTING:
+You MUST return valid JSON. If you use quotes inside your strings, you MUST escape them (e.g., "using a \\"drawknife\\""). DO NOT use unescaped double quotes inside strings.
+
+CURRENT ENCYCLOPEDIA TOPICS:
+{json.dumps(known_topics_list)}
+
+SCRIPT CONTENT:
+{script_data.get("script", str(script_data))[:4000]}
+
+Identify the core survival micro-mechanics in this script. For each mechanic:
+1. Is it a complex physical process that requires specific visual rules to look realistic? 
+2. Do we ALREADY have a topic for it in the CURRENT ENCYCLOPEDIA TOPICS?
+
+CRITICAL INSTRUCTION ON COMPLETENESS:
+You MUST list EVERY SINGLE micro-mechanic you find in the script. Do NOT only list the missing ones. If a mechanic is already covered by the CURRENT ENCYCLOPEDIA TOPICS, you MUST still include it in your JSON list but mark "is_known": true. I need to see the complete exhaustive list of EVERYTHING required to build this.
+
+Return JSON in this format:
+{{
+    "required_mechanics": [
+        {{
+            "name": "Carving a saddle notch with an axe",
+            "is_known": true,
+            "matching_topic": "log_notching_mechanics"
+        }},
+        {{
+            "name": "Igniting tinder using a ferro rod",
+            "is_known": false,
+            "matching_topic": null
+        }}
+    ]
+}}
+"""
+    try:
+        result = generate_json(prompt, temperature=0.2, max_tokens=8000, model=GEMINI_MODEL)
+        reqs = result.get("required_mechanics", [])
+        
+        known = [r for r in reqs if r.get("is_known")]
+        missing = [r for r in reqs if not r.get("is_known") and r.get("name")]
+        score = int(len(known) / max(1, len(reqs)) * 100) if reqs else 100
+        
+        report = f"Knowledge Audit Complete. Confidence: {score}%."
+        if known:
+            report += f"\nKnown Topics: {', '.join(k.get('name') for k in known)}"
+        if missing:
+            report += f"\nMissing Topics: {', '.join(m.get('name') for m in missing)}"
+            
+        return {
+            "confidence_score": score,
+            "known_topics": [k.get("name") for k in known],
+            "missing_topics": [m.get("name") for m in missing],
+            "report_text": report
+        }
+    except Exception as e:
+        if progress_callback:
+            progress_callback(f"❌ Audit failed: {str(e)}", "error")
+        return {"confidence_score": 0, "known_topics": [], "missing_topics": ["Auditor Failed"], "report_text": str(e)}
+
+def auto_research_mechanics(missing_topics, progress_callback=None):
+    """
+    For each missing topic, uses Gemini with Google Search to research the mechanics 
+    and writes a new .md file into the resources/encyclopedia.
+    """
+    enc_dir = get_encyclopedia_dir()
+    os.makedirs(enc_dir, exist_ok=True)
+    
+    client = init_client()
+    results = []
+    
+    for topic in missing_topics:
+        if progress_callback:
+            progress_callback(f"🔍 Auto-researching missing topic: {topic}...", "batch")
+            
+        research_prompt = f"""You are a survival expert writing a technical guide for a video generation AI.
+Topic: {topic}
+
+Search Google for detailed, practical, physical step-by-step information on how `{topic}` is actually done in reality.
+Focus on:
+1. The exact physical movements of the hands/body.
+2. The tools required and exactly how they are held.
+3. The visual appearance of the materials at each step.
+4. Mistakes to avoid (what looks fake vs what looks real).
+
+Format your response as a detailed Markdown document. Use clear headings, bullet points, and highlight visual/physical cues. 
+Do NOT wrap the entire response in ```markdown, just return the raw markdown text.
+Focus on realism and mechanical accuracy.
+"""
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=research_prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.4,
+                    max_output_tokens=8000,
+                    tools=[{"google_search": {}}],
+                )
+            )
+            
+            content = response.text.strip()
+            if content.startswith("```md"):
+                content = content[5:]
+            elif content.startswith("```markdown"):
+                content = content[11:]
+            if content.endswith("```"):
+                content = content[:-3]
+            content = content.strip()
+            
+            # create filename
+            filename = topic.lower().replace(" ", "_").replace("/", "_").replace("\\", "_")[:40] + ".md"
+            filepath = os.path.join(enc_dir, filename)
+            
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(content)
+                
+            results.append({"topic": topic, "filename": filename, "status": "success"})
+            if progress_callback:
+                progress_callback(f"✅ Saved research for {topic} to {filename}", "success")
+                
+        except Exception as e:
+            if progress_callback:
+                progress_callback(f"❌ Research failed for {topic}: {str(e)}", "error")
+            results.append({"topic": topic, "error": str(e), "status": "failed"})
+            
+    return results
 
 # =============================================================================
 # SYSTEM 1: CINEMATIC ANALYZER (Chapter → Storyboard)
@@ -2101,6 +2287,9 @@ def generate_scene_prompts(story, narration, elements, audio_durations=None, pro
         if not is_narrator and not phase_elements:
             phase_elements = ["@Element1"]
         
+        enc_rules = load_encyclopedia_rules()
+        enc_text = "\\n\\n".join([f"### {k.upper()}\\n{v}" for k, v in enc_rules.items()]) if enc_rules else "No specific rules loaded."
+
         prompt = f"""Generate {num_scenes} scene prompt(s) for this narration segment.
 
 NARRATION TEXT:
@@ -2111,6 +2300,9 @@ TOTAL DURATION: ~{actual_duration} seconds across {num_scenes} scene(s)
 
 AVAILABLE ELEMENTS:
 {element_context}
+
+SURVIVAL KNOWLEDGE BASE (Follow these exact physical/mechanical rules if applicable to the scene):
+{enc_text}
 
 ELEMENTS IN THIS PHASE: {', '.join(phase_elements) if phase_elements else 'None specified'}
 
@@ -2233,6 +2425,9 @@ def generate_video_prompt(scene_row, scene_state, elements, story, is_presenter=
     time_of_day = scene_state.get("time_of_day", "morning")
     weather = scene_state.get("weather", "overcast")
     
+    enc_rules = load_encyclopedia_rules()
+    enc_text = "\\n\\n".join([f"### {k.upper()}\\n{v}" for k, v in enc_rules.items()]) if enc_rules else "No specific rules loaded."
+    
     if is_presenter:
         prompt = f"""Generate a KLING VIDEO PROMPT for a PRESENTER scene.
 
@@ -2244,6 +2439,9 @@ WEATHER: {weather}
 
 AVAILABLE ELEMENTS:
 {element_context}
+
+SURVIVAL KNOWLEDGE BASE (Strict Physical Rules for Scene Realism):
+{enc_text}
 
 ENVIRONMENT (where the presenter is standing):
 - {env_description}
@@ -2282,6 +2480,9 @@ WEATHER: {weather}
 
 AVAILABLE ELEMENTS:
 {element_context}
+
+SURVIVAL KNOWLEDGE BASE (Strict Physical Rules for Scene Realism):
+{enc_text}
 
 CURRENT ENVIRONMENT STATE:
 - Ground: {env_description}
