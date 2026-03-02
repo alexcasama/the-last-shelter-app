@@ -7,9 +7,11 @@ import os
 import json
 import re
 import base64
+import base64
 import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from pydantic import BaseModel, Field
 
 import diversity_tracker
 
@@ -153,19 +155,23 @@ def _repair_truncated_json(text):
         return None
 
 
-def generate_json(prompt, temperature=0.3, max_tokens=8000, model=None):
+def generate_json(prompt, temperature=0.3, max_tokens=8000, model=None, response_schema=None):
     """Generate JSON content with Gemini, forced JSON output."""
     client = init_client()
     model = model or GEMINI_MODEL
     
+    config_kwargs = {
+        "temperature": temperature,
+        "max_output_tokens": max_tokens,
+        "response_mime_type": "application/json",
+    }
+    if response_schema:
+        config_kwargs["response_schema"] = response_schema
+        
     response = client.models.generate_content(
         model=model,
         contents=prompt,
-        config=types.GenerateContentConfig(
-            temperature=temperature,
-            max_output_tokens=max_tokens,
-            response_mime_type="application/json",
-        )
+        config=types.GenerateContentConfig(**config_kwargs)
     )
     
     text = response.text
@@ -876,7 +882,27 @@ CRITICAL RULES:
 
 Return ONLY the JSON object."""
 
-    result = generate_json(prompt, temperature=0.3, max_tokens=6000)
+    class ElementCharacter(BaseModel):
+        id: str
+        label: str
+        category: str
+        description: str
+        appears_in: list[str]
+        frontal_prompt: str
+
+    class ElementObject(BaseModel):
+        id: str
+        label: str
+        category: str
+        description: str
+        appears_in: list[str]
+        frontal_prompt: str
+
+    class ElementResponse(BaseModel):
+        characters: list[ElementCharacter]
+        objects: list[ElementObject]
+
+    result = generate_json(prompt, temperature=0.3, max_tokens=6000, response_schema=ElementResponse)
     
     # Combine everything into a flat list for the generator
     chars = result.get("characters", [])

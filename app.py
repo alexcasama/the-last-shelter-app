@@ -780,8 +780,9 @@ def api_generate_elements(project_id):
                     with open(settings_path) as sf:
                         settings = json.load(sf)
                     
-                    presenter_name = settings.get("presenter_name", "Jack Harlan")
-                    turnaround = settings.get("turnaround_image", "")
+                    presenter_data = settings.get("presenter", {})
+                    presenter_name = presenter_data.get("name", "Jack Harlan")
+                    turnaround = presenter_data.get("turnaround_image", "")
                     
                     if turnaround:
                         # Copy the turnaround image to the project's elements folder
