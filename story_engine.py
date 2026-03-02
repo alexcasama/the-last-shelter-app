@@ -803,28 +803,28 @@ FULL NARRATION SCRIPT FOR CONTEXT:
 
 You must return a JSON object with exactly two arrays: "characters" and "objects".
 
-{
+{{
   "characters": [
-    {
+    {{
       "id": "snake_case_identifier",
       "label": "Display Name",
       "category": "character", // or "animal", "family"
       "description": "Extremely detailed visual description",
       "appears_in": ["Phase 1", "Phase 2"],
       "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND..."
-    }
+    }}
   ],
   "objects": [
-    {
+    {{
       "id": "snake_case_identifier",
       "label": "Display Name",
       "category": "object", // or "vehicle"
       "description": "Extremely detailed visual description",
       "appears_in": ["Phase 1", "Phase 3"],
       "frontal_prompt": "Studio portrait of [object] on CLEAN WHITE BACKGROUND..."
-    }
+    }}
   ]
-}
+}}
 
 FRONTAL PROMPT RULES (ALL elements get PORTRAIT 3:4 format with STUDIO BACKGROUND):
 - For CHARACTERS: "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. [extremely detailed face and upper body description]. 
@@ -842,7 +842,7 @@ FRONTAL PROMPT RULES (ALL elements get PORTRAIT 3:4 format with STUDIO BACKGROUN
 
 Return JSON:
 {{
-    "elements": [
+    "characters": [
         {{
             "id": "protagonist",
             "label": "Jack Harlan",
@@ -850,14 +850,16 @@ Return JSON:
             "description": "Rugged man in his mid-40s, 6'1, muscular build...",
             "appears_in": ["Arrival", "Base Camp", "Building Phase 1"],
             "frontal_prompt": "Close-up chest-up portrait on a clean white studio background. A rugged, weathered man in his mid-40s, facing the camera directly. Tanned, wind-burned skin. Short-cropped brown hair with grey at the temples. Thick brown beard with grey streaks. Intense blue eyes, crow's feet. He wears a faded olive Carhartt jacket over a red flannel shirt. Shoulders and head visible, eye-level angle. Sharp focus on face. Studio lighting, no shadows, clean white background."
-        }},
+        }}
+    ],
+    "objects": [
         {{
             "id": "pickup_truck",  
             "label": "Ford F-250 Pickup",
             "category": "vehicle",
             "description": "A beat-up dark blue Ford F-250 with mud-caked fenders...",
             "appears_in": ["Arrival", "Supply Run", "Final Push"],
-            "frontal_prompt": "Cinematic 16:9 shot of a beat-up dark blue Ford F-250 pickup truck parked on a dirt road in a dense forest. The truck has mud-caked wheel wells, a dented tailgate, and a bed loaded with lumber and tools. Forest backdrop, overcast sky. Shot on RED V-Raptor, shallow depth of field."
+            "frontal_prompt": "Studio portrait of a beat-up dark blue Ford F-250 pickup truck on CLEAN WHITE BACKGROUND. The truck has mud-caked wheel wells and a dented tailgate."
         }}
     ]
 }}
