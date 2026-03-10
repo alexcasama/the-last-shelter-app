@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'StratumNo1';
+  src: url('https://thelastshelter.s3.us-east-2.amazonaws.com/StratumNo1-Black.woff2') format('woff2'),
+       url('https://thelastshelter.s3.us-east-2.amazonaws.com/StratumNo1-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Play", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "StratumNo1", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-frost-400: #89CFF0;
+  --color-frost-500: #5DADE2;
+  --color-frost-600: #2E86C1;
+  --color-frost-900: #154360;
+}
+
+body {
+  background-color: #050505;
+  color: #e5e5e5;
+  overflow-x: hidden;
+}
+
+/* Action text gradient */
+.text-gradient-action {
+  background: linear-gradient(to bottom, #ffffff 0%, #999999 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Particles animation */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100vh) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: absolute;
+  bottom: -10px;
+  background: radial-gradient(circle, #ffffff 0%, #5DADE2 40%, transparent 70%);
+  border-radius: 50%;
+  animation: floatUp linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Custom button styles */
+.btn-cinematic {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 900;
+  color: #ffffff;
+  background: transparent;
+  border: 2px solid rgba(93, 173, 226, 0.4);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.btn-cinematic::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(93, 173, 226, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-cinematic:hover {
+  border-color: #5DADE2;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(93, 173, 226, 0.4);
+}
+
+.btn-cinematic:hover::before {
+  left: 100%;
+}
+
+.btn-cinematic-primary {
+  background: rgba(93, 173, 226, 0.15);
+  border-color: #5DADE2;
+}
+
+.btn-cinematic-primary:hover {
+  background: rgba(93, 173, 226, 0.3);
+}
+
+/* Hexagon/Diamond clip path for buttons */
+.btn-diamond {
+  clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 15px 100%, 0 50%);
+  padding: 1rem 3rem;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
