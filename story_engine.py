@@ -760,23 +760,64 @@ def analyze_elements(story, narration, script_data, progress_callback=None):
     strict_chars = script_data.get("characters", [])
     strict_objs = script_data.get("objects", [])
     
+    # FALLBACK: If script_data doesn't have characters/objects,
+    # build approximate lists from story.json metadata
+    if not strict_chars:
+        print(f"[analyze_elements] WARNING: script_data has no 'characters' field. Building from story.json...")
+        fallback_chars = []
+        # Add protagonist
+        if char.get("name"):
+            fallback_chars.append({"name": char["name"], "type": "character"})
+        # Add companion
+        if companion.get("name"):
+            fallback_chars.append({"name": companion["name"], "type": "animal"})
+        # Try to extract from narration text using common name patterns
+        # Also check story conflicts for character names
+        for conflict in story.get("conflicts", []):
+            desc = conflict.get("description", "")
+            title = conflict.get("title", "")
+            # These might mention characters
+        strict_chars = fallback_chars
+        if progress_callback:
+            progress_callback(
+                f"⚠️ No characters in script_data. Built fallback: {', '.join(c.get('name', '?') for c in strict_chars)}",
+                "warning"
+            )
+    
+    if not strict_objs:
+        print(f"[analyze_elements] WARNING: script_data has no 'objects' field. Building from story.json...")
+        fallback_objs = []
+        # Add construction project
+        if construction.get("type"):
+            fallback_objs.append({"name": construction.get("type", "Shelter"), "id": "construction"})
+        strict_objs = fallback_objs
+    
     char_list_str = "\n".join([f"- {c.get('name', '')} (Type: {c.get('type', 'character')})" for c in strict_chars])
     obj_list_str = "\n".join([f"- {o.get('name', '')}" for o in strict_objs])
     
     # Build FULL narration text for thorough analysis
     full_narration_parts = []
-    if narration.get("intro", {}).get("narration_text"):
-        full_narration_parts.append(f"INTRO: {narration['intro']['narration_text']}")
+    intro_data = narration.get("intro", {})
+    intro_text = intro_data.get("narration_text") or intro_data.get("text", "")
+    if intro_text:
+        full_narration_parts.append(f"INTRO: {intro_text}")
     for p in narration.get('phases', []):
         name = p.get('phase_name', '')
-        text = p.get('narration_text', '')
-        full_narration_parts.append(f"PHASE [{name}]: {text}")
-    if narration.get("outro", {}).get("narration_text"):
-        full_narration_parts.append(f"OUTRO: {narration['outro']['narration_text']}")
+        text = p.get('narration_text') or p.get('narration') or p.get('text', '')
+        if text:
+            full_narration_parts.append(f"PHASE [{name}]: {text}")
+    close_data = narration.get("close", {}) or narration.get("outro", {})
+    close_text = close_data.get("narration_text") or close_data.get("text", "")
+    if close_text:
+        full_narration_parts.append(f"OUTRO: {close_text}")
     
     full_narration_text = "\n\n".join(full_narration_parts)
     
-    prompt = f"""You are a video production supervisor. We already have a STRICT list of elements that appear in the script.
+    # Decide prompt mode based on available data
+    has_strict_lists = len(strict_chars) > 2 or len(strict_objs) > 2  # More than just fallback protagonist
+    
+    if has_strict_lists:
+        prompt_header = f"""You are a video production supervisor. We already have a STRICT list of elements that appear in the script.
 Your job is ONLY to write the extremely detailed visual descriptions and the `frontal_prompt` for THESE EXACT ELEMENTS.
 DO NOT INVENT NEW ELEMENTS. DO NOT SKIP ANY OF THESE ELEMENTS.
 
@@ -784,7 +825,23 @@ STRICT CHARACTERS TO GENERATE:
 {char_list_str if char_list_str else "None"}
 
 STRICT OBJECTS TO GENERATE:
-{obj_list_str if obj_list_str else "None"}
+{obj_list_str if obj_list_str else "None"}"""
+    else:
+        prompt_header = f"""You are a video production supervisor. Read the narration script below and identify ALL recurring characters and key objects that need reference images for video generation.
+
+EXTRACT from the narration:
+1. ALL named characters (protagonist, family members, animals, any named person)
+2. ALL key physical objects that appear in multiple scenes (structures, vehicles, tools, meaningful objects)
+
+KNOWN PROTAGONIST:
+- Name: {char.get('name', 'Unknown')}
+- Age: {char.get('age', 'Unknown')}
+- Physical: {char.get('physical_description', 'Unknown')}
+
+You MUST include the protagonist AND any family members, animals, or antagonists mentioned in the narration.
+You MUST include any structures being built, significant objects, and vehicles."""
+
+    prompt = f"""{prompt_header}
 
 To help you write accurate descriptions, here is the context of the story:
 STORY PROTAGONIST DATA:
