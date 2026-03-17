@@ -1580,6 +1580,26 @@ Also check for COMPRESSED ACTIONS:
   → If NO: split it until it can.
 
 Add the missing scenes until every process is fully decomposed.
+
+═══════════════════════════════════════════════════
+ANTI-PATTERNS TO ELIMINATE (check EVERY scene)
+═══════════════════════════════════════════════════
+
+Scan every scene's `action` field. If ANY of these appear, REWRITE the scene:
+
+❌ DIALOGUE in work/construction scenes — remove ALL spoken words. Only ambient sounds (wind, chopping, footsteps)
+❌ ABSTRACT/EMOTIONAL language: "determination", "hope", "connection to the land", "with renewed purpose"
+   → REPLACE with concrete physical descriptions: "grips the axe handle", "positions feet shoulder-width apart"
+❌ CAMERA TRICKS: "cut to", "smash cut", "quick series of shots", "montage"
+   → REPLACE with continuous action in a single take
+❌ MULTIPLE ACTIONS per scene: "grabs axe AND chops AND stacks" = 3 separate scenes
+   → SPLIT into one action per scene
+❌ WRONG TOOLS: axe for hammering stakes, bare hands for heavy logs, knife for chopping wood
+   → Correct tool table: Chopping→AXE, Hammering→MALLET, Cutting rope→KNIFE, Digging→SHOVEL, Notching→AXE+CHISEL, Lifting logs→ROPES+RAMPS/PEAVEY
+❌ INVISIBLE ACTIONS: "feels the cold", "remembers his father", "senses danger", "realizes"
+   → These cannot be filmed. REMOVE or replace with visible physical reaction
+❌ TOOLS appearing without being picked up — add bridge scene for tool retrieval
+❌ INCONSISTENT materials — fresh wood cannot look seasoned in the same scene
 """
 
     try:
@@ -2372,6 +2392,16 @@ RULES:
 4. Duration per scene: {max(3, min(15, actual_duration // num_scenes))} seconds
 5. For narrator scenes: show the narrator speaking to camera, reference @narrator element if available
 6. scene numbers start at {scene_counter + 1}
+7. ZERO DIALOGUE in work/construction scenes. Only ambient sounds (wind, chopping, sawing, footsteps)
+8. NEVER use abstract, emotional, or metaphorical language in video_prompt. Only what is PHYSICALLY VISIBLE. BAD: "with determination". GOOD: "grips the axe with both hands"
+9. Each sentence in video_prompt describes EXACTLY ONE physical action. Maximum 15 words per sentence
+10. Actions must follow STRICT CHRONOLOGICAL ORDER: first → then → finally
+11. Use 1-2 camera angles maximum. Prefer continuous tracking shots. NO "cut to" or "smash cut"
+12. TOOL CONSISTENCY: Chopping→AXE, Hammering stakes→MALLET, Cutting rope→KNIFE, Digging→SHOVEL, Notching→AXE+CHISEL, Lifting logs→ROPES+RAMPS
+13. TOOL PERSISTENCE: tools stay in hands until explicitly put down. Switching tools requires putting down the first
+14. video_prompt describes ONLY what the camera SEES. No backstory, motivation, or emotional context
+15. ANTI-PATTERNS in video_prompt — NEVER write: "with renewed determination", "feels the cold", "realizes", "montage of", "series of shots"
+16. Materials must match the setting: arctic=snow, fresh-cut wood=wet, seasoned wood=cracked
 
 Return JSON:
 {{
@@ -2550,15 +2580,39 @@ RULES:
 1. Start with "No music." — ALWAYS
 2. Use @ElementName references (e.g. @Erik, @Gus), not character descriptions
 3. Describe MOTION and ACTION — what physically moves and how
-4. Camera movements: wide shot, tracking, close-up, aerial — describe each cut's camera
+4. Use 1-2 camera angles MAXIMUM per scene. Prefer continuous tracking shots. AVOID quick cuts, jump cuts, or "cut to"
 5. Keep each individual shot's action SIMPLE — one movement per shot
-6. Use as many camera angle changes as cinematically needed
-7. Sound design: ambient only. Wind, cracking wood, footsteps, breathing. NEVER music.
+6. Each sentence in the prompt must describe EXACTLY ONE physical action. Never combine multiple actions in a single statement
+7. Sound design: ambient only. Wind, cracking wood, footsteps, breathing. NEVER music
 8. End with "4K." — ALWAYS
 9. Do NOT mention the reference image in the prompt text (it's attached in Kling)
 10. Environment descriptions must match the state tracker data EXACTLY
-11. If character uses a tool, the CORRECT tool must be specified (per Tool Validation rules)
-12. {'No dialogue in this scene' if not narration_text else 'Sparse dialogue allowed: max 1 short phrase if this scene warrants it (every 4-5 scenes)'}
+11. ZERO DIALOGUE in work/construction scenes. No spoken words, no whispers, no grunts that form words. ONLY ambient sounds
+12. NEVER use abstract, emotional, or metaphorical language. Only describe what is PHYSICALLY VISIBLE on screen. BAD: "with determination he drives the axe". GOOD: "@Erik swings the axe downward into the log"
+13. Describe actions in STRICT CHRONOLOGICAL ORDER: first → then → finally. One step leads logically to the next
+14. TOOL CONSISTENCY TABLE — use the CORRECT tool for each action:
+    - Chopping wood/brush → FELLING AXE (two hands, wide stance)
+    - Hammering stakes → MALLET or HAMMER (never axe)
+    - Cutting rope/twine → KNIFE
+    - Stripping bark → DRAWKNIFE on a sawhorse
+    - Notching logs → AXE + CHISEL (mark first, then cut)
+    - Digging → SHOVEL or PICKAXE
+    - Lifting heavy logs → ROPES + RAMPS or PEAVEY (never bare hands for large logs)
+    - Measuring → TAPE MEASURE or marked stick
+    - Splitting logs → SPLITTING MAUL + WEDGE (never a felling axe)
+15. TOOL PERSISTENCE: Once a tool is in the character's hands, it stays there until explicitly put down. If a different tool is needed, describe putting down the first and picking up the second
+16. Write prompts as SIMPLE DECLARATIVE SENTENCES. Subject + verb + object. Maximum 15 words per sentence. Avoid subordinate clauses
+17. The prompt describes ONLY what a camera SEES. Never explain WHY something happens, character backstory, or emotional significance
+18. Describe ONLY concrete physical actions: hands gripping, arms lifting, wood splitting, sawdust falling. Never reference thoughts, feelings, motivations, or story context
+19. If character changes position (standing→kneeling, ground→ladder), describe the transition explicitly
+20. Materials must be visually consistent: fresh-cut wood is wet/light, seasoned wood has cracks, snow is present if in arctic setting
+21. ANTI-PATTERNS — NEVER write any of these:
+    - "with renewed determination" or any emotional qualifier
+    - "cut to" or "smash cut" or "quick montage"
+    - "feels the cold" or "senses" or "realizes" (invisible actions)
+    - "a series of shots showing" (decompose into individual actions)
+    - Multiple tools appearing without being picked up
+22. {'No dialogue — ambient sound only' if not narration_text else 'No dialogue in work/construction scenes. For non-construction scenes, max 1 short phrase every 4-5 scenes'}
 
 Return JSON:
 {{
@@ -3194,6 +3248,9 @@ RULES:
 6. Use PARAGRAPH BREAKS (\\n\\n) to separate distinct moments or beats. Each paragraph should be 3-5 sentences. NEVER write a single wall of text.
 7. WORD LIMIT IS STRICT: stay within {words_for_phase - 30} to {words_for_phase + 30} words
 8. Follow the PHASE-SPECIFIC emotional instructions above — they are CRITICAL for quality.
+9. VISUAL vs EMOTIONAL SEPARATION: While narration CAN be emotional (it is voiceover), clearly separate VISUAL ACTIONS from EMOTIONAL REFLECTION. When describing what the character DOES physically, be specific about tools, body positions, and materials. Reserve abstract/emotional language for the narrator COMMENTARY about the action, not the action description itself. BAD: "With hope in his heart, Erik builds the wall." GOOD: "Erik lifts the log onto the wall, fitting the saddle notch into place. Each log is a step closer to the promise he made."
+10. CONSTRUCTION ACCURACY: When describing building/construction actions, use CORRECT tool names and realistic sequences. Never have a character use an axe to hammer stakes, bare hands to lift heavy logs, or skip foundational steps. Reference the construction type ({construction_text}) and describe the physical process accurately.
+11. TOOL SPECIFICITY: When the character uses a tool, NAME IT. Not "he works on the logs" but "he draws the drawknife along the bark, shaving it clean in long strips." The narration should teach the viewer what they are seeing.
 
 Return JSON:
 {{
