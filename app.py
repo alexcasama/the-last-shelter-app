@@ -768,6 +768,30 @@ def api_generate_elements(project_id):
     with open(script_path) as f:
         script_data = json.load(f)
     
+    # AUTO-REPAIR: If script_data is missing characters/objects,
+    # re-extract them using the LLM and save back to script.json
+    if not script_data.get("characters") or not script_data.get("objects"):
+        from script_parser import _extract_entities_with_llm
+        
+        # Build full script text from sections
+        full_text = "\n\n".join(
+            s.get("clean_text", "") for s in script_data.get("sections", []) if s.get("clean_text")
+        )
+        
+        if full_text:
+            try:
+                print(f"[Elements] Auto-repairing script_data: extracting characters/objects...")
+                extracted = _extract_entities_with_llm(full_text)
+                script_data["characters"] = extracted.get("characters", [])
+                script_data["objects"] = extracted.get("objects", [])
+                
+                # Save back so this repair is permanent
+                with open(script_path, "w") as f:
+                    json.dump(script_data, f, indent=2, ensure_ascii=False)
+                print(f"[Elements] Auto-repair complete: {len(script_data['characters'])} chars, {len(script_data['objects'])} objects saved")
+            except Exception as repair_err:
+                print(f"[Elements] Auto-repair failed: {repair_err}")
+    
     _progress_streams[project_id] = []
     callback = progress_callback_factory(project_id)
     
