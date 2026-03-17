@@ -912,6 +912,35 @@ Return ONLY the JSON object."""
     
     elements = chars + objs + legacy
     
+    # FALLBACK: If schema-based call returned 0 elements, retry WITHOUT schema
+    # This handles cases where response_schema + long prompts cause empty arrays
+    if len(elements) == 0:
+        if progress_callback:
+            progress_callback(
+                f"⚠️ Schema-based extraction returned 0 elements. Retrying without schema...",
+                "warning"
+            )
+        print(f"[analyze_elements] FALLBACK: schema call returned 0 elements. strict_chars={len(strict_chars)}, strict_objs={len(strict_objs)}")
+        print(f"[analyze_elements] Prompt length: {len(prompt)} chars, narration length: {len(full_narration_text)} chars")
+        
+        try:
+            # Retry without response_schema — often works better with complex prompts
+            result2 = generate_json(prompt, temperature=0.4, max_tokens=8000, model=GEMINI_MODEL_FLASH)
+            chars2 = result2.get("characters", [])
+            objs2 = result2.get("objects", [])
+            legacy2 = result2.get("elements", [])
+            elements = chars2 + objs2 + legacy2
+            
+            if progress_callback:
+                if elements:
+                    progress_callback(f"✅ Fallback succeeded: found {len(elements)} elements", "success")
+                else:
+                    progress_callback(f"⚠️ Fallback also returned 0 elements", "warning")
+        except Exception as fallback_err:
+            if progress_callback:
+                progress_callback(f"⚠️ Fallback failed: {str(fallback_err)[:100]}", "error")
+            print(f"[analyze_elements] FALLBACK FAILED: {fallback_err}")
+    
     if progress_callback:
         progress_callback(
             f"✅ Found {len(elements)} elements: {', '.join(e.get('label', '?') for e in elements)}",
