@@ -675,9 +675,14 @@ export default function App() {
             <img src="https://thelastshelter.s3.us-east-2.amazonaws.com/logo-tls.png" alt="The Last Shelter" className="w-48 mb-8 opacity-50 hover:opacity-100 transition-opacity" />
           </button>
 
-          <div className="flex space-x-6 mb-8">
-            <a href="https://www.youtube.com/@thelastsheltertv" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-frost-500 transition-colors"><Youtube className="w-5 h-5" /></a>
-            <a href="mailto:info@origostudios.ai" className="text-gray-500 hover:text-frost-500 transition-colors"><Mail className="w-5 h-5" /></a>
+          <div className="flex space-x-8 mb-8 items-center justify-center">
+            <a href="https://www.youtube.com/@thelastsheltertv" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-frost-500 transition-colors"><Youtube className="w-6 h-6" /></a>
+            <a href="https://x.com/JackHarlanTLS" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-frost-500 transition-colors">
+              <svg viewBox="0 0 24 24" className="w-[22px] h-[22px] fill-current" aria-hidden="true">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+            <a href="mailto:info@origostudios.ai" className="text-gray-500 hover:text-frost-500 transition-colors"><Mail className="w-6 h-6" /></a>
           </div>
 
           <div className="text-center space-y-2 text-xs text-gray-600 font-display tracking-widest uppercase">

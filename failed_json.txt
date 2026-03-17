@@ -1,76 +1,97 @@
 {
   "characters": [
     {
-      "id": "matthew_callahan",
-      "label": "Matthew Callahan",
+      "id": "daniel_carter",
+      "label": "Daniel Carter",
       "category": "character",
-      "description": "A man in his mid-40s, with an average height and a lean, wiry build honed by fieldwork. His fair skin is severely chapped and wind-burned, with patches of frostnip on his cheeks and the tip of his nose. He has short, unkempt brown hair, matted with grime, and a thick, untrimmed stubble covering his jaw. His eyes are a deep, exhausted blue, bloodshot and surrounded by dark circles. He wears a torn, dark grey thermal base layer shirt, stained with dirt and fuel. His hands are raw, with split knuckles and bleeding cuts from constant, desperate work.",
+      "description": "A man in his late 30s to early 40s, standing 6'0\" with a lean, muscular build earned from years as a forest engineer. His skin is sun-kissed and weathered. He has short, practical dark brown hair and a determined expression, often framed by a slight stubble on a square jaw. His eyes are a focused hazel. He wears durable, earth-toned outdoor clothing: a layered red and black plaid Pendleton flannel shirt over a grey thermal henley, sturdy Carhartt-style work pants in a dark brown canvas, and heavy-duty Red Wing leather work boots, scuffed from use.",
       "appears_in": [
-        "The First Hours",
-        "The Principle Of The Wolf",
-        "The Great Excavation",
-        "The Hunt",
-        "Predators And The Radio",
-        "Rescue"
+        "The Archaeology Of Failure",
+        "The Steel Skeleton",
+        "The Invitation",
+        "The Fortress",
+        "The Final Test"
       ],
-      "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A rugged, exhausted man in his mid-40s, facing the camera directly. Wind-burned fair skin with frostnip on the cheeks. Short, matted brown hair and a thick, untrimmed stubble. Intense, bloodshot blue eyes. He wears a torn, dark grey thermal shirt. Shoulders and head visible, eye-level angle. Sharp focus on face. Studio lighting, no shadows, no environment."
-    },
-    {
-      "id": "pilot",
-      "label": "Pilot",
-      "category": "character",
-      "description": "A man in his late 50s with a heavy-set build. His skin is pale and ashen. He has short, thinning grey hair and a neatly trimmed grey mustache. He is dressed in a standard pilot's uniform: a light blue button-up shirt and a dark tie, worn under a brown leather bomber jacket with a thick sheepskin collar. A simple silver wedding band is visible on his left hand.",
-      "appears_in": [
-        "The First Hours"
-      ],
-      "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A man in his late 50s with short, thinning grey hair and a neat grey mustache, facing the camera directly. Pale, ashen skin. He wears a brown leather bomber jacket with a sheepskin collar over a blue pilot's shirt. Shoulders and head visible, eye-level angle. Sharp focus on face. Studio lighting, no shadows, no environment."
-    },
-    {
-      "id": "sofia",
-      "label": "Sofia",
-      "category": "family",
-      "description": "A five-year-old girl, seen only in a crumpled, slightly water-damaged photograph. She has bright, curious brown eyes and a wide, joyful smile showing a gap where a front tooth is missing. Her hair is light brown, cut into a simple bob with straight bangs across her forehead. She has fair skin with a light dusting of freckles across her nose and cheeks. In the photo, she is wearing a puffy, bright pink winter jacket with a faux-fur trimmed hood.",
-      "appears_in": [
-        "The Great Excavation"
-      ],
-      "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A happy five-year-old girl with light brown hair in a bob with bangs, facing the camera directly. Fair skin with freckles across her nose. Big, curious brown eyes and a wide smile. She wears a pink puffy jacket. Shoulders and head visible, eye-level angle. Sharp focus on face. Studio lighting, no shadows, no environment."
+      "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A rugged man in his late 30s with a lean, muscular build, facing camera directly. Sun-kissed skin, short dark brown hair, and a determined expression with a slight stubble. He wears a layered red and black plaid flannel shirt over a grey thermal. Shoulders and head visible, eye-level angle. Sharp focus on face. Studio lighting, no shadows, no environment."
     },
     {
       "id": "jack",
       "label": "Jack",
       "category": "character",
-      "description": "A man in his early 40s, with a rugged, weathered face from exposure to the elements. He has a stocky, powerful build. His hair is dark and curly, and he sports a full, thick beard lightly dusted with frost. His eyes are a sharp, piercing green. He wears a heavy-duty, navy blue parka with a fur-lined hood, and a dark wool beanie pulled down low over his forehead.",
-      "appears_in": [],
-      "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A rugged man in his early 40s with a stocky build, facing the camera directly. Weathered skin. Dark curly hair and a full, thick beard. Piercing green eyes. He wears a heavy-duty navy blue parka with a fur-lined hood and a dark wool beanie. Shoulders and head visible, eye-level angle. Sharp focus on face. Studio lighting, no shadows, no environment."
+      "description": "A man in his late 50s, 5'10\" with a stocky, powerful build. His face is weather-beaten with deep lines around his kind green eyes. He has a full, neatly-trimmed grey beard and short grey hair. His skin is ruddy from a life spent outdoors. He wears a well-worn, dark green Filson tin cloth jacket over a thick navy blue wool sweater, and a faded red beanie.",
+      "appears_in": [
+        "The Archaeology Of Failure"
+      ],
+      "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A stocky man in his late 50s with a weather-beaten face and a full grey beard, facing camera directly. He has kind green eyes and wears a dark green jacket over a wool sweater. Shoulders and head visible, eye-level angle. Sharp focus on face. Studio lighting, no shadows, no environment."
     },
     {
-      "id": "arctic_wolves",
-      "label": "Arctic wolves",
-      "category": "animal",
-      "description": "A pack of large Arctic wolves (Canis lupus arctos). They possess thick, dense, pure white fur that provides camouflage and insulation. Standing approximately 80cm at the shoulder, they have a powerful, lean build. Their intelligent, observant eyes are a striking pale yellow. They feature pointed ears, a narrow muzzle, and long, powerful legs.",
+      "id": "grandfather",
+      "label": "Grandfather",
+      "category": "family",
+      "description": "A man in his late 60s, seen as a memory. He has a strong, wiry frame from a life of manual labor. His face is a map of wrinkles, especially around his kind, pale blue eyes. He has thin, white hair combed back from a high forehead and a clean-shaven jaw. He wears a simple, faded denim work shirt with the sleeves rolled up to his elbows, revealing sinewy forearms.",
       "appears_in": [
-        "Predators And The Radio"
+        "The Archaeology Of Failure"
       ],
-      "frontal_prompt": "Close-up portrait of a large Arctic wolf on a CLEAN WHITE STUDIO BACKGROUND. Thick, dense, pure white fur. Piercing pale yellow eyes. Facing camera, head and shoulders visible. Studio lighting, no shadows, no environment."
+      "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. An elderly man in his late 60s with a wiry frame and kind, pale blue eyes, facing camera directly. He has thin white hair and wears a faded denim work shirt. Shoulders and head visible, eye-level angle. Sharp focus on face. Studio lighting, no shadows, no environment."
     },
     {
-      "id": "arctic_hares",
-      "label": "Arctic hares",
+      "id": "grizzly",
+      "label": "Grizzly",
       "category": "animal",
-      "description": "An Arctic hare (Lepus arcticus) in its winter phase. Its body is covered in thick, fluffy, immaculate white fur, with the exception of the very tips of its long ears, which are black. It has large, dark, round eyes that stand out against the white fur, and its body is compact and rounded to conserve heat.",
+      "description": "A massive adult male grizzly bear, standing over nine feet tall on its hind legs. Its thick, shaggy coat is a mix of dark brown and blonde fur, with prominent silver-tipped guard hairs on its back and shoulders creating a 'grizzled' appearance. A large, powerful hump of muscle is visible above its shoulders. Its face is broad with small, dark, intelligent eyes and a long snout. Its formidable claws are four inches long, light-colored, and clearly visible.",
       "appears_in": [
-        "The Hunt",
-        "Predators And The Radio"
+        "The Steel Skeleton",
+        "The Fortress",
+        "The Final Test"
       ],
-      "frontal_prompt": "Close-up portrait of an Arctic hare on a CLEAN WHITE STUDIO BACKGROUND. Thick, fluffy, pure white fur and long ears with black tips. Large dark eyes. Facing camera, head and shoulders visible. Studio lighting, no shadows, no environment."
+      "frontal_prompt": "Close-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A massive grizzly bear with a prominent shoulder hump and thick, silver-tipped brown fur. Facing camera, head and shoulders visible. Studio lighting, no shadows, no environment."
+    },
+    {
+      "id": "black_bear",
+      "label": "Black Bear",
+      "category": "animal",
+      "description": "A large adult American black bear, powerful and heavy-set but lacking the shoulder hump of a grizzly. It stands roughly six feet tall on its hind legs. Its fur is a uniform, glossy jet-black. It has a straight facial profile with a long, tan-colored snout and large, prominent ears. Its claws are short, curved, and dark, ideal for climbing.",
+      "appears_in": [
+        "The Invitation"
+      ],
+      "frontal_prompt": "Close-up portrait on a CLEAN WHITE STUDIO BACKGROUND. A large American black bear with glossy, jet-black fur and a straight facial profile. Facing camera, head and shoulders visible. Studio lighting, no shadows, no environment."
+    },
+    {
+      "id": "grandmother",
+      "label": "Grandmother",
+      "category": "family",
+      "description": "A woman in her late 60s, seen in memory. She has a warm, gentle face with soft wrinkles and kind, dark brown eyes. Her hair is mostly silver-white, tied back neatly in a simple bun. She wears a simple, floral-patterned cotton house dress and a hand-knitted grey cardigan sweater.",
+      "appears_in": [
+        "The Archaeology Of Failure"
+      ],
+      "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND. An elderly woman in her late 60s with a gentle face and silver-white hair in a bun, facing camera directly. She wears a floral dress and a grey cardigan. Shoulders and head visible, eye-level angle. Sharp focus on face. Studio lighting, no shadows, no environment."
     }
   ],
   "objects": [
     {
-      "id": "snow_shelter",
-      "label": "Snow Shelter",
+      "id": "grandfathers_cabin",
+      "label": "Grandfather's Cabin",
       "category": "object",
-      "description": "A quinzee-style snow shelter constructed from a large mound of sintered snow. From the outside, it is a solid, slightly asymmetrical dome approximately six meters in diameter and two and a half meters high. Its surface is rough and textured, not smooth. A small, dark, tunnel-like entrance, just large enough for a person to crawl through, is carved into the base. Near the apex of the dome, a small, circular ventilation hole, about five centimeters in diameter, is visible.",
+      "description": "The wreckage of a small log cabin sitting on a low fieldstone foundation. It is a pile of debris consisting of splintered, rotten floorboards and collapsed walls of weathered grey logs. The most prominent feature is a single door made of thick pine, ripped from its hinges, with deep, splintering claw marks gouged violently into the wood.",
       "appears_in": [
-        "The Great Excavation",
-        "The
+        "The Archaeology Of Failure"
+      ],
+      "frontal_prompt": "Studio portrait of the wreckage of a log cabin on CLEAN WHITE BACKGROUND. A pile of rotten logs and splintered boards on a stone foundation, with a single door bearing deep claw marks visible. Centered, entire object visible, studio lighting, no environment."
+    },
+    {
+      "id": "the_last_shelter",
+      "label": "The Last Shelter (Daniel's Cabin)",
+      "category": "object",
+      "description": "A compact, 200-square-foot cabin elevated 15 feet in the air, anchored to three massive trees. The exterior is dark-stained wood siding. It features a steep-pitched, dark grey standing-seam metal roof. Windows are small, high, and rectangular, made of thick polycarbonate. The single door is heavy-duty, constructed from two layers of solid wood reinforced with an external steel plate, and it opens outwards. The cabin is supported by a visible under-structure of heavy beams and diagonal knee braces.",
+      "appears_in": [
+        "The Invitation",
+        "The Fortress",
+        "The Final Test"
+      ],
+      "frontal_prompt": "Studio portrait of a small, elevated treehouse cabin on CLEAN WHITE BACKGROUND. The cabin has dark wood siding, a steep metal roof, and is shown with its support beams as if anchored to invisible trees. Centered, entire object visible, studio lighting, no environment."
+    },
+    {
+      "id": "platform",
+      "label": "Platform",
+      "category": "object",
+      "description": "The triangular structural base of the treehouse. It is
