@@ -902,48 +902,182 @@ Return ONLY the JSON object."""
         characters: list[ElementCharacter]
         objects: list[ElementObject]
 
-    result = generate_json(prompt, temperature=0.3, max_tokens=6000, response_schema=ElementResponse)
+    # Try with schema first, fallback without schema if 0 results
+    try:
+        result = generate_json(prompt, temperature=0.3, max_tokens=6000, response_schema=ElementResponse)
+    except Exception as schema_err:
+        print(f"[analyze_elements] Schema call failed: {schema_err}")
+        result = {"characters": [], "objects": []}
     
-    # Combine everything into a flat list for the generator
+    # Combine everything into a flat list
     chars = result.get("characters", [])
     objs = result.get("objects", [])
-    # Legacy fallback in case Gemini decides to ignore the schema
     legacy = result.get("elements", [])
-    
     elements = chars + objs + legacy
     
-    # FALLBACK: If schema-based call returned 0 elements, retry WITHOUT schema
-    # This handles cases where response_schema + long prompts cause empty arrays
+    # FALLBACK: If schema returned 0, retry without schema using Flash
     if len(elements) == 0:
         if progress_callback:
+            progress_callback("⚠️ Schema extraction returned 0. Retrying without schema...", "warning")
+        try:
+            result2 = generate_json(prompt, temperature=0.4, max_tokens=8000, model=GEMINI_MODEL_FLASH)
+            elements = result2.get("characters", []) + result2.get("objects", []) + result2.get("elements", [])
+        except Exception as fallback_err:
+            print(f"[analyze_elements] Fallback failed: {fallback_err}")
+    
+    # ═══════════════════════════════════════════════════════════
+    # STRICT VALIDATION: Ensure ALL script elements are covered
+    # ═══════════════════════════════════════════════════════════
+    
+    # Build lookup of what the LLM returned (normalized names)
+    returned_names = set()
+    for e in elements:
+        name = (e.get("label") or e.get("name") or "").lower().strip()
+        returned_names.add(name)
+        # Also add partial matches (e.g. "Daniel" matches "Daniel Carter")
+        for word in name.split():
+            if len(word) > 2:
+                returned_names.add(word)
+    
+    # Check which STRICT characters are missing
+    missing_chars = []
+    for sc in strict_chars:
+        sc_name = sc.get("name", "").strip()
+        sc_lower = sc_name.lower()
+        # Check if any returned element matches this character
+        found = any(
+            sc_lower in rn or rn in sc_lower 
+            for rn in returned_names if len(rn) > 2
+        )
+        if not found and sc_name:
+            missing_chars.append(sc)
+    
+    # Check which STRICT objects are missing
+    missing_objs = []
+    for so in strict_objs:
+        so_name = so.get("name", "").strip()
+        so_lower = so_name.lower()
+        found = any(
+            so_lower in rn or rn in so_lower 
+            for rn in returned_names if len(rn) > 2
+        )
+        if not found and so_name:
+            missing_objs.append(so)
+    
+    # If we have missing elements, generate descriptions for them
+    if missing_chars or missing_objs:
+        missing_count = len(missing_chars) + len(missing_objs)
+        if progress_callback:
+            missing_names = [c.get("name", "?") for c in missing_chars] + [o.get("name", "?") for o in missing_objs]
             progress_callback(
-                f"⚠️ Schema-based extraction returned 0 elements. Retrying without schema...",
+                f"⚠️ LLM skipped {missing_count} elements: {', '.join(missing_names)}. Generating them now...",
                 "warning"
             )
-        print(f"[analyze_elements] FALLBACK: schema call returned 0 elements. strict_chars={len(strict_chars)}, strict_objs={len(strict_objs)}")
-        print(f"[analyze_elements] Prompt length: {len(prompt)} chars, narration length: {len(full_narration_text)} chars")
+        
+        # Build a targeted prompt for ONLY the missing elements
+        missing_char_str = "\n".join([f"- {c.get('name', '')} (Type: {c.get('type', 'character')})" for c in missing_chars])
+        missing_obj_str = "\n".join([f"- {o.get('name', '')}" for o in missing_objs])
+        
+        repair_prompt = f"""You are a video production supervisor. Generate detailed visual descriptions for these elements.
+
+CHARACTERS TO DESCRIBE:
+{missing_char_str if missing_char_str else "None"}
+
+OBJECTS TO DESCRIBE:
+{missing_obj_str if missing_obj_str else "None"}
+
+STORY CONTEXT:
+- Protagonist: {char.get('name', 'Unknown')}, {char.get('age', 'Unknown')} years old
+- Physical: {char.get('physical_description', 'Unknown')}
+- Location: {loc.get('name', 'Unknown')} — {loc.get('climate', 'wilderness')}
+- Construction: {construction.get('type', 'shelter')}
+
+NARRATION EXCERPT (for context):
+{full_narration_text[:3000]}
+
+RULES:
+- For CHARACTERS: frontal_prompt must be "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND..." 
+- For OBJECTS: frontal_prompt must be "Studio portrait of [object] on CLEAN WHITE BACKGROUND..."
+- NEVER use character names in prompts — use descriptive terms
+- Be extremely detailed about physical appearance
+
+Return JSON:
+{{
+    "characters": [
+        {{
+            "id": "snake_case_id",
+            "label": "Display Name",
+            "category": "character",
+            "description": "Detailed description...",
+            "appears_in": ["Phase 1"],
+            "frontal_prompt": "Close-up chest-up portrait on a CLEAN WHITE STUDIO BACKGROUND..."
+        }}
+    ],
+    "objects": [
+        {{
+            "id": "snake_case_id",
+            "label": "Display Name", 
+            "category": "object",
+            "description": "Detailed description...",
+            "appears_in": ["Phase 1"],
+            "frontal_prompt": "Studio portrait of [object] on CLEAN WHITE BACKGROUND..."
+        }}
+    ]
+}}"""
         
         try:
-            # Retry without response_schema — often works better with complex prompts
-            result2 = generate_json(prompt, temperature=0.4, max_tokens=8000, model=GEMINI_MODEL_FLASH)
-            chars2 = result2.get("characters", [])
-            objs2 = result2.get("objects", [])
-            legacy2 = result2.get("elements", [])
-            elements = chars2 + objs2 + legacy2
+            repair_result = generate_json(repair_prompt, temperature=0.3, max_tokens=4000, model=GEMINI_MODEL_FLASH)
+            repair_chars = repair_result.get("characters", [])
+            repair_objs = repair_result.get("objects", [])
+            elements.extend(repair_chars + repair_objs)
             
             if progress_callback:
-                if elements:
-                    progress_callback(f"✅ Fallback succeeded: found {len(elements)} elements", "success")
-                else:
-                    progress_callback(f"⚠️ Fallback also returned 0 elements", "warning")
-        except Exception as fallback_err:
+                progress_callback(
+                    f"✅ Recovered {len(repair_chars) + len(repair_objs)} missing elements",
+                    "success"
+                )
+        except Exception as repair_err:
+            print(f"[analyze_elements] Repair call failed: {repair_err}")
             if progress_callback:
-                progress_callback(f"⚠️ Fallback failed: {str(fallback_err)[:100]}", "error")
-            print(f"[analyze_elements] FALLBACK FAILED: {fallback_err}")
+                progress_callback(f"⚠️ Could not recover missing elements: {str(repair_err)[:100]}", "error")
+    
+    # Filter out elements that don't match ANY strict character or object (hallucinations)
+    # Only filter if we have a strict list to compare against
+    if strict_chars or strict_objs:
+        strict_names = set()
+        for sc in strict_chars:
+            name = sc.get("name", "").lower().strip()
+            strict_names.add(name)
+            for word in name.split():
+                if len(word) > 2:
+                    strict_names.add(word)
+        for so in strict_objs:
+            name = so.get("name", "").lower().strip()
+            strict_names.add(name)
+            for word in name.split():
+                if len(word) > 2:
+                    strict_names.add(word)
+        
+        filtered = []
+        for e in elements:
+            label = (e.get("label") or "").lower().strip()
+            # Keep if any word from the label matches a strict name
+            matches = any(
+                word in strict_names or any(sn in label for sn in strict_names if len(sn) > 2)
+                for word in label.split() if len(word) > 2
+            )
+            if matches:
+                filtered.append(e)
+            else:
+                print(f"[analyze_elements] FILTERED OUT hallucinated element: '{e.get('label', '?')}'")
+                if progress_callback:
+                    progress_callback(f"🚫 Filtered out non-script element: {e.get('label', '?')}", "info")
+        
+        elements = filtered
     
     if progress_callback:
         progress_callback(
-            f"✅ Found {len(elements)} elements: {', '.join(e.get('label', '?') for e in elements)}",
+            f"✅ Final: {len(elements)} elements: {', '.join(e.get('label', '?') for e in elements)}",
             "success"
         )
     
